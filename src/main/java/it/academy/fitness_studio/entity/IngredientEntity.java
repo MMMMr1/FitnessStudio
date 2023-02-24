@@ -4,15 +4,20 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Entity
-@Table(schema = "app",name = "ingredient")
+//@Entity
+//@Table(schema = "app",name = "ingredient")
+@Embeddable
 public class IngredientEntity {
-    @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name="increment", strategy = "increment")
-    private Long id;
+//    @Id
+//    @GeneratedValue(generator = "increment")
+//    @GenericGenerator(name="increment", strategy = "increment")
+//    private Long id;
 
     @ManyToOne
+    @JoinColumn(
+            name = "product_id",
+            nullable = false, updatable = false
+    )
     private ProductEntity product;
 
     private Integer weight;

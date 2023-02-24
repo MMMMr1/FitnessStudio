@@ -6,7 +6,7 @@ spring:
     password: pass
   jpa:
     show-sql: true
-#    generate-ddl: true
-#    hibernate:
-#      ddl-auto: create
-#    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    database: postgresql
