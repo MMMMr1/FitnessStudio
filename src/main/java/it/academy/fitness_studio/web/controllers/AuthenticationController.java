@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.web.controllers;
 
-import it.academy.fitness_studio.core.dto.UserLoginDTO;
-import it.academy.fitness_studio.core.dto.UserRegistrationDTO;
+import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
+import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +24,8 @@ public class AuthenticationController {
 
     @RequestMapping( path = "/verification", method = RequestMethod.GET)
     protected ResponseEntity<?> verify(
-            @RequestParam(name = "code", required = true) String code,
-            @RequestParam(name = "mail", required = true) String mail)  {
+            @RequestParam(name = "code") String code,
+            @RequestParam(name = "mail") String mail)  {
         service.verify(mail,code);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

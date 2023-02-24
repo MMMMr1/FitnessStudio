@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.dto;
+package it.academy.fitness_studio.core.dto.user;
 
 public class UserLoginDTO {
     private String mail;

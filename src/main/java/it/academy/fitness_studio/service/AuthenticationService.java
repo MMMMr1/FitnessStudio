@@ -1,18 +1,14 @@
 package it.academy.fitness_studio.service;
 
 import it.academy.fitness_studio.core.UserStatus;
-import it.academy.fitness_studio.core.dto.UserDTO;
-import it.academy.fitness_studio.core.dto.UserLoginDTO;
-import it.academy.fitness_studio.core.dto.UserRegistrationDTO;
-import it.academy.fitness_studio.core.dto.UserSavedDTO;
+import it.academy.fitness_studio.core.dto.user.UserDTO;
+import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
+import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.dao.api.IAuthenticationDao;
-import it.academy.fitness_studio.entity.RoleEntity;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IUserService;
-
-import java.util.UUID;
 
 public class AuthenticationService implements IAuthenticationService {
     private final IAuthenticationDao dao;
@@ -51,6 +47,7 @@ public class AuthenticationService implements IAuthenticationService {
         UserEntity byMail = dao.findByMail(mail);
         if(code.equals(byMail.getCode())){
             byMail.setStatus(new StatusEntity(UserStatus.ACTIVATED));
+            byMail.setCode(null);
             dao.save(byMail);
         } else throw new IllegalArgumentException("Code is incorrect");
     }
@@ -62,5 +59,4 @@ public class AuthenticationService implements IAuthenticationService {
             throw new IllegalArgumentException("Incorrect mail and password");
         }
     }
-
 }

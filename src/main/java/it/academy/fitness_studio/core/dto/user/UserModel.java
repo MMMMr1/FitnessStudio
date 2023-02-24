@@ -1,9 +1,9 @@
-package it.academy.fitness_studio.core.dto;
+package it.academy.fitness_studio.core.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.CustomInstantConverter;
+import it.academy.fitness_studio.core.converter.CustomInstantConverter;
 import it.academy.fitness_studio.core.UserRole;
 import it.academy.fitness_studio.core.UserStatus;
 
