@@ -24,11 +24,10 @@ public class ProductController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    protected ResponseEntity<?> createProduct(@RequestBody ProductDTO product) {
+    protected ResponseEntity<?> create(@RequestBody ProductDTO product) {
         service.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
     @RequestMapping(method = RequestMethod.GET)
     protected ResponseEntity<Pages<ProductModel>> getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -36,11 +35,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getPageProduct(page, size));
     }
-
-
-
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateProduct(@PathVariable("uuid") UUID uuid,
+    public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Long dtUpdate,
                                         @RequestBody ProductDTO product) {
         Instant version = Instant.ofEpochMilli(dtUpdate);

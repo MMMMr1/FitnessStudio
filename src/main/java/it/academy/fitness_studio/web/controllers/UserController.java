@@ -22,13 +22,13 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    protected ResponseEntity<?> createUser(@RequestBody UserDTO user) {
+    protected ResponseEntity<?> create(@RequestBody UserDTO user) {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    protected ResponseEntity<Pages<UserModel>> getAllUser(
+    protected ResponseEntity<Pages<UserModel>> getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "20") Integer size) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -36,13 +36,13 @@ public class UserController {
     }
 
     @RequestMapping(path = "/{uuid}", method = RequestMethod.GET)
-    public ResponseEntity<UserModel> getUser(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<UserModel> get(@PathVariable("uuid") UUID uuid) {
          return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getUser(uuid));
     }
 
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@PathVariable("uuid") UUID uuid,
+    public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Long dtUpdate,
                                         @RequestBody UserDTO user) {
         Instant version = Instant.ofEpochMilli(dtUpdate);

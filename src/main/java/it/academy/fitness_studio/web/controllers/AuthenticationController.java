@@ -16,7 +16,7 @@ public class AuthenticationController {
         this.service = service;
     }
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
-    protected ResponseEntity<?> createUser(
+    protected ResponseEntity<?> create(
             @RequestBody UserRegistrationDTO user) {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -73,5 +74,20 @@ public class ProductService implements IProductService {
                 all.getNumberOfElements(),
                 all.isLast(),
                 content);
+    }
+
+    @Override
+    public ProductEntity getProduct(UUID id) {
+        ProductEntity productEntity = dao.findById(id).get();
+       return new ProductEntity(productEntity.getUuid(),
+                productEntity.getDtCreate(),
+                productEntity.getDtUpdate(),
+                productEntity.getTitle(),
+                productEntity.getWeight(),
+                productEntity.getCalories(),
+                productEntity.getProteins(),
+                productEntity.getFats(),
+                productEntity.getCarbohydrates());
+
     }
 }

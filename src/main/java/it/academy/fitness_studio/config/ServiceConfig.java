@@ -6,12 +6,15 @@ import it.academy.fitness_studio.core.converter.CustomProductEntityConverter;
 import it.academy.fitness_studio.core.converter.CustomUserDTOConverter;
 import it.academy.fitness_studio.core.converter.CustomUserEntityConverter;
 import it.academy.fitness_studio.dao.api.IProductDao;
+import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.dao.api.IUserDao;
 import it.academy.fitness_studio.dao.api.IAuthenticationDao;
 import it.academy.fitness_studio.service.ProductService;
+import it.academy.fitness_studio.service.RecipeService;
 import it.academy.fitness_studio.service.UserService;
 import it.academy.fitness_studio.service.AuthenticationService;
 import it.academy.fitness_studio.service.api.IProductService;
+import it.academy.fitness_studio.service.api.IRecipeService;
 import it.academy.fitness_studio.service.api.IUserService;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import org.springframework.context.annotation.Bean;
@@ -34,4 +37,9 @@ public class ServiceConfig {
                                           CustomProductEntityConverter converterProductEntity ){
         return new ProductService(dao,converterProductDTO,converterProductEntity);
     }
+    @Bean
+    public IRecipeService recipeService(IRecipeDao dao, IProductService service ){
+        return new RecipeService(dao, service);
+    }
+
 }
