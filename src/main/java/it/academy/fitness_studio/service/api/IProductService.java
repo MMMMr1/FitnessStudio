@@ -16,5 +16,5 @@ public interface IProductService {
     void create(ProductDTO product);
     void update(UUID id, Instant version, ProductDTO product);
     Pages getPageProduct(int page, int size);
-    ProductEntity getProduct(UUID id);
+    ProductModel getProduct(UUID id);
 }

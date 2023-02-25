@@ -37,4 +37,9 @@ public class IngredientEntity {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
 }

@@ -1,10 +1,7 @@
 package it.academy.fitness_studio.config;
 
 
-import it.academy.fitness_studio.core.converter.CustomProductDTOConverter;
-import it.academy.fitness_studio.core.converter.CustomProductEntityConverter;
-import it.academy.fitness_studio.core.converter.CustomUserDTOConverter;
-import it.academy.fitness_studio.core.converter.CustomUserEntityConverter;
+import it.academy.fitness_studio.core.converter.*;
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.dao.api.IUserDao;
@@ -34,12 +31,14 @@ public class ServiceConfig {
     @Bean
     public IProductService productService(IProductDao dao,
                                           CustomProductDTOConverter converterProductDTO,
-                                          CustomProductEntityConverter converterProductEntity ){
+                                          CustomProductEntityToModelConverter converterProductEntity ){
         return new ProductService(dao,converterProductDTO,converterProductEntity);
     }
     @Bean
-    public IRecipeService recipeService(IRecipeDao dao, IProductService service ){
-        return new RecipeService(dao, service);
+    public IRecipeService recipeService(IRecipeDao dao, IProductService service,
+                                        CustomProductEntityToModelConverter converterProductEntity,
+                                        CustomProductModelToEntityConverter modelToEntityConverter){
+        return new RecipeService(dao, service, converterProductEntity, modelToEntityConverter);
     }
 
 }

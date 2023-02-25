@@ -65,14 +65,12 @@ public class RecipeEntity {
     public List<IngredientEntity> getComposition() {
         return composition;
     }
-    //    @Column(name = "weight")
-//    private Integer weight;   /* Вес всего блюда считается на основе состава*/
-//    @Column(name = "calories")
-//    private Integer calories;
-//    @Column(name = "proteins")
-//    private Double proteins;
-//    @Column(name = "fats")
-//    private Double fats;
-//    @Column(name = "carbohydrates")
-//    private Double carbohydrates;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setComposition(List<IngredientEntity> composition) {
+        this.composition = composition;
+    }
 }

@@ -1,22 +1,21 @@
 package it.academy.fitness_studio.core.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
 import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
-import org.springframework.format.annotation.NumberFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Version;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 @JsonIgnoreProperties
-public class ProductModel {
+public class RecipeModel {
     @JsonProperty("uuid")
     private UUID uuid;
     @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
@@ -27,12 +26,13 @@ public class ProductModel {
     private Instant dtUpdate;
     @JsonProperty("title")
     private String title;
+    @JsonProperty("composition")
+    private List<IngredientModel> composition;
+
     @JsonProperty("weight")
-    private Integer weight;
-
-
+    private  Integer weight;
     @JsonProperty("calories")
-    private Integer calories;
+    private  Integer calories;
     @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
     @JsonProperty("proteins")
     private Double proteins;
@@ -43,22 +43,24 @@ public class ProductModel {
     @JsonProperty("carbohydrates")
     private Double carbohydrates;
 
-    public ProductModel() {
+    public RecipeModel() {
     }
 
-    public ProductModel(UUID uuid,
-                        Instant dtCreate,
-                        Instant dtUpdate,
-                        String title,
-                        Integer weight,
-                        Integer calories,
-                        Double proteins,
-                        Double fats,
-                        Double carbohydrates) {
+    public RecipeModel(UUID uuid,
+                       Instant dtCreate,
+                       Instant dtUpdate,
+                       String title,
+                       List<IngredientModel> composition,
+                       Integer weight,
+                       Integer calories,
+                       Double proteins,
+                       Double fats,
+                       Double carbohydrates) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.title = title;
+        this.composition = composition;
         this.weight = weight;
         this.calories = calories;
         this.proteins = proteins;
@@ -80,6 +82,10 @@ public class ProductModel {
 
     public String getTitle() {
         return title;
+    }
+
+    public List<IngredientModel> getComposition() {
+        return composition;
     }
 
     public Integer getWeight() {

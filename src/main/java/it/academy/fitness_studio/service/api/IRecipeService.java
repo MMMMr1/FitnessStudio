@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface IRecipeService {
     void create(RecipeDTO recipe);
-//    void update(UUID id, Instant version, ProductDTO product);
+    Pages getPageRecipe(int page, int size);
+    void update(UUID id, Instant version, RecipeDTO product);
 //    Pages getPageProduct(int page, int size);
 }

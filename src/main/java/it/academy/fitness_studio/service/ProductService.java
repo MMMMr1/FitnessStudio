@@ -2,12 +2,10 @@ package it.academy.fitness_studio.service;
 
 
 import it.academy.fitness_studio.core.converter.CustomProductDTOConverter;
-import it.academy.fitness_studio.core.converter.CustomProductEntityConverter;
+import it.academy.fitness_studio.core.converter.CustomProductEntityToModelConverter;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
-import it.academy.fitness_studio.core.dto.user.UserDTO;
-import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.entity.ProductEntity;
 import it.academy.fitness_studio.service.api.IProductService;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,10 +23,11 @@ public class ProductService implements IProductService {
 //    @Autowired
     private final IProductDao dao;
     private final CustomProductDTOConverter converterProductDTO;
-    private final CustomProductEntityConverter converterProductEntity;
+    private final CustomProductEntityToModelConverter converterProductEntity;
+
     public ProductService(IProductDao dao,
                           CustomProductDTOConverter converterProductDTO,
-                          CustomProductEntityConverter converterProductEntity) {
+                          CustomProductEntityToModelConverter converterProductEntity) {
         this.dao = dao;
         this.converterProductDTO = converterProductDTO;
         this.converterProductEntity = converterProductEntity;
@@ -77,17 +75,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductEntity getProduct(UUID id) {
+    public ProductModel getProduct(UUID id) {
         ProductEntity productEntity = dao.findById(id).get();
-       return new ProductEntity(productEntity.getUuid(),
-                productEntity.getDtCreate(),
-                productEntity.getDtUpdate(),
-                productEntity.getTitle(),
-                productEntity.getWeight(),
-                productEntity.getCalories(),
-                productEntity.getProteins(),
-                productEntity.getFats(),
-                productEntity.getCarbohydrates());
+
+        return converterProductEntity.convert(productEntity);
 
     }
 }
