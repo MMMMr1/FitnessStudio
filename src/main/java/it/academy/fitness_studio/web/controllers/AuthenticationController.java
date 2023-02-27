@@ -2,10 +2,13 @@ package it.academy.fitness_studio.web.controllers;
 
 import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
+import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,7 +20,7 @@ public class AuthenticationController {
     }
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
     protected ResponseEntity<?> create(
-            @RequestBody UserRegistrationDTO user) {
+            @RequestBody @Valid UserRegistrationDTO user) throws ValidationUserException {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -26,12 +29,12 @@ public class AuthenticationController {
     protected ResponseEntity<?> verify(
             @RequestParam(name = "code") String code,
             @RequestParam(name = "mail") String mail)  {
-        service.verify(mail,code);
+        service.verify(code,mail);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 //    Получить информацию о пользователе
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO user) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
         service.login(user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

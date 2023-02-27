@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface IRecipeDao extends PagingAndSortingRepository<RecipeEntity, UUID>
-{
+public interface IRecipeDao extends PagingAndSortingRepository<RecipeEntity, UUID>{
+    RecipeEntity findByTitle(String title);
 }

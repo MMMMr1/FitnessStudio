@@ -4,13 +4,12 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
-import it.academy.fitness_studio.core.dto.user.UserDTO;
-import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.service.api.IProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class ProductController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    protected ResponseEntity<?> create(@RequestBody ProductDTO product) {
+    protected ResponseEntity<?> create( @RequestBody @Valid ProductDTO product ) {
         service.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -38,7 +37,7 @@ public class ProductController {
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Long dtUpdate,
-                                        @RequestBody ProductDTO product) {
+                                        @RequestBody @Valid ProductDTO product) {
         Instant version = Instant.ofEpochMilli(dtUpdate);
         service.update(uuid, version, product);
         return ResponseEntity.status(HttpStatus.OK).build();

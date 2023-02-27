@@ -10,7 +10,6 @@ import java.util.UUID;
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "id")
 )
 public class UserEntity {
-
     @Id
     @Column(name = "id")
     private UUID uuid;
@@ -43,15 +42,11 @@ public class UserEntity {
             @JoinColumn(name  = "status_id")
     )
     private StatusEntity status;
-
     @Column(name = "code", table= "verification")
     private String code;
     private String password;
-
-
     public UserEntity() {
     }
-
     public UserEntity(UUID uuid,
                       Instant dtCreate,
                       Instant dtUpdate,
@@ -69,63 +64,48 @@ public class UserEntity {
         this.status = status;
         this.password = password;
     }
-
     public UUID getUuid() {
         return uuid;
     }
-
     public Instant getDtCreate() {
         return dtCreate;
     }
-
     public Instant getDtUpdate() {
         return dtUpdate;
     }
-
     public String getMail() {
         return mail;
     }
-
     public String getFio() {
         return fio;
     }
-
     public RoleEntity getRole() {
         return role;
     }
-
     public StatusEntity getStatus() {
         return status;
     }
-
     public String getPassword() {
         return password;
     }
-
     public String getCode() {
         return code;
     }
-
     public void setCode(String code) {
         this.code = code;
     }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
-
     public void setFio(String fio) {
         this.fio = fio;
     }
-
     public void setRole(RoleEntity role) {
         this.role = role;
     }
-
     public void setStatus(StatusEntity status) {
         this.status = status;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }

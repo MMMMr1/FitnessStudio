@@ -12,5 +12,5 @@ import java.util.UUID;
 @Repository
 public interface IUserDao extends PagingAndSortingRepository<UserEntity, UUID>
 {
-
+    UserEntity findByMail(String mail);
 }

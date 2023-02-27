@@ -1,17 +1,22 @@
 package it.academy.fitness_studio.core.dto.product;
 
 
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
 
-import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 public class ProductDTO {
+    @NotBlank(message = "Title must not be blank")
     private String title;
+    @Min(value = 1, message = "Weight should not be less than 1")
     private Integer weight;
+    @Min(value = 1, message = "Calories should not be less than 1")
     private Integer calories;
+    @Min(value = 0, message = "Proteins should not be less than 0.0")
     private Double proteins;
+    @Min(value = 0, message = "Fats should not be less than 0.0")
     private Double fats;
+    @Min(value = 0, message = "Carbohydrates should not be less than 0.0")
     private Double carbohydrates;
 
     public ProductDTO(String title,

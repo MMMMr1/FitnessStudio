@@ -3,18 +3,34 @@ package it.academy.fitness_studio.core.dto.user;
 
 import it.academy.fitness_studio.core.UserRole;
 import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.exception.ValueOfEnum;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class UserDTO {
+    @NotBlank
     private String mail;
+    @NotBlank(message = "Name must not be blank")
     private String fio;
-    private UserRole role;
-    private UserStatus status;
+
+    @ValueOfEnum(enumClass = UserRole.class)
+    private String role;
+
+//    @RoleTypeSubset(anyOf = {UserRole.ADMIN,UserRole.USER})
+//    private UserRole role;
+
+
+
+    @ValueOfEnum(enumClass = UserStatus.class)
+    private String status;
+    @NotNull
     private String password;
 
     public UserDTO(String mail,
                    String fio,
-                   UserRole role,
-                   UserStatus status,
+                   String role,
+                   String status,
                    String password) {
         this.mail = mail;
         this.fio = fio;
@@ -27,8 +43,8 @@ public class UserDTO {
         this.mail = mail;
         this.fio = fio;
         this.password = password;
-        this.role = UserRole.USER;
-        this.status = UserStatus.WAITING_ACTIVATION;
+        this.role = UserRole.USER.toString();
+        this.status = UserStatus.WAITING_ACTIVATION.toString();
     }
 
     public UserDTO() {
@@ -50,19 +66,26 @@ public class UserDTO {
         this.fio = fio;
     }
 
-    public UserRole getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(String role) {
         this.role = role;
     }
+    //    public UserRole getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(UserRole role) {
+//        this.role = role;
+//    }
 
-    public UserStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

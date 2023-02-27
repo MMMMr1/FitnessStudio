@@ -1,7 +1,11 @@
 package it.academy.fitness_studio.core.dto.user;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserLoginDTO {
+    @NotBlank
     private String mail;
+    @NotBlank
     private String password;
 
     public UserLoginDTO(String mail, String password) {

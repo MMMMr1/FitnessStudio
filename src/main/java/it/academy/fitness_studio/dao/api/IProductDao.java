@@ -14,4 +14,5 @@ import java.util.UUID;
 public interface IProductDao extends PagingAndSortingRepository<ProductEntity, UUID>
 {
 
+    ProductEntity findByTitle(String title);
 }

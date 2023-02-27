@@ -13,6 +13,7 @@ public class RecipeEntity {
     @Id
     private UUID uuid;
     private Instant dtCreate;
+    @Version
     private Instant dtUpdate;
     private String title;
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST )
