@@ -3,6 +3,7 @@ package it.academy.fitness_studio.core.dto.product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
+import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 
 
 public class IngredientModel {
@@ -60,10 +61,18 @@ public class IngredientModel {
         return carbohydrates;
     }
     private Integer countInt(Integer val){
+        checkWeight(product.getWeight());
        return   weight*val/product.getWeight();
     }
     private Double countDouble(Double val){
+        checkWeight(product.getWeight());
         return weight*val/product.getWeight();
+    }
+    private void checkWeight(Integer weight){
+        if (weight <= 0) {
+            throw new ValidationRecipeException("Check product with id : "+
+                    product.getUuid() +". Weight can not be <= 0");
+        }
     }
 
 }

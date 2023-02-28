@@ -11,7 +11,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomUserDTOConverter implements Converter<UserDTO,UserEntity> {
+public class UserDTOToUserEntity implements Converter<UserDTO,UserEntity> {
 
     @Override
     public UserEntity convert(UserDTO user) {

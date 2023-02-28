@@ -1,13 +1,13 @@
 package it.academy.fitness_studio.core.dto.exception;
 
-public class Exception400DTO {
+public class ExceptionErrorDTO {
     private String logref;
     private String message;
 
-    public Exception400DTO() {
+    public ExceptionErrorDTO() {
     }
 
-    public Exception400DTO(String message) {
+    public ExceptionErrorDTO(String message) {
         this.logref = "error";
         this.message = message;
     }

@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.web;
 
-import it.academy.fitness_studio.core.dto.exception.Exception400DTO;
+import it.academy.fitness_studio.core.dto.exception.ExceptionErrorDTO;
 import it.academy.fitness_studio.core.dto.exception.ExceptionStructuredDTO;
 import it.academy.fitness_studio.core.dto.exception.ExceptionListDTO;
 import it.academy.fitness_studio.core.exception.ValidationProductException;
@@ -24,23 +24,23 @@ public class ExceptionGlobal {
 //                .body(new Exception400DTO(e.getLocalizedMessage()));
 //    }
     @ExceptionHandler(value = {ValidationUserException.class})
-    public ResponseEntity<Exception400DTO> ArgumentUserNotValidException(
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotValidException(
             ValidationUserException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new Exception400DTO(e.getMessage()));
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
     @ExceptionHandler(value = {ValidationProductException.class})
-    public ResponseEntity<Exception400DTO> ArgumentProductNotValidException(
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductNotValidException(
             ValidationProductException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new Exception400DTO(e.getMessage()));
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
     @ExceptionHandler(value = {ValidationRecipeException.class})
-    public ResponseEntity<Exception400DTO> ArgumentRecipeNotValidException(
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new Exception400DTO(e.getMessage()));
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(

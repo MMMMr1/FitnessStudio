@@ -6,6 +6,7 @@ import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +35,7 @@ public class AuthenticationController {
     }
 //    Получить информацию о пользователе
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDTO user) {
+    public ResponseEntity<?> login(@RequestBody @Validated UserLoginDTO user) {
         service.login(user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

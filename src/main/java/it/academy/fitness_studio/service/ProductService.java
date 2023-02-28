@@ -1,46 +1,43 @@
 package it.academy.fitness_studio.service;
 
 
-import it.academy.fitness_studio.core.converter.CustomProductDTOConverter;
-import it.academy.fitness_studio.core.converter.CustomProductEntityToModelConverter;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
 import it.academy.fitness_studio.core.exception.ValidationProductException;
-import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.entity.ProductEntity;
 import it.academy.fitness_studio.service.api.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 public class ProductService implements IProductService {
-//    @Autowired
-    private final IProductDao dao;
-    private final CustomProductDTOConverter converterProductDTO;
-    private final CustomProductEntityToModelConverter converterProductEntity;
 
-    public ProductService(IProductDao dao,
-                          CustomProductDTOConverter converterProductDTO,
-                          CustomProductEntityToModelConverter converterProductEntity) {
+    private final IProductDao dao;
+//    private final IProductConverterService converterService;
+//    CustomProductDTOConverter converterProductDTO;
+//    private final CustomProductEntityToModelConverter converterProductEntity;
+   @Autowired
+   private ConversionService conversionService;
+    public ProductService(IProductDao dao) {
         this.dao = dao;
-        this.converterProductDTO = converterProductDTO;
-        this.converterProductEntity = converterProductEntity;
     }
 
     @Override
     public void create(ProductDTO product) {
         validate(product);
         checkDoubleProduct(product);
-        dao.save(converterProductDTO.convert(product));
+//        boolean b = conversionService.canConvert(ProductDTO.class, ProductEntity.class);
+        dao.save(conversionService.convert(product, ProductEntity.class));
     }
 
     @Override
@@ -67,7 +64,7 @@ public class ProductService implements IProductService {
         }
 
         List<ProductModel> content = all.getContent().stream()
-                .map(s -> converterProductEntity.convert(s) )
+                .map(s -> conversionService.convert(s,ProductModel.class))
                 .collect(Collectors.toList());
         return  new Pages<ProductModel>(
                 all.getNumber(),
@@ -84,7 +81,7 @@ public class ProductService implements IProductService {
     public ProductModel getProduct(UUID id) {
         ProductEntity productEntity  = dao.findById(id)
                 .orElseThrow(() -> new ValidationProductException("There is no product with such id"));
-         return converterProductEntity.convert(productEntity);
+         return conversionService.convert(productEntity,ProductModel.class);
     }
     private void validate(ProductDTO product) throws ValidationProductException{
         String title = product.getTitle();

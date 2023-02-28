@@ -6,13 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 @JsonIgnoreProperties
 public class RecipeModel {
@@ -106,5 +103,88 @@ public class RecipeModel {
 
     public Double getCarbohydrates() {
         return carbohydrates;
+    }
+
+    public static class RecipeModelBuilder {
+        private UUID uuid;
+        private Instant dtCreate;
+        private Instant dtUpdate;
+        private String title;
+        private List<IngredientModel> composition;
+        private  Integer weight;
+        private  Integer calories;
+        private Double proteins;
+        private Double fats;
+        private Double carbohydrates;
+        private RecipeModelBuilder() {
+        }
+
+        public static RecipeModelBuilder create(){
+            return new RecipeModelBuilder();
+        }
+
+        public RecipeModelBuilder setUuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public RecipeModelBuilder setDtCreate(Instant dtCreate) {
+            this.dtCreate = dtCreate;
+            return this;
+        }
+
+        public RecipeModelBuilder setDtUpdate(Instant dtUpdate) {
+            this.dtUpdate = dtUpdate;
+            return this;
+        }
+
+        public RecipeModelBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public RecipeModelBuilder setComposition(List<IngredientModel> composition) {
+            this.composition = composition;
+            return this;
+        }
+
+        public RecipeModelBuilder setWeight(Integer weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public RecipeModelBuilder setCalories(Integer calories) {
+            this.calories = calories;
+            return this;
+        }
+
+        public RecipeModelBuilder setProteins(Double proteins) {
+            this.proteins = proteins;
+            return this;
+        }
+
+        public RecipeModelBuilder setFats(Double fats) {
+            this.fats = fats;
+            return this;
+        }
+
+        public RecipeModelBuilder setCarbohydrates(Double carbohydrates) {
+            this.carbohydrates = carbohydrates;
+            return this;
+        }
+
+        public RecipeModel build(){
+            return new RecipeModel(
+                    uuid,
+                    dtCreate,
+                    dtUpdate,
+                    title,
+                    composition,
+                    weight,
+                    calories,
+                    proteins,
+                    fats,
+                    carbohydrates);
+        }
     }
 }

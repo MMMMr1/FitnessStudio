@@ -31,14 +31,8 @@ public @interface ValueOfEnum {
      * @return the error message template
      */
     String message() default
-            "Value is not present in enum list {enumClass}";
+            "Value is not present in enum list";
 
-//    must be any of enum";
-//    + "{enumClass().getEnumConstants()}";
-
-    /**
-     * @return the groups the constraint belongs to
-     */
     Class<?>[] groups() default {};
 
     /**

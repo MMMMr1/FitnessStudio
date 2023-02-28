@@ -1,46 +1,36 @@
 package it.academy.fitness_studio.service;
 
 
-import it.academy.fitness_studio.core.converter.CustomProductEntityToModelConverter;
-import it.academy.fitness_studio.core.converter.CustomProductModelToEntityConverter;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.product.*;
-import it.academy.fitness_studio.core.exception.ValidationProductException;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.entity.IngredientEntity;
+import it.academy.fitness_studio.entity.ProductEntity;
 import it.academy.fitness_studio.entity.RecipeEntity;
 import it.academy.fitness_studio.service.api.IProductService;
 import it.academy.fitness_studio.service.api.IRecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 
 public class RecipeService implements IRecipeService {
     private final IRecipeDao dao;
     private final IProductService service;
-    private final CustomProductEntityToModelConverter converterProductEntity;
-    private final CustomProductModelToEntityConverter modelToEntityConverter;
-
-    public RecipeService(IRecipeDao dao, IProductService service,
-                         CustomProductEntityToModelConverter converterProductEntity,
-                         CustomProductModelToEntityConverter modelToEntityConverter
-    ) {
+    @Autowired
+    private ConversionService conversionService;
+    public RecipeService(IRecipeDao dao,
+                         IProductService service ) {
         this.dao = dao;
         this.service = service;
-        this.converterProductEntity = converterProductEntity;
-        this.modelToEntityConverter = modelToEntityConverter;
     }
 
     @Override
@@ -50,8 +40,9 @@ public class RecipeService implements IRecipeService {
         RecipeSavedDTO recipe = new RecipeSavedDTO(recipeDTO);
         List<IngredientDTO> ingredientDTO = recipe.getComposition();
         List<IngredientEntity> collect = ingredientDTO.stream()
-                .map(s -> new IngredientEntity(
-                        modelToEntityConverter.convert(service.getProduct(s.getProduct())), s.getWeight()))
+                .map(s ->  new IngredientEntity(
+                        conversionService.convert(service.getProduct(s.getProduct()), ProductEntity.class),
+                        s.getWeight()))
                 .collect(Collectors.toList());
         RecipeEntity recipeEntity = new RecipeEntity(recipe.getUuid(),
                 recipe.getDtCreate(),
@@ -82,18 +73,21 @@ public class RecipeService implements IRecipeService {
                     .mapToDouble(IngredientModel::getFats).sum();
             Double carbohydrates = collect.stream()
                     .mapToDouble(IngredientModel::getCarbohydrates).sum();
-            content.add(
-                    new RecipeModel(recipe.getUuid(),
-                    recipe.getDtCreate(),
-                    recipe.getDtUpdate(),
-                    recipe.getTitle(),
-                    collect,
-                    weight,
-                    calories,
-                    proteins,
-                    fats,
-                    carbohydrates
-                    ));
+            RecipeModel.RecipeModelBuilder builder = RecipeModel.RecipeModelBuilder.create()
+                    .setCalories(calories)
+                            .setCarbohydrates(carbohydrates)
+                                    .setDtCreate(recipe.getDtCreate())
+                                            .setDtUpdate(recipe.getDtUpdate())
+                                                    .setFats(fats)
+                                                            .setProteins(proteins)
+                                                                    .setUuid(recipe.getUuid())
+                                                                            .setWeight(weight)
+                                                                                    .setComposition(collect)
+                                                                                            .setTitle(recipe.getTitle());
+            content.add(builder.build());
+
+
+
         } return  new Pages<RecipeModel>(
                 all.getNumber(),
                 all.getSize(),
@@ -116,7 +110,8 @@ public class RecipeService implements IRecipeService {
             List<IngredientDTO> composition = product.getComposition();
             List<IngredientEntity> collect = composition.stream()
                     .map(s -> new IngredientEntity(
-                            modelToEntityConverter.convert(service.getProduct(s.getProduct())), s.getWeight()))
+                            conversionService.convert(service.getProduct(s.getProduct()),ProductEntity.class),
+                            s.getWeight()))
                     .collect(Collectors.toList());
             recipeEntity.setComposition(collect);
             dao.save(recipeEntity);

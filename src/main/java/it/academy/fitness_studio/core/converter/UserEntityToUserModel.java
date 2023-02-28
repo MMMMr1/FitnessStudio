@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.UUID;
 @Component
-public class CustomUserEntityConverter implements Converter<UserEntity, UserModel> {
+public class UserEntityToUserModel implements Converter<UserEntity, UserModel> {
     @Override
     public UserModel convert(UserEntity userEntity) {
         Instant dtCreate = userEntity.getDtCreate();

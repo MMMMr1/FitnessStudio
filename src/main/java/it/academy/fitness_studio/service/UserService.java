@@ -1,11 +1,6 @@
 package it.academy.fitness_studio.service;
 
-
-
-
 import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.converter.CustomUserDTOConverter;
-import it.academy.fitness_studio.core.converter.CustomUserEntityConverter;
 import it.academy.fitness_studio.core.UserStatus;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
@@ -16,6 +11,9 @@ import it.academy.fitness_studio.entity.RoleEntity;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,23 +25,19 @@ import java.util.stream.Collectors;
 
 
 public class UserService implements IUserService {
-//    @Autowired
+
     private final IUserDao dao;
-    private final CustomUserEntityConverter converterUserEntity;
-    private final CustomUserDTOConverter converterUserDTO;
-    public UserService(IUserDao dao,
-                       CustomUserEntityConverter customUserEntityConverter,
-                       CustomUserDTOConverter converterUserDTO) {
+    @Autowired
+    private ConversionService conversionService;
+    public UserService(IUserDao dao) {
         this.dao = dao;
-        this.converterUserEntity = customUserEntityConverter;
-        this.converterUserDTO = converterUserDTO;
     }
 
     @Override
     public void create(UserDTO user)  {
         validate(user);
         checkDoubleMail(user);
-        UserEntity userEntity = converterUserDTO.convert(user);
+        UserEntity userEntity = conversionService.convert(user,UserEntity.class);
         if(userEntity != null &&
                 userEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             userEntity.setCode(UUID.randomUUID().toString());
@@ -75,7 +69,7 @@ public class UserService implements IUserService {
         Page<UserEntity> all = dao.findAll(paging);
 
         List<UserModel> content = all.getContent().stream()
-                .map(s -> converterUserEntity.convert(s) )
+                .map(s -> conversionService.convert(s,UserModel.class))
                 .collect(Collectors.toList());
         return  new Pages<UserModel>(
                 all.getNumber(),
@@ -91,7 +85,7 @@ public class UserService implements IUserService {
     public UserModel getUser(UUID id) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new ValidationUserException("There is no user with such id"));
-        return converterUserEntity.convert(userEntity);
+        return  conversionService.convert(userEntity,UserModel.class);
     }
     private void validate(UserDTO user)  throws ValidationUserException{
 //        Throwable throwable = new Throwable();
@@ -101,7 +95,11 @@ public class UserService implements IUserService {
             throw new ValidationUserException("Mail not entered");
         }
 
-        if (!mail.matches("([a-zA-Z]+\\.?[a-zA-Z]+)@[a-zA-Z]+")) {
+        if (!mail.matches(
+                "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+//                "([a-zA-Z]+\\.?[a-zA-Z]+)@[a-zA-Z]+"
+        )) {
             throw new ValidationUserException("Wrong format of mail");
         }
         if (mail.length() < 6) {
@@ -116,7 +114,7 @@ public class UserService implements IUserService {
         if (password == null || password.isBlank()){
             throw new ValidationUserException("Password is not entered");
         }
-        if (password.length()<8){
+        if (password.length()<8 || password.length()>30){
             throw new ValidationUserException("Password can not be less then 8 symbols") ;
         }
 

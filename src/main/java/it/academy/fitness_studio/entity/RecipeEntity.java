@@ -16,14 +16,6 @@ public class RecipeEntity {
     @Version
     private Instant dtUpdate;
     private String title;
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST )
-//    @JoinTable(schema = "app",
-//            name = "recipe_ingredient",
-//            joinColumns =
-//            @JoinColumn(name = "recipe_id"),
-//            inverseJoinColumns =
-//            @JoinColumn(name  = "ingredient_id")
-//    )
     @ElementCollection
     @CollectionTable(
             schema = "app",

@@ -1,8 +1,10 @@
 package it.academy.fitness_studio.core.dto.product;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class RecipeDTO {
+    @NotBlank(message = "Title must not be blank")
     private String title;
     private List<IngredientDTO> composition;
 

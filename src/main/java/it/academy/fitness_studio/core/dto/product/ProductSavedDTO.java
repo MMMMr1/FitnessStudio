@@ -71,4 +71,58 @@ public class ProductSavedDTO {
     public Double getCarbohydrates() {
         return carbohydrates;
     }
+    public static class ProductSavedDTOBuilder{
+
+        private String title;
+        private Integer weight;
+        private Integer calories;
+        private Double proteins;
+        private Double fats;
+        private Double carbohydrates;
+        public static ProductSavedDTOBuilder create(){
+            return new ProductSavedDTOBuilder();
+        }
+
+
+
+        public ProductSavedDTOBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public ProductSavedDTOBuilder setWeight(Integer weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public ProductSavedDTOBuilder setCalories(Integer calories) {
+            this.calories = calories;
+            return this;
+        }
+
+        public ProductSavedDTOBuilder setProteins(Double proteins) {
+            this.proteins = proteins;
+            return this;
+        }
+
+        public ProductSavedDTOBuilder setFats(Double fats) {
+            this.fats = fats;
+            return this;
+        }
+
+        public ProductSavedDTOBuilder setCarbohydrates(Double carbohydrates) {
+            this.carbohydrates = carbohydrates;
+            return this;
+        }
+        public ProductSavedDTO build(){
+            return new ProductSavedDTO(
+                    title,
+                    weight,
+                    calories,
+                    proteins,
+                    fats,
+                    carbohydrates);
+        }
+    }
 }
+

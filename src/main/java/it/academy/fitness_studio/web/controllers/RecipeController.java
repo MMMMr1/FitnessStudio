@@ -11,6 +11,7 @@ import it.academy.fitness_studio.service.api.IProductService;
 import it.academy.fitness_studio.service.api.IRecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -26,21 +27,21 @@ public class RecipeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    protected ResponseEntity<?> create(@RequestBody RecipeDTO product) {
+    protected ResponseEntity<?> create(@RequestBody @Validated RecipeDTO product) {
         service.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @RequestMapping(method = RequestMethod.GET)
     protected ResponseEntity<Pages<RecipeModel>> getAll(
-            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "20") Integer size) {
+            @RequestParam(name = "page",   defaultValue = "0") Integer page,
+            @RequestParam(name = "size",   defaultValue = "20") Integer size) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getPageRecipe(page, size));
     }
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Long dtUpdate,
-                                        @RequestBody RecipeDTO product) {
+                                        @RequestBody @Validated RecipeDTO product) {
         Instant version = Instant.ofEpochMilli(dtUpdate);
         service.update(uuid, version, product);
         return ResponseEntity.status(HttpStatus.OK).build();

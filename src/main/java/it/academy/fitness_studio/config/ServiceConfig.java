@@ -1,44 +1,37 @@
 package it.academy.fitness_studio.config;
 
 
-import it.academy.fitness_studio.core.converter.*;
+
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.dao.api.IUserDao;
 import it.academy.fitness_studio.dao.api.IAuthenticationDao;
-import it.academy.fitness_studio.service.ProductService;
-import it.academy.fitness_studio.service.RecipeService;
-import it.academy.fitness_studio.service.UserService;
-import it.academy.fitness_studio.service.AuthenticationService;
-import it.academy.fitness_studio.service.api.IProductService;
-import it.academy.fitness_studio.service.api.IRecipeService;
-import it.academy.fitness_studio.service.api.IUserService;
-import it.academy.fitness_studio.service.api.IAuthenticationService;
+import it.academy.fitness_studio.service.*;
+import it.academy.fitness_studio.service.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.ConversionService;
 
 @Configuration
 public class ServiceConfig {
     @Bean
-    public IUserService userService(IUserDao dao, CustomUserEntityConverter converterUserEntity,
-                                     CustomUserDTOConverter converterUserDTO){
-        return new UserService(dao, converterUserEntity, converterUserDTO);
+    public IUserService userService(IUserDao dao){
+        return new UserService(dao);
     }
     @Bean
-    public IAuthenticationService authenticationService(IAuthenticationDao dao, IUserService service){
+    public IAuthenticationService authenticationService(IAuthenticationDao dao,
+                                                        IUserService service){
         return new AuthenticationService(dao, service);
     }
     @Bean
-    public IProductService productService(IProductDao dao,
-                                          CustomProductDTOConverter converterProductDTO,
-                                          CustomProductEntityToModelConverter converterProductEntity ){
-        return new ProductService(dao,converterProductDTO,converterProductEntity);
+    public IProductService productService(IProductDao dao){
+        return new ProductService(dao);
     }
     @Bean
-    public IRecipeService recipeService(IRecipeDao dao, IProductService service,
-                                        CustomProductEntityToModelConverter converterProductEntity,
-                                        CustomProductModelToEntityConverter modelToEntityConverter){
-        return new RecipeService(dao, service, converterProductEntity, modelToEntityConverter);
+    public IRecipeService recipeService(IRecipeDao dao,
+                                        IProductService service){
+        return new RecipeService(dao, service);
     }
 
 }

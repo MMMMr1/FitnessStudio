@@ -6,7 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomProductEntityToModelConverter implements Converter<ProductEntity, ProductModel> {
+public class ProductEntityToProductModel implements Converter<ProductEntity, ProductModel> {
 
     @Override
     public ProductModel convert(ProductEntity productEntity) {
