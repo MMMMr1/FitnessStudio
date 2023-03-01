@@ -12,5 +12,4 @@ public interface IRecipeService {
     void create(RecipeDTO recipe);
     Pages getPageRecipe(Pageable paging);
     void update(UUID id, Instant version, RecipeDTO product);
-//    Pages getPageProduct(int page, int size);
 }

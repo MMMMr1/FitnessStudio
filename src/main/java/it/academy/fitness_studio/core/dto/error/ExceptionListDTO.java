@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.dto.exception;
+package it.academy.fitness_studio.core.dto.error;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class ExceptionListDTO {
     }
 
     public ExceptionListDTO(List<ExceptionStructuredDTO> message) {
-        this.logref = "error";
+        this.logref = "structured_error";
         this.errors = message;
     }
 

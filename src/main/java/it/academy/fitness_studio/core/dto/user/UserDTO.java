@@ -3,34 +3,26 @@ package it.academy.fitness_studio.core.dto.user;
 
 import it.academy.fitness_studio.core.UserRole;
 import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.validator.ValidEmail;
+import it.academy.fitness_studio.core.validator.ValidPassword;
 import it.academy.fitness_studio.core.validator.ValueOfEnum;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class UserDTO {
-    @NotBlank(message = "Mail must not be blank")
-    @Pattern(regexp="^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$",
-            message="Wrong format of mail")
+    @ValidEmail(message="Wrong format of mail")
     private String mail;
-
-    @NotBlank(message = "Name must not be blank")
     @Pattern(regexp="([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)",
-    message = "Write correct full name")
+    message = "Wrong format of name")
     private String fio;
-
     @ValueOfEnum(enumClass = UserRole.class)
     private String role;
-
-//    @RoleTypeSubset(anyOf = {UserRole.ADMIN,UserRole.USER})
-//    private UserRole role;
     @ValueOfEnum(enumClass = UserStatus.class)
     private String status;
-//    @NotNull
-//    @ValidPassword
+    @ValidPassword
     private String password;
-
     public UserDTO(String mail,
                    String fio,
                    String role,

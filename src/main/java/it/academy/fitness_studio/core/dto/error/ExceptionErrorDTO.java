@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.dto.exception;
+package it.academy.fitness_studio.core.dto.error;
 
 public class ExceptionErrorDTO {
     private String logref;

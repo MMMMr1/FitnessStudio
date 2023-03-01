@@ -1,95 +1,94 @@
 package it.academy.fitness_studio.web;
 
-import it.academy.fitness_studio.core.dto.exception.ExceptionErrorDTO;
-import it.academy.fitness_studio.core.dto.exception.ExceptionStructuredDTO;
-import it.academy.fitness_studio.core.dto.exception.ExceptionListDTO;
-import it.academy.fitness_studio.core.exception.ValidationProductException;
-import it.academy.fitness_studio.core.exception.ValidationRecipeException;
-import it.academy.fitness_studio.core.exception.ValidationUserException;
+import it.academy.fitness_studio.core.dto.error.ExceptionErrorDTO;
+import it.academy.fitness_studio.core.dto.error.ExceptionStructuredDTO;
+import it.academy.fitness_studio.core.dto.error.ExceptionListDTO;
+import it.academy.fitness_studio.core.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
-//    @ExceptionHandler(value = {NullPointerException.class,
-//            ArrayIndexOutOfBoundsException.class})
-//    public ResponseEntity<Exception400DTO> handlerNPE(RuntimeException e ){
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body(new Exception400DTO(e.getLocalizedMessage()));
-//    }
-    @ExceptionHandler(value = {ValidationUserException.class})
+
+    //400 @Validated
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
+        List<ExceptionStructuredDTO> error = e.getBindingResult().getFieldErrors().stream()
+                .map(s -> new ExceptionStructuredDTO(s.getField(), s.getDefaultMessage()))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionListDTO(error));
+    }
+//    400
+    @ExceptionHandler(value = {NumberFormatException.class})
     public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotValidException(
             ValidationUserException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-    @ExceptionHandler(value = {ValidationProductException.class})
+    @ExceptionHandler(value = {ValidationUserException.class})
     public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductNotValidException(
-            ValidationProductException e) {
+            ValidationUserException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
     @ExceptionHandler(value = {ValidationRecipeException.class})
     public ResponseEntity<List<ExceptionErrorDTO>> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
-
+        List<ExceptionErrorDTO> collect = Arrays.stream(e.getSuppressed())
+                .map(s -> new ExceptionErrorDTO(s.getMessage()))
+                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(collect);
+//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
+
+    //    404
+    @ExceptionHandler(value = {UserNotFoundException.class,
+            ProductNotFoundException.class,
+            RecipeNotFoundException.class})
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotFoundException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
-        List<ExceptionStructuredDTO> error = e.getBindingResult().getFieldErrors().stream()
-                    .map(s -> new ExceptionStructuredDTO(s.getField(), s.getDefaultMessage()))
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest()
-                    .body(new ExceptionListDTO(error));
+    //    409
+    @ExceptionHandler(value = {ProductAlreadyExistException.class})
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductAlreadyExistException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
+    @ExceptionHandler(value = {RecipeAlreadyExistException.class})
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentRecipeAlreadyExistException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
+    @ExceptionHandler(value = {UserAlreadyExistException.class })
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentUserAlreadyExistException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }    @ExceptionHandler(value = {InvalidVersionException.class})
+    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentInvalidVersionException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
+
+//    500
     @ExceptionHandler
-    public ResponseEntity<ExceptionStructuredDTO> handlerNPE(Throwable e){
+    public ResponseEntity<List<ExceptionErrorDTO>> handlerNPE(Throwable e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ExceptionStructuredDTO("error", e.getMessage()));
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-//    --------------------------------------------------------------------
 }
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(
-//            IllegalArgumentException e
-//    ) {
-//        Throwable[] suppressed = e.getSuppressed();
-//
-//        return ResponseEntity.badRequest().body(new ExceptionListDTO("structured_error",e.));
-//    }
-//}
-
-
-
-//    @ResponseBody
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<ExceptionListDTO> onConstraintValidationException(
-//            ConstraintViolationException e
-//    ) {
-//        List<ExceptionDTO> error = e.getConstraintViolations().stream()
-//                .map(s -> new ExceptionDTO(s.getPropertyPath().toString(),
-//                        s.getMessage()))
-//                .collect(Collectors.toList());
-//        return ResponseEntity.badRequest().body(new ExceptionListDTO(error));
-//    }
-
-//        final List<Violation> violations = e.getConstraintViolations().stream()
-//                .map(
-//                        violation -> new Violation(
-//                                violation.getPropertyPath().toString(),
-//                                violation.getMessage()
-//                        )
-//                )
-//                .collect(Collectors.toList());
-//        return   ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body( new ValidationErrorResponse(violations));
-//    }

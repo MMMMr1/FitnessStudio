@@ -70,7 +70,7 @@ public class IngredientModel {
     }
     private void checkWeight(Integer weight){
         if (weight <= 0) {
-            throw new ValidationRecipeException("Check product with id : "+
+            throw new NumberFormatException("Check product with id : "+
                     product.getUuid() +". Weight can not be <= 0");
         }
     }

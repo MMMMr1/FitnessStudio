@@ -21,7 +21,7 @@ public class AuthenticationController {
     }
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
     protected ResponseEntity<?> create(
-            @RequestBody @Valid UserRegistrationDTO user) throws ValidationUserException {
+            @RequestBody @Validated UserRegistrationDTO user) {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

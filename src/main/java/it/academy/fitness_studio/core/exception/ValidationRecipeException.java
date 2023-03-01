@@ -7,4 +7,8 @@ public class ValidationRecipeException extends IllegalArgumentException {
     public ValidationRecipeException(String message) {
         super(message);
     }
+
+    public ValidationRecipeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

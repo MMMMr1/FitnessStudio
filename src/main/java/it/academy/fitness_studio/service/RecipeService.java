@@ -3,6 +3,9 @@ package it.academy.fitness_studio.service;
 
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.product.*;
+import it.academy.fitness_studio.core.exception.InvalidVersionException;
+import it.academy.fitness_studio.core.exception.RecipeAlreadyExistException;
+import it.academy.fitness_studio.core.exception.RecipeNotFoundException;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.entity.IngredientEntity;
@@ -15,6 +18,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,9 +37,8 @@ public class RecipeService implements IRecipeService {
         this.dao = dao;
         this.service = service;
     }
-
     @Override
-    public void create(RecipeDTO recipeDTO) {
+    public void create( @Validated RecipeDTO recipeDTO) {
         validate(recipeDTO);
         checkDoubleRecipe(recipeDTO);
         RecipeSavedDTO recipe = new RecipeSavedDTO(recipeDTO);
@@ -55,7 +58,6 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public Pages getPageRecipe(Pageable paging) {
-//        PageRequest paging = PageRequest.of(page, size);
         Page<RecipeEntity> all = dao.findAll(paging);
         List<RecipeModel>  content  = new ArrayList<>();
         for (RecipeEntity recipe: all.getContent()) {
@@ -86,9 +88,6 @@ public class RecipeService implements IRecipeService {
                                                                                     .setComposition(collect)
                                                                                             .setTitle(recipe.getTitle());
             content.add(builder.build());
-
-
-
         } return  new Pages<RecipeModel>(
                 all.getNumber(),
                 all.getSize(),
@@ -102,10 +101,9 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public void update(UUID id, Instant version, RecipeDTO product) {
-//        validate
         validate(product);
         RecipeEntity recipeEntity = dao.findById(id)
-                .orElseThrow(() -> new ValidationRecipeException("There is no recipe with such id"));
+                .orElseThrow(() -> new RecipeNotFoundException("There is no recipe with such id"));
         if (version.toEpochMilli() == recipeEntity.getDtUpdate().toEpochMilli()){
             recipeEntity.setTitle(product.getTitle());
             List<IngredientDTO> composition = product.getComposition();
@@ -116,29 +114,32 @@ public class RecipeService implements IRecipeService {
                     .collect(Collectors.toList());
             recipeEntity.setComposition(collect);
             dao.save(recipeEntity);
-        }  else throw new ValidationRecipeException("Version is not correct");
+        }  else throw new InvalidVersionException("Version is not correct");
     }
     private void validate(RecipeDTO recipe) throws ValidationRecipeException {
         String title = recipe.getTitle();
-
+        ValidationRecipeException validationRecipeException = new ValidationRecipeException();
         if (title == null || title.isBlank()){
-            throw new ValidationRecipeException("Title of product is not entered");
+           validationRecipeException.addSuppressed(new ValidationRecipeException("Title of product is not entered"));
         }
         List<IngredientDTO> composition = recipe.getComposition();
 
         for (IngredientDTO ingredient:composition) {
             if (service.getProduct(ingredient.getProduct()) == null){
-                throw new ValidationRecipeException("Product with id "+ ingredient.getProduct()+" is not exist");
+                validationRecipeException.addSuppressed(new ValidationRecipeException("Product with id "+ ingredient.getProduct()+" is not exist"));
             }
             if (ingredient.getWeight() <=0 ){
-                throw new ValidationRecipeException("Weight of ingredient with id "+ ingredient.getProduct()+ " is incorrect");
+                validationRecipeException.addSuppressed(new ValidationRecipeException( "Weight of ingredient with id "+ ingredient.getProduct()+ " is incorrect"));
             }
         }
+        if (validationRecipeException.getSuppressed().length>0){
+            throw validationRecipeException;
+        }
     }
-    private void checkDoubleRecipe(RecipeDTO recipe) throws ValidationRecipeException{
+    private void checkDoubleRecipe(RecipeDTO recipe) {
         String title = recipe.getTitle();
         if (dao.findByTitle(title) != null){
-            throw new ValidationRecipeException("Product with such title has already exist");
+            throw new RecipeAlreadyExistException("Product with title '"+title+"' has already existed");
         }
     }
 }

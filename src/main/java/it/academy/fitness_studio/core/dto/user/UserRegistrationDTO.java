@@ -1,14 +1,20 @@
 package it.academy.fitness_studio.core.dto.user;
 
 
+import it.academy.fitness_studio.core.validator.ValidEmail;
+import it.academy.fitness_studio.core.validator.ValidPassword;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class UserRegistrationDTO {
-    @NotBlank
+    @ValidEmail
     private String mail;
-    @NotBlank
+    @NotBlank(message = "Name must not be blank")
+    @Pattern(regexp="([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)",
+            message = "Write correct full name")
     private String fio;
-    @NotBlank
+    @ValidPassword
     private String password;
 
     public UserRegistrationDTO() {
