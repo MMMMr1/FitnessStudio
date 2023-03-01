@@ -4,6 +4,7 @@ package it.academy.fitness_studio.core.dto.user;
 import it.academy.fitness_studio.core.UserRole;
 import it.academy.fitness_studio.core.UserStatus;
 import it.academy.fitness_studio.core.validator.ValidEmail;
+import it.academy.fitness_studio.core.validator.ValidName;
 import it.academy.fitness_studio.core.validator.ValidPassword;
 import it.academy.fitness_studio.core.validator.ValueOfEnum;
 
@@ -14,8 +15,8 @@ import javax.validation.constraints.Pattern;
 public class UserDTO {
     @ValidEmail(message="Wrong format of mail")
     private String mail;
-    @Pattern(regexp="([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)",
-    message = "Wrong format of name")
+//    @Pattern(regexp="([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)",
+    @ValidName(message = "Wrong format of name")
     private String fio;
     @ValueOfEnum(enumClass = UserRole.class)
     private String role;
