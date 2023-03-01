@@ -6,12 +6,15 @@ import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.service.api.IUserService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -32,10 +35,11 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     protected ResponseEntity<Pages<UserModel>> getAll(
-            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "20") Integer size) {
+            @RequestParam(name = "page", defaultValue = "0")  Integer page,
+            @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        Pageable paging = PageRequest.of(page, size);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(service.getPageUser(page, size));
+                .body(service.getPageUser(paging));
     }
 
     @RequestMapping(path = "/{uuid}", method = RequestMethod.GET)

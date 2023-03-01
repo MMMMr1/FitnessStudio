@@ -63,11 +63,9 @@ public class UserService implements IUserService {
         }  else throw new ValidationUserException("Version is not correct");
     }
 
-    public Pages getPageUser(int page, int size) {
-        Pageable paging = PageRequest.of(page, size);
-
+    public Pages getPageUser(Pageable paging) {
+//        Pageable paging = PageRequest.of(page, size);
         Page<UserEntity> all = dao.findAll(paging);
-
         List<UserModel> content = all.getContent().stream()
                 .map(s -> conversionService.convert(s,UserModel.class))
                 .collect(Collectors.toList());

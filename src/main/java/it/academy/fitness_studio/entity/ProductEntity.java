@@ -7,7 +7,6 @@ import java.util.UUID;
 @Entity
 @Table(schema = "app",name = "product")
 public class ProductEntity {
-
     @Id
     @Column(name = "id")
     private UUID uuid;
@@ -28,10 +27,8 @@ public class ProductEntity {
     private Double fats;
     @Column(name = "carbohydrates")
     private Double carbohydrates;
-
     public ProductEntity() {
     }
-
     public ProductEntity(UUID uuid,
                          Instant dtCreate,
                          Instant dtUpdate,
@@ -51,63 +48,48 @@ public class ProductEntity {
         this.fats = fats;
         this.carbohydrates = carbohydrates;
     }
-
     public UUID getUuid() {
         return uuid;
     }
-
     public Instant getDtCreate() {
         return dtCreate;
     }
-
     public Instant getDtUpdate() {
         return dtUpdate;
     }
-
     public String getTitle() {
         return title;
     }
-
     public Integer getWeight() {
         return weight;
     }
-
     public Integer getCalories() {
         return calories;
     }
-
     public Double getProteins() {
         return proteins;
     }
-
     public Double getFats() {
         return fats;
     }
-
     public Double getCarbohydrates() {
         return carbohydrates;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
-
     public void setCalories(Integer calories) {
         this.calories = calories;
     }
-
     public void setProteins(Double proteins) {
         this.proteins = proteins;
     }
-
     public void setFats(Double fats) {
         this.fats = fats;
     }
-
     public void setCarbohydrates(Double carbohydrates) {
         this.carbohydrates = carbohydrates;
     }

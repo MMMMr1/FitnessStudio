@@ -1,7 +1,5 @@
 package it.academy.fitness_studio.entity;
 
-import org.hibernate.annotations.CollectionId;
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
@@ -9,7 +7,6 @@ import java.util.UUID;
 @Entity
 @Table(schema = "app",name = "recipes")
 public class RecipeEntity {
-
     @Id
     private UUID uuid;
     private Instant dtCreate;
@@ -23,10 +20,8 @@ public class RecipeEntity {
             joinColumns = @JoinColumn(name ="recipe_id" )
     )
     private List<IngredientEntity> composition;
-
     public RecipeEntity() {
     }
-
     public RecipeEntity(UUID uuid,
                         Instant dtCreate,
                         Instant dtUpdate,
@@ -38,31 +33,24 @@ public class RecipeEntity {
         this.title = title;
         this.composition = composition;
     }
-
     public UUID getUuid() {
         return uuid;
     }
-
     public Instant getDtCreate() {
         return dtCreate;
     }
-
     public Instant getDtUpdate() {
         return dtUpdate;
     }
-
     public String getTitle() {
         return title;
     }
-
     public List<IngredientEntity> getComposition() {
         return composition;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public void setComposition(List<IngredientEntity> composition) {
         this.composition = composition;
     }

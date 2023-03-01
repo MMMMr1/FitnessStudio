@@ -23,11 +23,8 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService {
 
     private final IProductDao dao;
-//    private final IProductConverterService converterService;
-//    CustomProductDTOConverter converterProductDTO;
-//    private final CustomProductEntityToModelConverter converterProductEntity;
-   @Autowired
-   private ConversionService conversionService;
+    @Autowired
+    private ConversionService conversionService;
     public ProductService(IProductDao dao) {
         this.dao = dao;
     }
@@ -55,8 +52,8 @@ public class ProductService implements IProductService {
             dao.save(productEntity);
         } else throw new ValidationProductException("Version is not correct");
     }
-    public Pages getPageProduct(int page, int size) {
-        Pageable paging = PageRequest.of(page, size);
+    public Pages getPageProduct(Pageable paging) {
+//        Pageable paging = PageRequest.of(page, size);
 
         Page<ProductEntity> all = dao.findAll(paging);
         if (all == null){
@@ -83,6 +80,8 @@ public class ProductService implements IProductService {
                 .orElseThrow(() -> new ValidationProductException("There is no product with such id"));
          return conversionService.convert(productEntity,ProductModel.class);
     }
+
+
     private void validate(ProductDTO product) throws ValidationProductException{
         String title = product.getTitle();
 

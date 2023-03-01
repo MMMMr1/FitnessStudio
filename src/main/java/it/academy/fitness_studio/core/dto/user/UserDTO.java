@@ -3,11 +3,9 @@ package it.academy.fitness_studio.core.dto.user;
 
 import it.academy.fitness_studio.core.UserRole;
 import it.academy.fitness_studio.core.UserStatus;
-import it.academy.fitness_studio.core.exception.ValidPassword;
-import it.academy.fitness_studio.core.exception.ValueOfEnum;
+import it.academy.fitness_studio.core.validator.ValueOfEnum;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class UserDTO {

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,8 +54,8 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public Pages getPageRecipe(int page, int size) {
-        PageRequest paging = PageRequest.of(page, size);
+    public Pages getPageRecipe(Pageable paging) {
+//        PageRequest paging = PageRequest.of(page, size);
         Page<RecipeEntity> all = dao.findAll(paging);
         List<RecipeModel>  content  = new ArrayList<>();
         for (RecipeEntity recipe: all.getContent()) {

@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.exception;
+package it.academy.fitness_studio.core.validator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

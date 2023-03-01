@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.exception;
+package it.academy.fitness_studio.core.validator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;

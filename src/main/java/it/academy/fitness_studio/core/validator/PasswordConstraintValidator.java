@@ -1,6 +1,6 @@
-package it.academy.fitness_studio.core.exception;
+package it.academy.fitness_studio.core.validator;
 
-import org.passay.*;
+import it.academy.fitness_studio.core.validator.ValidPassword;
 
 import java.util.Arrays;
 
