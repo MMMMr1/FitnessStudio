@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.core.converter;
 
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.enums.UserRole;
+import it.academy.fitness_studio.core.enums.UserStatus;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;

@@ -1,24 +1,20 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.enums.UserRole;
+import it.academy.fitness_studio.core.enums.UserStatus;
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.InvalidVersionException;
 import it.academy.fitness_studio.core.exception.UserAlreadyExistException;
 import it.academy.fitness_studio.core.exception.UserNotFoundException;
-import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.dao.api.IUserDao;
 import it.academy.fitness_studio.entity.RoleEntity;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,27 +25,26 @@ import java.util.stream.Collectors;
 
 
 public class UserService implements IUserService {
-
     private final IUserDao dao;
-    @Autowired
-    private ConversionService conversionService;
-    public UserService(IUserDao dao) {
-        this.dao = dao;
-    }
 
+    private ConversionService conversionService;
+    public UserService(IUserDao dao, ConversionService conversionService) {
+        this.dao = dao;
+        this.conversionService = conversionService;
+    }
     @Override
     public void create(@Validated UserDTO user)  {
         checkDoubleMail(user);
-        UserEntity userEntity = conversionService.convert(user,UserEntity.class);
-        if(userEntity != null &&
-                userEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
-            userEntity.setCode(UUID.randomUUID().toString());
+        if (!conversionService.canConvert(UserDTO.class, UserEntity.class)) {
+            throw new RuntimeException("Can not convert UserDTO.class to UserEntity.class");
         }
+        UserEntity userEntity = conversionService.convert(user,UserEntity.class);
+        userEntity.setUuid(UUID.randomUUID());
+        Instant now = Instant.now();
+        userEntity.setDtCreate(now);
+        userEntity.setDtUpdate(now);
         dao.save(userEntity);
     }
-
-
-
     @Override
     public void update(UUID id, Instant version, @Validated  UserDTO user)  {
         UserEntity userEntity = dao.findById(id)
@@ -57,33 +52,39 @@ public class UserService implements IUserService {
         if ( version.toEpochMilli() == userEntity.getDtUpdate().toEpochMilli()){
             userEntity.setFio(user.getFio());
             userEntity.setMail(user.getMail());
-            String status = user.getStatus();
-            userEntity.setStatus(new StatusEntity(UserStatus.valueOf(status)));
+//            String status = user.getStatus();
+//            userEntity.setStatus(new StatusEntity(UserStatus.valueOf(status)));
+         userEntity.setStatus(new StatusEntity(user.getStatus()));
             userEntity.setPassword(user.getPassword());
-            userEntity.setRole(new RoleEntity(UserRole.valueOf(user.getRole())));
+            userEntity.setRole(new RoleEntity(user.getRole()));
             dao.save(userEntity);
         }  else throw new InvalidVersionException("Invalid version");
     }
-
     public Pages getPageUser(Pageable paging) {
         Page<UserEntity> all = dao.findAll(paging);
+        if (!conversionService.canConvert(UserEntity.class,UserModel.class)) {
+            throw new RuntimeException("Can not convert UserEntity.class to UserModel.class");
+        }
         List<UserModel> content = all.getContent().stream()
                 .map(s -> conversionService.convert(s,UserModel.class))
                 .collect(Collectors.toList());
-        return  new Pages<UserModel>(
-                all.getNumber(),
-                all.getSize(),
-                all.getTotalPages(),
-                all.getTotalElements(),
-                all.isFirst(),
-                all.getNumberOfElements(),
-                all.isLast(),
-                content);
+        return  Pages.PagesBuilder.create().setNumber(all.getNumber())
+                .setContent(content)
+                .setFirst(all.isFirst())
+                .setLast(all.isLast())
+                .setNumberOfElements(all.getNumberOfElements())
+                .setSize(all.getSize())
+                .setTotalPages(all.getTotalPages())
+                .setTotalElements(all.getTotalElements())
+                .build();
     }
     @Override
     public UserModel getUser(UUID id) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
+        if (!conversionService.canConvert(UserEntity.class,UserModel.class)) {
+            throw new RuntimeException("Can not convert UserEntity.class to UserModel.class");
+        }
         return  conversionService.convert(userEntity,UserModel.class);
     }
     private void checkDoubleMail(UserDTO user) {

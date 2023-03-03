@@ -10,15 +10,16 @@ public class ProductEntityToProductModel implements Converter<ProductEntity, Pro
 
     @Override
     public ProductModel convert(ProductEntity productEntity) {
-        ProductModel productModel = new ProductModel(productEntity.getUuid(),
-                productEntity.getDtCreate(),
-                productEntity.getDtUpdate(),
-                productEntity.getTitle(),
-                productEntity.getWeight(),
-                productEntity.getCalories(),
-                productEntity.getProteins(),
-                productEntity.getFats(),
-                productEntity.getCarbohydrates());
-        return productModel;
+        return ProductModel.ProductModelBuilder.create()
+                .setUuid(productEntity.getUuid())
+                .setDtCreate(productEntity.getDtCreate())
+                .setDtUpdate(productEntity.getDtUpdate())
+                .setCalories(productEntity.getCalories())
+                .setFats(productEntity.getFats())
+                .setCarbohydrates(productEntity.getCarbohydrates())
+                .setProteins(productEntity.getProteins())
+                .setWeight(productEntity.getWeight())
+                .setTitle(productEntity.getTitle())
+                .build();
     }
 }

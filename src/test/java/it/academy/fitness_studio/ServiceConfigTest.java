@@ -5,7 +5,6 @@ import it.academy.fitness_studio.dao.api.IAuthenticationDao;
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.dao.api.IUserDao;
-import it.academy.fitness_studio.service.UserService;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IProductService;
 import it.academy.fitness_studio.service.api.IRecipeService;

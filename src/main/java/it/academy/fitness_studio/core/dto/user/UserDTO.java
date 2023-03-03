@@ -1,22 +1,16 @@
 package it.academy.fitness_studio.core.dto.user;
 
-
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.enums.UserRole;
+import it.academy.fitness_studio.core.enums.UserStatus;
 import it.academy.fitness_studio.core.validator.ValidEmail;
 import it.academy.fitness_studio.core.validator.ValidName;
 import it.academy.fitness_studio.core.validator.ValidPassword;
 import it.academy.fitness_studio.core.validator.ValueOfEnum;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 public class UserDTO {
-    @ValidEmail(message="Wrong format of mail")
+    @ValidEmail(message="Wrong format")
     private String mail;
-//    @Pattern(regexp="([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)",
-    @ValidName(message = "Wrong format of name")
+    @ValidName(message = "Wrong format")
     private String fio;
     @ValueOfEnum(enumClass = UserRole.class)
     private String role;
@@ -35,7 +29,6 @@ public class UserDTO {
         this.status = status;
         this.password = password;
     }
-
     public UserDTO(String mail, String fio, String password) {
         this.mail = mail;
         this.fio = fio;
@@ -43,28 +36,22 @@ public class UserDTO {
         this.role = UserRole.USER.toString();
         this.status = UserStatus.WAITING_ACTIVATION.toString();
     }
-
     public UserDTO() {
     }
-
     public String getMail() {
         return mail;
     }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
-
     public String getFio() {
         return fio;
     }
-
     public void setFio(String fio) {
         this.fio = fio;
     }
-
-    public String getRole() {
-        return role;
+    public UserRole getRole() {
+        return UserRole.valueOf(role);
     }
 
     public void setRole(String role) {
@@ -78,8 +65,8 @@ public class UserDTO {
 //        this.role = role;
 //    }
 
-    public String getStatus() {
-        return status;
+    public UserStatus getStatus() {
+        return UserStatus.valueOf(status);
     }
 
     public void setStatus(String status) {

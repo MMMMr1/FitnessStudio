@@ -20,21 +20,11 @@ import javax.validation.Payload;
 @Documented
 @Constraint(validatedBy = ValueOfEnumValidator.class)
 public @interface ValueOfEnum {
-    /**
-     * @return class containing enum values to which this String should match
-     */
-    Class<? extends Enum<?>> enumClass();
 
-    /**
-     * @return the error message template
-     */
+    Class<? extends Enum<?>> enumClass();
     String message() default
             "Value is not present in enum list";
-
     Class<?>[] groups() default {};
 
-    /**
-     * @return the payload associated to the constraint
-     */
     Class<? extends Payload>[] payload() default {};
 }

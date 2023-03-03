@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.entity;
 
-import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.enums.UserStatus;
 
 import javax.persistence.*;
 

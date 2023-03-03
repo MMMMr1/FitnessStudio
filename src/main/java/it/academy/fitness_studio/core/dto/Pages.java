@@ -1,30 +1,34 @@
 package it.academy.fitness_studio.core.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.academy.fitness_studio.core.dto.product.IngredientModel;
+import it.academy.fitness_studio.core.dto.product.RecipeModel;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
+
 //@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pages<T> {
     @JsonProperty("number")
-    int number;
+    private int number;
     @JsonProperty("size")
-    int size;
+    private int size;
     @JsonProperty("total_pages")
-    int totalPages;
+    private int totalPages;
     @JsonProperty("total_elements")
-    long totalElements;
+    private long totalElements;
     @JsonProperty("first")
-    boolean first;
+    private boolean first;
     @JsonProperty("number_of_elements")
-    int numberOfElements;
+    private int numberOfElements;
     @JsonProperty("last")
-    boolean last;
+    private boolean last;
     @JsonProperty("content")
-    List<T> content;
+    private List<T> content;
 
-    public Pages() {
+    public Pages () {
     }
 
     public Pages(int number,
@@ -42,7 +46,7 @@ public class Pages<T> {
         this.first = first;
         this.numberOfElements = numberOfElements;
         this.last = last;
-        this.content =content;
+        this.content = content;
     }
 
     public int getNumber() {
@@ -107,5 +111,75 @@ public class Pages<T> {
 
     public void setContent(List<T> content) {
         this.content = content;
+    }
+
+    public static class PagesBuilder<T> {
+        private int number;
+        private int size;
+        private int totalPages;
+        private long totalElements;
+        private boolean first;
+        private int numberOfElements;
+        private boolean last;
+        private List<T> content;
+
+        private PagesBuilder() {
+        }
+
+        public static <T>PagesBuilder<T> create( ) {
+            return new PagesBuilder<T>();
+        }
+
+        public PagesBuilder setNumber(int number) {
+            this.number = number;
+            return this;
+        }
+
+        public PagesBuilder setSize(int size) {
+            this.size = size;
+            return this;
+        }
+
+        public PagesBuilder setTotalPages(int totalPages) {
+            this.totalPages = totalPages;
+            return this;
+        }
+
+        public PagesBuilder setTotalElements(long totalElements) {
+            this.totalElements = totalElements;
+            return this;
+        }
+
+        public PagesBuilder setFirst(boolean first) {
+            this.first = first;
+            return this;
+        }
+
+        public PagesBuilder setNumberOfElements(int numberOfElements) {
+            this.numberOfElements = numberOfElements;
+            return this;
+        }
+
+        public PagesBuilder setLast(boolean last) {
+            this.last = last;
+            return this;
+        }
+
+        public PagesBuilder setContent(List<T> content) {
+            this.content = content;
+            return this;
+        }
+
+        public Pages build() {
+            return new Pages(
+                    number,
+                    size,
+                    totalPages,
+                    totalElements,
+                    first,
+                    numberOfElements,
+                    last,
+                    content);
+        }
     }
 }

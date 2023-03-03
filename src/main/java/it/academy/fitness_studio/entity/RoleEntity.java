@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.entity;
 
-import it.academy.fitness_studio.core.UserRole;
+import it.academy.fitness_studio.core.enums.UserRole;
 
 import javax.persistence.*;
 

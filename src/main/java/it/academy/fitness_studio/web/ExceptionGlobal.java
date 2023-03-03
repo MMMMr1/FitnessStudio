@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
+    private ValidationRecipeException e;
 
     //400 @Validated
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,23 +35,21 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-    @ExceptionHandler(value = {ValidationUserException.class})
-    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductNotValidException(
-            ValidationUserException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }
+//    @ExceptionHandler(value = {ValidationUserException.class})
+//    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductNotValidException(
+//            ValidationUserException e) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+//    }
     @ExceptionHandler(value = {ValidationRecipeException.class})
-    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentRecipeNotValidException(
+    public ResponseEntity<ExceptionListDTO> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
-        List<ExceptionErrorDTO> collect = Arrays.stream(e.getSuppressed())
-                .map(s -> new ExceptionErrorDTO(s.getMessage()))
+        List<ExceptionStructuredDTO> collect = Arrays.stream(e.getSuppressed())
+                .map(s -> new ExceptionStructuredDTO(s.getMessage(),s.getCause().getMessage()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(collect);
-//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+                .body(new ExceptionListDTO(collect));
     }
-
     //    404
     @ExceptionHandler(value = {UserNotFoundException.class,
             ProductNotFoundException.class,
@@ -84,7 +83,6 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-
 //    500
     @ExceptionHandler
     public ResponseEntity<List<ExceptionErrorDTO>> handlerNPE(Throwable e){

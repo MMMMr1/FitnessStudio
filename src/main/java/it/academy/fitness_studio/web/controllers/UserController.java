@@ -1,10 +1,8 @@
 package it.academy.fitness_studio.web.controllers;
 
-
 import it.academy.fitness_studio.core.dto.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.service.api.IUserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.PositiveOrZero;
 import java.time.Instant;
 import java.util.UUID;
 

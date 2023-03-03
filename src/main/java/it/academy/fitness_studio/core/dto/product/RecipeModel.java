@@ -7,7 +7,6 @@ import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +41,6 @@ public class RecipeModel {
 
     public RecipeModel() {
     }
-
     public RecipeModel(UUID uuid,
                        Instant dtCreate,
                        Instant dtUpdate,
@@ -152,27 +150,22 @@ public class RecipeModel {
             this.weight = weight;
             return this;
         }
-
         public RecipeModelBuilder setCalories(Integer calories) {
             this.calories = calories;
             return this;
         }
-
         public RecipeModelBuilder setProteins(Double proteins) {
             this.proteins = proteins;
             return this;
         }
-
         public RecipeModelBuilder setFats(Double fats) {
             this.fats = fats;
             return this;
         }
-
         public RecipeModelBuilder setCarbohydrates(Double carbohydrates) {
             this.carbohydrates = carbohydrates;
             return this;
         }
-
         public RecipeModel build(){
             return new RecipeModel(
                     uuid,

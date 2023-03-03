@@ -48,6 +48,21 @@ public class ProductEntity {
         this.fats = fats;
         this.carbohydrates = carbohydrates;
     }
+
+    public ProductEntity(String title,
+                         Integer weight,
+                         Integer calories,
+                         Double proteins,
+                         Double fats,
+                         Double carbohydrates) {
+        this.title = title;
+        this.weight = weight;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+
     public UUID getUuid() {
         return uuid;
     }
@@ -75,6 +90,19 @@ public class ProductEntity {
     public Double getCarbohydrates() {
         return carbohydrates;
     }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setDtCreate(Instant dtCreate) {
+        this.dtCreate = dtCreate;
+    }
+
+    public void setDtUpdate(Instant dtUpdate) {
+        this.dtUpdate = dtUpdate;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

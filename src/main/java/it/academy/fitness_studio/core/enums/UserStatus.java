@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core;
+package it.academy.fitness_studio.core.enums;
 
 
 public enum UserStatus {

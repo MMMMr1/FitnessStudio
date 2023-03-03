@@ -1,17 +1,11 @@
 package it.academy.fitness_studio.core.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.UserRole;
-import it.academy.fitness_studio.core.UserStatus;
 import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
-import org.springframework.format.annotation.NumberFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Version;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -29,8 +23,6 @@ public class ProductModel {
     private String title;
     @JsonProperty("weight")
     private Integer weight;
-
-
     @JsonProperty("calories")
     private Integer calories;
     @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
@@ -42,10 +34,8 @@ public class ProductModel {
     @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
     @JsonProperty("carbohydrates")
     private Double carbohydrates;
-
     public ProductModel() {
     }
-
     public ProductModel(UUID uuid,
                         Instant dtCreate,
                         Instant dtUpdate,
@@ -100,5 +90,79 @@ public class ProductModel {
 
     public Double getCarbohydrates() {
         return carbohydrates;
+    }
+    public static class ProductModelBuilder {
+        private UUID uuid;
+        private Instant dtCreate;
+        private Instant dtUpdate;
+        private String title;
+        private  Integer weight;
+        private  Integer calories;
+        private Double proteins;
+        private Double fats;
+        private Double carbohydrates;
+        private ProductModelBuilder() {
+        }
+
+        public static ProductModelBuilder create(){
+            return new ProductModelBuilder();
+        }
+
+        public ProductModelBuilder setUuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public ProductModelBuilder setDtCreate(Instant dtCreate) {
+            this.dtCreate = dtCreate;
+            return this;
+        }
+
+        public ProductModelBuilder setDtUpdate(Instant dtUpdate) {
+            this.dtUpdate = dtUpdate;
+            return this;
+        }
+
+        public ProductModelBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+        public ProductModelBuilder setWeight(Integer weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public ProductModelBuilder setCalories(Integer calories) {
+            this.calories = calories;
+            return this;
+        }
+
+        public ProductModelBuilder setProteins(Double proteins) {
+            this.proteins = proteins;
+            return this;
+        }
+
+        public ProductModelBuilder setFats(Double fats) {
+            this.fats = fats;
+            return this;
+        }
+
+        public ProductModelBuilder setCarbohydrates(Double carbohydrates) {
+            this.carbohydrates = carbohydrates;
+            return this;
+        }
+
+        public ProductModel build(){
+            return new ProductModel(
+                    uuid,
+                    dtCreate,
+                    dtUpdate,
+                    title,
+                    weight,
+                    calories,
+                    proteins,
+                    fats,
+                    carbohydrates);
+        }
     }
 }

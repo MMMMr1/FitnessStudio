@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.UserStatus;
+import it.academy.fitness_studio.core.enums.UserStatus;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
@@ -13,7 +13,7 @@ import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IUserService;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public class AuthenticationService implements IAuthenticationService {
     private final IAuthenticationDao dao;
@@ -26,6 +26,13 @@ public class AuthenticationService implements IAuthenticationService {
     @Override
     public void create(UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
+//        здесь генерируем код и отправляем
+//        if(userEntity != null &&
+//                userEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+//            String code = UUID.randomUUID().toString();
+//            userEntity.setCode(code);
+////            mailService.send(code, mail);
+//        }
     }
 
     @Override
