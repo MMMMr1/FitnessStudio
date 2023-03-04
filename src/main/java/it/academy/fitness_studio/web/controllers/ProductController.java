@@ -36,10 +36,9 @@ public class ProductController {
     }
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
-                                        @PathVariable("dt_update") Long dtUpdate,
+                                        @PathVariable("dt_update") Instant dtUpdate,
                                         @RequestBody @Validated ProductDTO product) {
-        Instant version = Instant.ofEpochMilli(dtUpdate);
-        service.update(uuid, version, product);
+        service.update(uuid, dtUpdate, product);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

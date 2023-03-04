@@ -1,11 +1,9 @@
 package it.academy.fitness_studio.core.dto.user;
 
+
 import it.academy.fitness_studio.core.enums.UserRole;
 import it.academy.fitness_studio.core.enums.UserStatus;
-import it.academy.fitness_studio.core.validator.ValidEmail;
-import it.academy.fitness_studio.core.validator.ValidName;
-import it.academy.fitness_studio.core.validator.ValidPassword;
-import it.academy.fitness_studio.core.validator.ValueOfEnum;
+import it.academy.fitness_studio.core.validator.*;
 
 public class UserDTO {
     @ValidEmail(message="Wrong format")
@@ -57,14 +55,6 @@ public class UserDTO {
     public void setRole(String role) {
         this.role = role;
     }
-    //    public UserRole getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(UserRole role) {
-//        this.role = role;
-//    }
-
     public UserStatus getStatus() {
         return UserStatus.valueOf(status);
     }

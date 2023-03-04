@@ -27,11 +27,10 @@ public class AuthenticationService implements IAuthenticationService {
     public void create(UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
 //        здесь генерируем код и отправляем
-//        if(userEntity != null &&
-//                userEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+
 //            String code = UUID.randomUUID().toString();
 //            userEntity.setCode(code);
-////            mailService.send(code, mail);
+//           mailService.send(code, mail);
 //        }
     }
 

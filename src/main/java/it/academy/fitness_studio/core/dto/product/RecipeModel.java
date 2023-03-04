@@ -24,7 +24,6 @@ public class RecipeModel {
     private String title;
     @JsonProperty("composition")
     private List<IngredientModel> composition;
-
     @JsonProperty("weight")
     private  Integer weight;
     @JsonProperty("calories")
@@ -38,7 +37,6 @@ public class RecipeModel {
     @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
     @JsonProperty("carbohydrates")
     private Double carbohydrates;
-
     public RecipeModel() {
     }
     public RecipeModel(UUID uuid,
@@ -62,47 +60,36 @@ public class RecipeModel {
         this.fats = fats;
         this.carbohydrates = carbohydrates;
     }
-
     public UUID getUuid() {
         return uuid;
     }
-
     public Instant getDtCreate() {
         return dtCreate;
     }
-
     public Instant getDtUpdate() {
         return dtUpdate;
     }
-
     public String getTitle() {
         return title;
     }
-
     public List<IngredientModel> getComposition() {
         return composition;
     }
-
     public Integer getWeight() {
         return weight;
     }
-
     public Integer getCalories() {
         return calories;
     }
-
     public Double getProteins() {
         return proteins;
     }
-
     public Double getFats() {
         return fats;
     }
-
     public Double getCarbohydrates() {
         return carbohydrates;
     }
-
     public static class RecipeModelBuilder {
         private UUID uuid;
         private Instant dtCreate;
@@ -116,57 +103,50 @@ public class RecipeModel {
         private Double carbohydrates;
         private RecipeModelBuilder() {
         }
-
         public static RecipeModelBuilder create(){
             return new RecipeModelBuilder();
         }
-
         public RecipeModelBuilder setUuid(UUID uuid) {
             this.uuid = uuid;
             return this;
         }
-
         public RecipeModelBuilder setDtCreate(Instant dtCreate) {
             this.dtCreate = dtCreate;
             return this;
         }
-
         public RecipeModelBuilder setDtUpdate(Instant dtUpdate) {
             this.dtUpdate = dtUpdate;
             return this;
         }
-
         public RecipeModelBuilder setTitle(String title) {
             this.title = title;
             return this;
         }
-
         public RecipeModelBuilder setComposition(List<IngredientModel> composition) {
             this.composition = composition;
             return this;
         }
-
-        public RecipeModelBuilder setWeight(Integer weight) {
-            this.weight = weight;
+        public RecipeModelBuilder setWeight(List<IngredientModel> composition) {
+            this.weight = composition.stream().mapToInt(IngredientModel::getWeight).sum();
             return this;
         }
-        public RecipeModelBuilder setCalories(Integer calories) {
-            this.calories = calories;
+        public RecipeModelBuilder setCalories( List<IngredientModel> composition) {
+            this.calories = composition.stream().mapToInt(IngredientModel::getCalories).sum();
             return this;
         }
-        public RecipeModelBuilder setProteins(Double proteins) {
-            this.proteins = proteins;
+        public RecipeModelBuilder setProteins(List<IngredientModel> composition ) {
+            this.proteins = composition.stream().mapToDouble(IngredientModel::getProteins).sum();
             return this;
         }
-        public RecipeModelBuilder setFats(Double fats) {
-            this.fats = fats;
+        public RecipeModelBuilder setFats( List<IngredientModel> composition) {
+            this.fats = composition.stream().mapToDouble(IngredientModel::getFats).sum();
             return this;
         }
-        public RecipeModelBuilder setCarbohydrates(Double carbohydrates) {
-            this.carbohydrates = carbohydrates;
+        public RecipeModelBuilder setCarbohydrates(List<IngredientModel> composition ) {
+            this.carbohydrates = composition.stream().mapToDouble(IngredientModel::getCarbohydrates).sum();
             return this;
         }
-        public RecipeModel build(){
+        public RecipeModel build() {
             return new RecipeModel(
                     uuid,
                     dtCreate,

@@ -37,11 +37,10 @@ public class RecipeController {
     }
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
-//                                        конвертировать в ИНСТАНТ
-                                        @PathVariable("dt_update") Long dtUpdate,
+                                        @PathVariable("dt_update") Instant dtUpdate,
                                         @RequestBody @Validated RecipeDTO product) throws ValidationRecipeException {
-        Instant version = Instant.ofEpochMilli(dtUpdate);
-        service.update(uuid, version, product);
+
+        service.update(uuid, dtUpdate, product);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

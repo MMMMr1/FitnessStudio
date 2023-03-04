@@ -126,7 +126,7 @@ public class Pages<T> {
         private PagesBuilder() {
         }
 
-        public static <T>PagesBuilder<T> create( ) {
+        public static <T>PagesBuilder<T> create() {
             return new PagesBuilder<T>();
         }
 
