@@ -2,7 +2,9 @@ package it.academy.fitness_studio.core.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
+import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
+
+import java.math.BigDecimal;
 
 
 public class IngredientModel {
@@ -12,24 +14,24 @@ public class IngredientModel {
     private Integer weight;
     @JsonProperty("calories")
     private Integer calories;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("proteins")
-    private Double proteins;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal proteins;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("fats")
-    private Double fats;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal fats;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("carbohydrates")
-    private Double carbohydrates;
+    private BigDecimal carbohydrates;
     public IngredientModel() {
     }
 
     public IngredientModel(ProductModel product,
                            Integer weight,
                            Integer calories,
-                           Double proteins,
-                           Double fats,
-                           Double carbohydrates) {
+                           BigDecimal proteins,
+                           BigDecimal fats,
+                           BigDecimal carbohydrates) {
         this.product = product;
         this.weight = weight;
         this.calories = calories;
@@ -40,28 +42,34 @@ public class IngredientModel {
     public ProductModel getProduct() {
         return product;
     }
+
     public Integer getWeight() {
         return weight;
     }
+
     public Integer getCalories() {
         return calories;
     }
-    public Double getProteins() {
+
+    public BigDecimal getProteins() {
         return proteins;
     }
-    public Double getFats() {
+
+    public BigDecimal getFats() {
         return fats;
     }
-    public Double getCarbohydrates() {
+
+    public BigDecimal getCarbohydrates() {
         return carbohydrates;
     }
+
     public static class IngredientModelBuilder {
         private ProductModel product;
         private Integer weight;
         private Integer calories;
-        private Double proteins;
-        private Double fats;
-        private Double carbohydrates;
+        private BigDecimal proteins;
+        private BigDecimal fats;
+        private BigDecimal carbohydrates;
         private IngredientModelBuilder() {
         }
         public static IngredientModelBuilder create() {
@@ -71,28 +79,33 @@ public class IngredientModel {
             this.product = product;
             return this;
         }
+        public IngredientModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
+            this.weight = weightAndTotal.getWeight();
+            this.fats = weightAndTotal.getFats();
+            this.carbohydrates = weightAndTotal.getCarbohydrates();
+            this.proteins = weightAndTotal.getProteins();
+            this.calories = weightAndTotal.getCalories();
+            return this;
+        }
         public IngredientModelBuilder setWeight(Integer weight) {
             this.weight = weight;
             return this;
         }
-        public IngredientModelBuilder setCalories(ProductModel product) {
-            checkWeight(product.getWeight());
-            this.calories = weight * product.getCalories() / product.getWeight();
+        public IngredientModelBuilder setCalories(Integer calories) {
+
+            this.calories = calories;
             return this;
         }
-        public IngredientModelBuilder setProteins(ProductModel product) {
-            checkWeight(product.getWeight());
-            this.proteins = weight * product.getProteins() / product.getWeight();
+        public IngredientModelBuilder setProteins(BigDecimal proteins) {
+            this.proteins = proteins;
             return this;
         }
-        public IngredientModelBuilder setFats(ProductModel product) {
-            checkWeight(product.getWeight());
-            this.fats = weight * product.getFats() / product.getWeight();
+        public IngredientModelBuilder setFats(BigDecimal fats) {
+            this.fats = fats;
             return this;
         }
-        public IngredientModelBuilder setCarbohydrates(ProductModel product) {
-            checkWeight(product.getWeight());
-            this.carbohydrates = weight * product.getCarbohydrates() / product.getWeight();
+        public IngredientModelBuilder setCarbohydrates(BigDecimal carbohydrates) {
+            this.carbohydrates = carbohydrates;
             return this;
         }
         public IngredientModel build() {

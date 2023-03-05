@@ -3,9 +3,9 @@ package it.academy.fitness_studio.core.dto.product;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
-import it.academy.fitness_studio.core.converter.CustomInstantConverter;
+import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +14,10 @@ import java.util.UUID;
 public class RecipeModel {
     @JsonProperty("uuid")
     private UUID uuid;
-    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
+//    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
     @JsonProperty("dtcreate")
     private Instant dtCreate;
-    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
+//    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
     @JsonProperty("dtupdate")
     private Instant dtUpdate;
     @JsonProperty("title")
@@ -28,15 +28,15 @@ public class RecipeModel {
     private  Integer weight;
     @JsonProperty("calories")
     private  Integer calories;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("proteins")
-    private Double proteins;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal proteins;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("fats")
-    private Double fats;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal fats;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("carbohydrates")
-    private Double carbohydrates;
+    private BigDecimal carbohydrates;
     public RecipeModel() {
     }
     public RecipeModel(UUID uuid,
@@ -46,9 +46,9 @@ public class RecipeModel {
                        List<IngredientModel> composition,
                        Integer weight,
                        Integer calories,
-                       Double proteins,
-                       Double fats,
-                       Double carbohydrates) {
+                       BigDecimal proteins,
+                       BigDecimal fats,
+                       BigDecimal carbohydrates) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -81,13 +81,13 @@ public class RecipeModel {
     public Integer getCalories() {
         return calories;
     }
-    public Double getProteins() {
+    public BigDecimal getProteins() {
         return proteins;
     }
-    public Double getFats() {
+    public BigDecimal getFats() {
         return fats;
     }
-    public Double getCarbohydrates() {
+    public BigDecimal getCarbohydrates() {
         return carbohydrates;
     }
     public static class RecipeModelBuilder {
@@ -98,9 +98,9 @@ public class RecipeModel {
         private List<IngredientModel> composition;
         private  Integer weight;
         private  Integer calories;
-        private Double proteins;
-        private Double fats;
-        private Double carbohydrates;
+        private BigDecimal proteins;
+        private BigDecimal fats;
+        private BigDecimal carbohydrates;
         private RecipeModelBuilder() {
         }
         public static RecipeModelBuilder create(){
@@ -126,26 +126,40 @@ public class RecipeModel {
             this.composition = composition;
             return this;
         }
-        public RecipeModelBuilder setWeight(List<IngredientModel> composition) {
-            this.weight = composition.stream().mapToInt(IngredientModel::getWeight).sum();
+        public RecipeModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
+            this.weight = weightAndTotal.getWeight();
+            this.fats = weightAndTotal.getFats();
+            this.carbohydrates = weightAndTotal.getCarbohydrates();
+            this.proteins = weightAndTotal.getProteins();
+            this.calories = weightAndTotal.getCalories();
             return this;
         }
-        public RecipeModelBuilder setCalories( List<IngredientModel> composition) {
-            this.calories = composition.stream().mapToInt(IngredientModel::getCalories).sum();
+
+        public RecipeModelBuilder setWeight(Integer weight) {
+            this.weight = weight;
             return this;
         }
-        public RecipeModelBuilder setProteins(List<IngredientModel> composition ) {
-            this.proteins = composition.stream().mapToDouble(IngredientModel::getProteins).sum();
+
+        public RecipeModelBuilder setCalories(Integer calories) {
+            this.calories = calories;
             return this;
         }
-        public RecipeModelBuilder setFats( List<IngredientModel> composition) {
-            this.fats = composition.stream().mapToDouble(IngredientModel::getFats).sum();
+
+        public RecipeModelBuilder setProteins(BigDecimal proteins) {
+            this.proteins = proteins;
             return this;
         }
-        public RecipeModelBuilder setCarbohydrates(List<IngredientModel> composition ) {
-            this.carbohydrates = composition.stream().mapToDouble(IngredientModel::getCarbohydrates).sum();
+
+        public RecipeModelBuilder setFats(BigDecimal fats) {
+            this.fats = fats;
             return this;
         }
+
+        public RecipeModelBuilder setCarbohydrates(BigDecimal carbohydrates) {
+            this.carbohydrates = carbohydrates;
+            return this;
+        }
+
         public RecipeModel build() {
             return new RecipeModel(
                     uuid,
@@ -161,3 +175,24 @@ public class RecipeModel {
         }
     }
 }
+//    public RecipeModelBuilder setWeight(List<IngredientModel> composition) {
+//        this.weight = composition.stream().mapToInt(IngredientModel::getWeight).sum();
+//        return this;
+//    }
+//    public RecipeModelBuilder setCalories( List<IngredientModel> composition) {
+//        this.calories = composition.stream().mapToInt(IngredientModel::getCalories).sum();
+//        return this;
+//    }
+//    public RecipeModelBuilder setProteins(List<IngredientModel> composition ) {
+//        this.proteins = composition.stream().mapToDouble(IngredientModel::getProteins).sum();
+//        return this;
+//    }
+//    public RecipeModelBuilder setFats( List<IngredientModel> composition) {
+//        this.fats = composition.stream().mapToDouble(IngredientModel::getFats).sum();
+//        return this;
+//    }
+//    public RecipeModelBuilder setCarbohydrates(List<IngredientModel> composition ) {
+//        this.carbohydrates = composition.stream()
+//                .mapToDouble(IngredientModel::getCarbohydrates).sum();
+//        return this;
+//    }

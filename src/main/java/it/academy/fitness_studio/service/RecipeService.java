@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,23 +101,47 @@ public class RecipeService implements IRecipeService {
             List<IngredientModel> collect = recipe.getComposition().stream()
                     .map(s -> {
                         ProductModel product = service.getProduct(s.getProduct().getUuid());
+                        WeightAndTotal weightAndTotal = counter(product, s.getWeight());
                         return IngredientModel.IngredientModelBuilder.create()
-                                .setProduct(product).setWeight(s.getWeight()).setCalories(product)
-                                .setCarbohydrates(product).setFats(product).setProteins(product)
-                                .build();
-                    })
+                                .setProduct(product).setWeightAndTotal(weightAndTotal)
+//                                .setWeight(s.getWeight())
+//                                .setCalories(weightAndTotal.getCalories()).setCarbohydrates(weightAndTotal.getCarbohydrates())
+//                                .setFats(weightAndTotal.getFats()).setProteins(weightAndTotal.getProteins())
+                                .build();})
                     .collect(Collectors.toList());
-
+            WeightAndTotal recipeWeightAndTotal = counter(collect);
             RecipeModel.RecipeModelBuilder recipeModel = RecipeModel.RecipeModelBuilder.create()
                     .setUuid(recipe.getUuid()).setTitle(recipe.getTitle())
                     .setDtCreate(recipe.getDtCreate()).setDtUpdate(recipe.getDtUpdate())
-                    .setComposition(collect).setCalories(collect)
-                    .setCarbohydrates(collect).setFats(collect)
-                    .setProteins(collect).setWeight(collect);
+                    .setComposition(collect).setCalories(recipeWeightAndTotal.getCalories())
+                    .setCarbohydrates(recipeWeightAndTotal.getCarbohydrates()).setFats(recipeWeightAndTotal.getFats())
+                    .setProteins(recipeWeightAndTotal.getProteins()).setWeight(recipeWeightAndTotal.getWeight());
 
             content.add(recipeModel.build());
         }
         return content;
+    }
+    private WeightAndTotal counter(ProductModel product, Integer weight){
+        BigDecimal factor = (BigDecimal.valueOf(weight)).divide(BigDecimal.valueOf(product.getWeight()));
+        Integer calories = factor.multiply(BigDecimal.valueOf(product.getCalories())).intValue();
+        BigDecimal proteins = factor.multiply(product.getProteins()) ;
+        BigDecimal fats =factor.multiply(product.getFats()) ;
+        BigDecimal carbohydrates = factor.multiply(product.getCarbohydrates()) ;
+        return new WeightAndTotal(weight,calories,proteins,fats,carbohydrates);
+    }
+    private WeightAndTotal counter(List<IngredientModel> collect) {
+        Integer weight = collect.stream().mapToInt(IngredientModel::getWeight).sum();
+        Integer calories = collect.stream().mapToInt(IngredientModel::getCalories).sum();
+        BigDecimal proteins = collect.stream()
+                .map(IngredientModel::getProteins)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal fats = collect.stream()
+                .map(IngredientModel::getFats)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal carbohydrates = collect.stream()
+                .map(IngredientModel::getCarbohydrates)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new WeightAndTotal(weight,calories,proteins,fats,carbohydrates);
     }
 
     private void checkDoubleRecipe(RecipeDTO recipe) {
@@ -153,13 +178,5 @@ public class RecipeService implements IRecipeService {
 //            content.add(recipeModel.build());
 //        }return content;
 //    }
-//    private WeightAndTotal counterWeightAndTotal(List<IngredientModel> collect){
-//
-//        Integer weight = collect.stream().mapToInt(IngredientModel::getWeight).sum();
-//        Integer calories = collect.stream().mapToInt(IngredientModel::getCalories).sum();
-//        Double proteins = collect.stream().mapToDouble(IngredientModel::getProteins).sum();
-//        Double fats = collect.stream().mapToDouble(IngredientModel::getFats).sum();
-//        Double carbohydrates = collect.stream().mapToDouble(IngredientModel::getCarbohydrates).sum();
-//       return new WeightAndTotal(weight,calories,proteins,fats,carbohydrates);
-//    }
+
 }

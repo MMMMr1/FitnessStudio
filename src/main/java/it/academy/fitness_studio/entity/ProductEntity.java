@@ -1,6 +1,7 @@
 package it.academy.fitness_studio.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public class ProductEntity {
     @Column(name = "calories")
     private Integer calories;
     @Column(name = "proteins")
-    private Double proteins;
+    private BigDecimal proteins;
     @Column(name = "fats")
-    private Double fats;
+    private BigDecimal fats;
     @Column(name = "carbohydrates")
-    private Double carbohydrates;
+    private BigDecimal carbohydrates;
     public ProductEntity() {
     }
     public ProductEntity(UUID uuid,
@@ -35,9 +36,9 @@ public class ProductEntity {
                          String title,
                          Integer weight,
                          Integer calories,
-                         Double proteins,
-                         Double fats,
-                         Double carbohydrates) {
+                         BigDecimal proteins,
+                         BigDecimal fats,
+                         BigDecimal carbohydrates) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -52,9 +53,9 @@ public class ProductEntity {
     public ProductEntity(String title,
                          Integer weight,
                          Integer calories,
-                         Double proteins,
-                         Double fats,
-                         Double carbohydrates) {
+                         BigDecimal proteins,
+                         BigDecimal fats,
+                         BigDecimal carbohydrates) {
         this.title = title;
         this.weight = weight;
         this.calories = calories;
@@ -75,19 +76,24 @@ public class ProductEntity {
     public String getTitle() {
         return title;
     }
+
     public Integer getWeight() {
         return weight;
     }
+
     public Integer getCalories() {
         return calories;
     }
-    public Double getProteins() {
+
+    public BigDecimal getProteins() {
         return proteins;
     }
-    public Double getFats() {
+
+    public BigDecimal getFats() {
         return fats;
     }
-    public Double getCarbohydrates() {
+
+    public BigDecimal getCarbohydrates() {
         return carbohydrates;
     }
 
@@ -106,19 +112,24 @@ public class ProductEntity {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
+
     public void setCalories(Integer calories) {
         this.calories = calories;
     }
-    public void setProteins(Double proteins) {
+
+    public void setProteins(BigDecimal proteins) {
         this.proteins = proteins;
     }
-    public void setFats(Double fats) {
+
+    public void setFats(BigDecimal fats) {
         this.fats = fats;
     }
-    public void setCarbohydrates(Double carbohydrates) {
+
+    public void setCarbohydrates(BigDecimal carbohydrates) {
         this.carbohydrates = carbohydrates;
     }
 }

@@ -2,6 +2,7 @@ package it.academy.fitness_studio.entity;
 
 
 import javax.persistence.*;
+
 @Embeddable
 public class IngredientEntity {
     @ManyToOne

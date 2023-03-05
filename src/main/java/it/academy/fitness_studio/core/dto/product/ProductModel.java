@@ -3,9 +3,10 @@ package it.academy.fitness_studio.core.dto.product;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.converter.CustomDoubleConverter;
+import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -25,15 +26,15 @@ public class ProductModel {
     private Integer weight;
     @JsonProperty("calories")
     private Integer calories;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("proteins")
-    private Double proteins;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal proteins;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("fats")
-    private Double fats;
-    @JsonSerialize(converter = CustomDoubleConverter.Serializer.class)
+    private BigDecimal fats;
+    @JsonSerialize(converter = CustomBigDecimalConverter.Serializer.class)
     @JsonProperty("carbohydrates")
-    private Double carbohydrates;
+    private BigDecimal carbohydrates;
     public ProductModel() {
     }
     public ProductModel(UUID uuid,
@@ -42,9 +43,9 @@ public class ProductModel {
                         String title,
                         Integer weight,
                         Integer calories,
-                        Double proteins,
-                        Double fats,
-                        Double carbohydrates) {
+                        BigDecimal proteins,
+                        BigDecimal fats,
+                        BigDecimal carbohydrates) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -80,15 +81,15 @@ public class ProductModel {
         return calories;
     }
 
-    public Double getProteins() {
+    public BigDecimal getProteins() {
         return proteins;
     }
 
-    public Double getFats() {
+    public BigDecimal getFats() {
         return fats;
     }
 
-    public Double getCarbohydrates() {
+    public BigDecimal getCarbohydrates() {
         return carbohydrates;
     }
     public static class ProductModelBuilder {
@@ -98,9 +99,9 @@ public class ProductModel {
         private String title;
         private  Integer weight;
         private  Integer calories;
-        private Double proteins;
-        private Double fats;
-        private Double carbohydrates;
+        private BigDecimal proteins;
+        private BigDecimal fats;
+        private BigDecimal carbohydrates;
         private ProductModelBuilder() {
         }
 
@@ -137,17 +138,17 @@ public class ProductModel {
             return this;
         }
 
-        public ProductModelBuilder setProteins(Double proteins) {
+        public ProductModelBuilder setProteins(BigDecimal proteins) {
             this.proteins = proteins;
             return this;
         }
 
-        public ProductModelBuilder setFats(Double fats) {
+        public ProductModelBuilder setFats(BigDecimal fats) {
             this.fats = fats;
             return this;
         }
 
-        public ProductModelBuilder setCarbohydrates(Double carbohydrates) {
+        public ProductModelBuilder setCarbohydrates(BigDecimal carbohydrates) {
             this.carbohydrates = carbohydrates;
             return this;
         }

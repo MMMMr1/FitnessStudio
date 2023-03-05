@@ -3,6 +3,8 @@ package it.academy.fitness_studio.core.dto.product;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class ProductDTO {
     @NotBlank(message = "Must not be blank")
@@ -12,17 +14,17 @@ public class ProductDTO {
     @PositiveOrZero(message = "Should be positive or zero")
     private Integer calories;
     @PositiveOrZero (message = "Should be positive or zero")
-    private Double proteins;
+    private BigDecimal proteins;
     @PositiveOrZero (message = "Should be positive or zero")
-    private Double fats;
+    private BigDecimal fats;
     @PositiveOrZero (message = "Should be positive or zero")
-    private Double carbohydrates;
+    private BigDecimal carbohydrates;
     public ProductDTO(String title,
                       Integer weight,
                       Integer calories,
-                      Double proteins,
-                      Double fats,
-                      Double carbohydrates) {
+                      BigDecimal proteins,
+                      BigDecimal fats,
+                      BigDecimal carbohydrates) {
         this.title = title;
         this.weight = weight;
         this.calories = calories;
@@ -35,19 +37,24 @@ public class ProductDTO {
     public String getTitle() {
         return title;
     }
+
     public Integer getWeight() {
         return weight;
     }
+
     public Integer getCalories() {
         return calories;
     }
-    public Double getProteins() {
+
+    public BigDecimal getProteins() {
         return proteins;
     }
-    public Double getFats() {
+
+    public BigDecimal getFats() {
         return fats;
     }
-    public Double getCarbohydrates() {
+
+    public BigDecimal getCarbohydrates() {
         return carbohydrates;
     }
 }
