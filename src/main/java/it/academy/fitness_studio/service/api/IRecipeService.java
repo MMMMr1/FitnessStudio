@@ -1,8 +1,8 @@
 package it.academy.fitness_studio.service.api;
 
 import it.academy.fitness_studio.core.dto.Pages;
-import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.RecipeDTO;
+import it.academy.fitness_studio.core.dto.product.RecipeModel;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +11,6 @@ import java.util.UUID;
 
 public interface IRecipeService {
     void create(RecipeDTO recipe) throws ValidationRecipeException;
-    Pages getPageRecipe(Pageable paging);
+    Pages<RecipeModel> getPageRecipe(Pageable paging);
     void update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException;
 }

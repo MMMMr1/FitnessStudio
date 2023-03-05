@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface IUserService {
     void create(UserDTO user);
     UserModel getUser(UUID id);
+    UserModel getUser(String mail);
     void update(UUID id, Instant version, UserDTO user) throws ValidationUserException;
-    Pages getPageUser(Pageable paging);
+    Pages <UserModel> getPageUser(Pageable paging);
 }

@@ -123,55 +123,55 @@ public class Pages<T> {
         private boolean last;
         private List<T> content;
 
-        private PagesBuilder() {
+        private PagesBuilder () {
         }
 
-        public static <T>PagesBuilder<T> create() {
+        public static <T>PagesBuilder<T> create( ) {
             return new PagesBuilder<T>();
         }
 
-        public PagesBuilder setNumber(int number) {
+        public PagesBuilder<T> setNumber(int number) {
             this.number = number;
             return this;
         }
 
-        public PagesBuilder setSize(int size) {
+        public PagesBuilder<T> setSize(int size) {
             this.size = size;
             return this;
         }
 
-        public PagesBuilder setTotalPages(int totalPages) {
+        public PagesBuilder<T> setTotalPages(int totalPages) {
             this.totalPages = totalPages;
             return this;
         }
 
-        public PagesBuilder setTotalElements(long totalElements) {
+        public PagesBuilder <T>setTotalElements(long totalElements) {
             this.totalElements = totalElements;
             return this;
         }
 
-        public PagesBuilder setFirst(boolean first) {
+        public PagesBuilder <T>setFirst(boolean first) {
             this.first = first;
             return this;
         }
 
-        public PagesBuilder setNumberOfElements(int numberOfElements) {
+        public PagesBuilder <T>setNumberOfElements(int numberOfElements) {
             this.numberOfElements = numberOfElements;
             return this;
         }
 
-        public PagesBuilder setLast(boolean last) {
+        public PagesBuilder <T>setLast(boolean last) {
             this.last = last;
             return this;
         }
 
-        public PagesBuilder setContent(List<T> content) {
+        public PagesBuilder <T>setContent(List<T> content) {
             this.content = content;
             return this;
         }
 
-        public Pages build() {
-            return new Pages(
+        public Pages <T>build() {
+            return new Pages<T>(
                     number,
                     size,
                     totalPages,

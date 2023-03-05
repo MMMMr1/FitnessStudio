@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.config;
+package it.academy.fitness_studio.configuration;
 
 
 
@@ -8,18 +8,18 @@ import it.academy.fitness_studio.dao.api.IUserDao;
 import it.academy.fitness_studio.dao.api.IAuthenticationDao;
 import it.academy.fitness_studio.service.*;
 import it.academy.fitness_studio.service.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Description;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import java.util.Properties;
 
 @Configuration
-public class ServiceConfig {
+public class ServiceConfiguration {
     @Bean
     public IUserService userService(IUserDao dao,
                                     ConversionService conversionService){
@@ -27,8 +27,10 @@ public class ServiceConfig {
     }
     @Bean
     public IAuthenticationService authenticationService(IAuthenticationDao dao,
-                                                        IUserService service){
-        return new AuthenticationService(dao, service);
+                                                        IUserService service,
+                                                        IEmailService emailService,
+                                                        ConversionService conversionService){
+        return new AuthenticationService(dao, service, emailService, conversionService);
     }
     @Bean
     public IProductService productService(IProductDao dao,
@@ -46,6 +48,54 @@ public class ServiceConfig {
     public IValidatorRecipe validatorRecipe(IProductService service ){
         return new ValidatorRecipe( service );
     }
+    @Bean
+    public IEmailService emailService(JavaMailSender emailSender,SimpleMailMessage template,
+                                      SpringTemplateEngine thymeleafTemplateEngine){
+        return new EmailService(emailSender,template,thymeleafTemplateEngine);
+    }
+
+
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//
+//        mailSender.setHost(mailServerHost);
+//        mailSender.setPort(mailServerPort);
+//
+//        mailSender.setUsername(mailServerUsername);
+//        mailSender.setPassword(mailServerPassword);
+//
+//        Properties props = mailSender.getJavaMailProperties();
+//        props.put("mail.transport.protocol", "smtp");
+//        props.put("mail.smtp.auth", mailServerAuth);
+//        props.put("mail.smtp.starttls.enable", mailServerStartTls);
+//        props.put("mail.debug", "true");
+//
+//        return mailSender;
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.mail.ru");
+        mailSender.setPort(465);
+
+        mailSender.setUsername("maksim.maks.23@mail.ru");
+        mailSender.setPassword("gGhRkGnRtLwpk3QCpqr4");
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtps");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
+    }
+
+    @Bean
+    public SimpleMailMessage templateSimpleMessage() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setText("This is the test email template for your email:\n%s\n");
+        return message;
+    }
+
+
 //    @Bean
 //    @Description("Thymeleaf Template Resolver")
 //    public ServletContextTemplateResolver templateResolver() {

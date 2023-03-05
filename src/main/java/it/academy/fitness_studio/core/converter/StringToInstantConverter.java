@@ -3,6 +3,7 @@ package it.academy.fitness_studio.core.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 @Component
 public class StringToInstantConverter implements Converter<String,Instant>

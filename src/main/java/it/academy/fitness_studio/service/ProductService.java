@@ -67,7 +67,7 @@ public class ProductService implements IProductService {
                 .map(s -> conversionService.convert(s,ProductModel.class))
                 .collect(Collectors.toList());
 
-        return Pages.PagesBuilder.create( )
+        return Pages.PagesBuilder.<ProductModel>create( )
                 .setNumber(all.getNumber())
                 .setContent(content)
                 .setFirst(all.isFirst())

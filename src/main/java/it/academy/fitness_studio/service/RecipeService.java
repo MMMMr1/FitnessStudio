@@ -47,7 +47,7 @@ public class RecipeService implements IRecipeService {
         validator.validate(recipeDTO);
         checkDoubleRecipe(recipeDTO);
         List<IngredientDTO> ingredientDTO = recipeDTO.getComposition();
-        if (!conversionService.canConvert(IngredientDTO.class, IngredientEntity.class)) {
+        if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
             throw new RuntimeException("Can not convert IngredientDTO.class to IngredientEntity.class");
         }
         List<IngredientEntity> collect = ingredientDTO.stream()
@@ -61,10 +61,10 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public Pages getPageRecipe(Pageable paging) {
+    public Pages<RecipeModel> getPageRecipe(Pageable paging) {
         Page<RecipeEntity> all = dao.findAll(paging);
         List<RecipeModel> content = convertListOfRecipeEntityToRecipeModel(all);
-        return Pages.PagesBuilder.create()
+        return Pages.PagesBuilder.<RecipeModel>create()
                 .setNumber(all.getNumber()).setContent(content)
                 .setFirst(all.isFirst()).setLast(all.isLast())
                 .setNumberOfElements(all.getNumberOfElements())

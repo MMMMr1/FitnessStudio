@@ -18,12 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/recipe")
 public class RecipeController {
-    private IRecipeService service;
+    private final IRecipeService service;
     public RecipeController(IRecipeService service) {
         this.service = service;
     }
     @RequestMapping(method = RequestMethod.POST)
-    protected ResponseEntity<?> create(@RequestBody @Validated RecipeDTO product)throws ValidationRecipeException {
+    protected ResponseEntity<?> create(@RequestBody @Validated RecipeDTO product){
         service.create(product);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -38,7 +38,7 @@ public class RecipeController {
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Instant dtUpdate,
-                                        @RequestBody @Validated RecipeDTO product) throws ValidationRecipeException {
+                                        @RequestBody @Validated RecipeDTO product) {
 
         service.update(uuid, dtUpdate, product);
         return ResponseEntity.status(HttpStatus.OK).build();

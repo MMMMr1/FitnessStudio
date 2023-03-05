@@ -6,6 +6,21 @@ spring:
     password: pass
   jpa:
     show-sql: true
+  mail:
+    host: smtp.mail.ru
+    port: 465
+    username: maksim.maks.23@mail.ru
+    password: gGhRkGnRtLwpk3QCpqr4
+properties:
+  mail:
+    smtp:
+      starttls:
+        enable: true
+        required: true
+      auth: true
+      ssl:
+        trust:smtp.mail.ru
+#    spring.mail.properties.mail.smtp.starttls.enable: true
 #    generate-ddl: true
 #    hibernate:
 #      ddl-auto: create
