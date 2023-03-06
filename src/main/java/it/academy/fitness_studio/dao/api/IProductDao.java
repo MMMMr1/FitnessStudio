@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface IProductDao extends PagingAndSortingRepository<ProductEntity, UUID>
-{
-
+public interface IProductDao extends PagingAndSortingRepository<ProductEntity, UUID> {
     ProductEntity findByTitle(String title);
 }

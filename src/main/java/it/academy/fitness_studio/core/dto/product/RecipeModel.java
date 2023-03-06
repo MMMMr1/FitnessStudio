@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
+import it.academy.fitness_studio.core.converter.CustomInstantConverter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,10 +15,10 @@ import java.util.UUID;
 public class RecipeModel {
     @JsonProperty("uuid")
     private UUID uuid;
-//    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
+    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
     @JsonProperty("dtcreate")
     private Instant dtCreate;
-//    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
+    @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
     @JsonProperty("dtupdate")
     private Instant dtUpdate;
     @JsonProperty("title")

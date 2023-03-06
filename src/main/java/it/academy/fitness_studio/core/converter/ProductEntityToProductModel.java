@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductEntityToProductModel implements Converter<ProductEntity, ProductModel> {
-
     @Override
     public ProductModel convert(ProductEntity productEntity) {
         return ProductModel.ProductModelBuilder.create()
