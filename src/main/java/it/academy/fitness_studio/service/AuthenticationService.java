@@ -39,9 +39,7 @@ public class AuthenticationService implements IAuthenticationService {
     @Override
     public void create(UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
-//        здесь генерируем код и отправляем
-        UserEntity userEntity = dao.findByMail(user.getMail())
-                .orElseThrow(() -> new RuntimeException("User with this mail is not registered"));
+        UserEntity userEntity = find(user.getMail());
         String code = UUID.randomUUID().toString();
         userEntity.setCode(code);
         dao.save(userEntity);
@@ -51,8 +49,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public void verify(String code,String mail) {
-        UserEntity userEntity = dao.findByMail(mail)
-                .orElseThrow(() -> new RuntimeException("User with this mail is not registered"));
+        UserEntity userEntity = find(mail);
         if( code.equals(userEntity.getCode())){
             userEntity.setStatus(new StatusEntity(UserStatus.ACTIVATED));
             userEntity.setCode(null);
@@ -61,15 +58,13 @@ public class AuthenticationService implements IAuthenticationService {
     }
     @Override
     public void login(@Validated UserLoginDTO user) {
-        UserEntity userEntity = dao.findByMail(user.getMail())
-                .orElseThrow(() -> new RuntimeException("User with this mail is not registered"));
+        UserEntity userEntity = find(user.getMail());
         if(!userEntity.getPassword().equals(user.getPassword())){
             throw new ValidationUserException("Incorrect mail and password");
         }
     }
-//    private void checkMail(String mail){
-//        if (dao.findByMail(mail) == null) {
-//            throw new UserNotFoundException("User with this mail is not registered");
-//        }
-//    }
+    private UserEntity find(String mail){
+        return dao.findByMail(mail)
+                .orElseThrow(() -> new RuntimeException("User with this mail is not registered"));
+    }
 }
