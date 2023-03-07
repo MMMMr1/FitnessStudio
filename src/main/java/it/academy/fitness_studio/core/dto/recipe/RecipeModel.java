@@ -1,10 +1,11 @@
-package it.academy.fitness_studio.core.dto.product;
+package it.academy.fitness_studio.core.dto.recipe;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
 import it.academy.fitness_studio.core.converter.CustomInstantConverter;
+import it.academy.fitness_studio.core.dto.ingredient.IngredientModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -127,14 +128,14 @@ public class RecipeModel {
             this.composition = composition;
             return this;
         }
-        public RecipeModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
-            this.weight = weightAndTotal.getWeight();
-            this.fats = weightAndTotal.getFats();
-            this.carbohydrates = weightAndTotal.getCarbohydrates();
-            this.proteins = weightAndTotal.getProteins();
-            this.calories = weightAndTotal.getCalories();
-            return this;
-        }
+//        public RecipeModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
+//            this.weight = weightAndTotal.getWeight();
+//            this.fats = weightAndTotal.getFats();
+//            this.carbohydrates = weightAndTotal.getCarbohydrates();
+//            this.proteins = weightAndTotal.getProteins();
+//            this.calories = weightAndTotal.getCalories();
+//            return this;
+//        }
 
         public RecipeModelBuilder setWeight(Integer weight) {
             this.weight = weight;

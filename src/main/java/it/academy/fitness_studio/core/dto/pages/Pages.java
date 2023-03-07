@@ -1,13 +1,9 @@
-package it.academy.fitness_studio.core.dto;
+package it.academy.fitness_studio.core.dto.pages;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.academy.fitness_studio.core.dto.product.IngredientModel;
-import it.academy.fitness_studio.core.dto.product.RecipeModel;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pages<T> {

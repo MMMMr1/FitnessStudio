@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.service.api;
 
-import it.academy.fitness_studio.core.dto.Pages;
+import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.ValidationUserException;

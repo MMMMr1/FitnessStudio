@@ -10,5 +10,5 @@ public class StringToInstantConverter implements Converter<String,Instant> {
     public Instant convert(String value) {
         Long decode =Long.decode(value);
         return Instant.ofEpochMilli(decode);
-        }
+    }
 }

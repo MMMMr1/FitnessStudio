@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.dto.Pages;
+import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
 import it.academy.fitness_studio.core.exception.InvalidVersionException;
@@ -27,25 +27,29 @@ public class ProductService implements IProductService {
                           ConversionService conversionService) {
         this.dao = dao;
         this.conversionService = conversionService;
-    }
-    @Override
+    }    @Override
     public void create( @Validated ProductDTO product) {
         checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
              throw new RuntimeException("Can not convert ProductDTO.class");
+//             IllegalStateException
          }
         ProductEntity productEntity = conversionService.convert(product, ProductEntity.class);
         productEntity.setUuid(UUID.randomUUID());
-        Instant now = Instant.now();
-        productEntity.setDtCreate(now);
-        productEntity.setDtUpdate(now);
+        Instant dtCreated =  Instant.now();
+        Instant dtUpdated = dtCreated;
+        productEntity.setDtCreate(dtCreated);
+        productEntity.setDtUpdate(dtUpdated);
         dao.save(productEntity);
     }
     @Override
     public void update(UUID id, Instant version,@Validated ProductDTO product) {
         ProductEntity productEntity = dao.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("There is no product with such id"));
-        if ( version.toEpochMilli() == productEntity.getDtUpdate().toEpochMilli()){
+//        if (!version.equals(productEntity.getDtUpdate())) {
+        if(version.toEpochMilli() != productEntity.getDtUpdate().toEpochMilli()){
+            throw new InvalidVersionException("Version is not correct");
+        }
             productEntity.setCalories(product.getCalories());
             productEntity.setCarbohydrates(product.getCarbohydrates());
             productEntity.setFats(product.getFats());
@@ -53,7 +57,7 @@ public class ProductService implements IProductService {
             productEntity.setTitle(product.getTitle());
             productEntity.setWeight(product.getWeight());
             dao.save(productEntity);
-        } else throw new InvalidVersionException("Version is not correct");
+
     }
     public Pages<ProductModel> getPageProduct(Pageable paging) {
         Page<ProductEntity> all = dao.findAll(paging);
@@ -87,31 +91,6 @@ public class ProductService implements IProductService {
         }
          return conversionService.convert(productEntity,ProductModel.class);
     }
-
-
-//    private void validate(ProductDTO product) throws ValidationProductException{
-//        String title = product.getTitle();
-//
-//        if (title == null || title.isBlank()){
-//                throw new ValidationProductException("Title of product is not entered");
-//        }
-//        Integer calories = product.getCalories();
-//        if (calories <=0 || calories == null ){
-//            throw new ValidationProductException("Value of calories is incorrect");
-//        }
-//        Integer weight = product.getWeight();
-//        if (weight <=0 || weight == null){
-//            throw new ValidationProductException("Value of weight is incorrect");
-//        }
-//        Double carbohydrates = product.getCarbohydrates();
-//        if (carbohydrates <=0 || carbohydrates == null ){
-//            throw new ValidationProductException("Value of carbohydrates is incorrect");
-//        }
-//        Double fats = product.getFats();
-//        if ( fats <=0 || fats == null){
-//            throw new ValidationProductException("Value of fats is incorrect");
-//        }
-//    }
     private void checkDoubleProduct(ProductDTO product){
         String title = product.getTitle();
         if (dao.findByTitle(title) != null){

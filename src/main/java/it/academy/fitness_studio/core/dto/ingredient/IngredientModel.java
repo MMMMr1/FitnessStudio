@@ -1,8 +1,9 @@
-package it.academy.fitness_studio.core.dto.product;
+package it.academy.fitness_studio.core.dto.ingredient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
+import it.academy.fitness_studio.core.dto.product.ProductModel;
 
 import java.math.BigDecimal;
 
@@ -79,14 +80,14 @@ public class IngredientModel {
             this.product = product;
             return this;
         }
-        public IngredientModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
-            this.weight = weightAndTotal.getWeight();
-            this.fats = weightAndTotal.getFats();
-            this.carbohydrates = weightAndTotal.getCarbohydrates();
-            this.proteins = weightAndTotal.getProteins();
-            this.calories = weightAndTotal.getCalories();
-            return this;
-        }
+//        public IngredientModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
+//            this.weight = weightAndTotal.getWeight();
+//            this.fats = weightAndTotal.getFats();
+//            this.carbohydrates = weightAndTotal.getCarbohydrates();
+//            this.proteins = weightAndTotal.getProteins();
+//            this.calories = weightAndTotal.getCalories();
+//            return this;
+//        }
         public IngredientModelBuilder setWeight(Integer weight) {
             this.weight = weight;
             return this;

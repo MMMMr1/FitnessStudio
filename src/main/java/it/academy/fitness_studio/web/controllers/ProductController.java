@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.web.controllers;
 
-import it.academy.fitness_studio.core.dto.Pages;
+import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
 import it.academy.fitness_studio.service.api.IProductService;

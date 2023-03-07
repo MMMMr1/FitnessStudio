@@ -1,8 +1,8 @@
 package it.academy.fitness_studio.service.api;
 
-import it.academy.fitness_studio.core.dto.Pages;
-import it.academy.fitness_studio.core.dto.product.RecipeDTO;
-import it.academy.fitness_studio.core.dto.product.RecipeModel;
+import it.academy.fitness_studio.core.dto.pages.Pages;
+import it.academy.fitness_studio.core.dto.recipe.RecipeDTO;
+import it.academy.fitness_studio.core.dto.recipe.RecipeModel;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 import org.springframework.data.domain.Pageable;
 

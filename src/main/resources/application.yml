@@ -10,7 +10,7 @@ spring:
     host: smtp.mail.ru
     port: 465
     username: maksim.maks.23@mail.ru
-    password: gGhRkGnRtLwpk3QCpqr4
+    password: DhrzvYXCZRL5RdPwTQbA
 properties:
   mail:
     smtp:

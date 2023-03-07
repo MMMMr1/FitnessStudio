@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.dto.product.IngredientDTO;
-import it.academy.fitness_studio.core.dto.product.RecipeDTO;
+import it.academy.fitness_studio.core.dto.ingredient.IngredientDTO;
+import it.academy.fitness_studio.core.dto.recipe.RecipeDTO;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
 import it.academy.fitness_studio.service.api.IProductService;
 import it.academy.fitness_studio.service.api.IValidatorRecipe;

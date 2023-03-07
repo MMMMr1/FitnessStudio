@@ -54,4 +54,8 @@ public class RecipeEntity {
     public void setComposition(List<IngredientEntity> composition) {
         this.composition = composition;
     }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 }

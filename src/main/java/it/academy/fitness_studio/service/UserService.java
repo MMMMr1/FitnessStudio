@@ -1,8 +1,6 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.enums.UserRole;
-import it.academy.fitness_studio.core.enums.UserStatus;
-import it.academy.fitness_studio.core.dto.Pages;
+import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.InvalidVersionException;
@@ -20,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,6 +32,8 @@ public class UserService implements IUserService {
         this.conversionService = conversionService;
     }
 
+
+
     @Override
     public void create(@Validated UserDTO user) {
         checkDoubleMail(user);
@@ -43,9 +42,11 @@ public class UserService implements IUserService {
         }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         userEntity.setUuid(UUID.randomUUID());
-        Instant now = Instant.now();
-        userEntity.setDtCreate(now);
-        userEntity.setDtUpdate(now);
+//        Instant dtCreated = Instant.ofEpochMilli(Instant.now().toEpochMilli());
+        Instant dtCreated = Instant.now();
+        Instant dtUpdated = dtCreated;
+        userEntity.setDtCreate(dtCreated);
+        userEntity.setDtUpdate(dtUpdated);
         dao.save(userEntity);
     }
 
@@ -53,14 +54,16 @@ public class UserService implements IUserService {
     public void update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
-        if (version.toEpochMilli() == userEntity.getDtUpdate().toEpochMilli()) {
+//        if (!version.equals(userEntity.getDtUpdate())) {
+        if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
+            throw new InvalidVersionException("Invalid version");
+        }
             userEntity.setFio(user.getFio());
             userEntity.setMail(user.getMail());
             userEntity.setStatus(new StatusEntity(user.getStatus()));
             userEntity.setPassword(user.getPassword());
             userEntity.setRole(new RoleEntity(user.getRole()));
             dao.save(userEntity);
-        } else throw new InvalidVersionException("Invalid version");
     }
 
     public Pages<UserModel> getPageUser(Pageable paging) {
@@ -109,55 +112,4 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
     }
-
-
-//    private void validate(UserDTO user)  throws ValidationUserException{
-////        Throwable throwable = new Throwable();
-//        ValidationUserException validationUserException = new ValidationUserException();
-//
-////        String mail = user.getMail();
-////        if (mail == null || mail.isBlank()) {
-////           validationUserException.addSuppressed(new ValidationUserException("Mail not entered"));
-////        }
-////
-////        if (!mail.matches(
-////                "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-////                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
-////        )) {
-////            validationUserException.addSuppressed(new ValidationUserException("Wrong format of mail"));
-////        }
-////        if (mail.length() < 6) {
-////            validationUserException.addSuppressed(new ValidationUserException("login can not be less then 6 symbols"));
-////        }
-////        if (mail.length() > 30) {
-////            validationUserException.addSuppressed(new ValidationUserException("login cannot be longer then 30 symbols"));
-////        }
-//
-//        String password = user.getPassword();
-////
-////        if (password == null || password.isBlank()){
-////            validationUserException.addSuppressed(new ValidationUserException("Password is not entered"));
-////        }
-//        if (password.length()<8 || password.length()>30){
-//            validationUserException.addSuppressed(new ValidationUserException("Password can not be less then 8 symbols")) ;
-//        }
-//
-//        String fullName = user.getFio();
-//
-//        if (fullName == null || fullName.isBlank()){
-//            validationUserException.addSuppressed(new ValidationUserException("Full name is not entered"));
-//        }
-//
-//        if (fullName.length()<=4){
-//            validationUserException.addSuppressed(new ValidationUserException("Full name cannot be less then 4 symbols"));
-//        }
-//        if(!fullName.matches("([A-Za-z]+) ([A-Za-z]+)|([А-Яа-я]+ [А-Яа-я]+)")){
-//            validationUserException.addSuppressed(new ValidationUserException("Write correct full name"));
-//        }
-////     todo   Status Role don't check in this method?
-//        if (validationUserException.getSuppressed().length >0) {
-//            throw validationUserException;
-//        }
-//    }
-
 }
