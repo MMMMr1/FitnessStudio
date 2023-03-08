@@ -54,7 +54,6 @@ public class UserService implements IUserService {
     public void update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
-//        if (!version.equals(userEntity.getDtUpdate())) {
         if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
             throw new InvalidVersionException("Invalid version");
         }
@@ -69,7 +68,7 @@ public class UserService implements IUserService {
     public Pages<UserModel> getPageUser(Pageable paging) {
         Page<UserEntity> all = dao.findAll(paging);
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
-            throw new RuntimeException("Can not convert UserEntity.class to UserModel.class");
+            throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
         }
         List<UserModel> content = all.getContent().stream()
                 .map(s -> conversionService.convert(s, UserModel.class))
@@ -91,7 +90,7 @@ public class UserService implements IUserService {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
-            throw new RuntimeException("Can not convert UserEntity.class to UserModel.class");
+            throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
         }
         return conversionService.convert(userEntity, UserModel.class);
     }
@@ -101,7 +100,7 @@ public class UserService implements IUserService {
         UserEntity userEntity = dao.findByMail(mail)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such mail"));
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
-            throw new RuntimeException("Can not convert UserEntity.class to UserModel.class");
+            throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
         }
         return conversionService.convert(userEntity, UserModel.class);
     }

@@ -31,7 +31,7 @@ public class ProductService implements IProductService {
     public void create( @Validated ProductDTO product) {
         checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
-             throw new RuntimeException("Can not convert ProductDTO.class");
+             throw new IllegalStateException("Can not convert ProductDTO.class");
 //             IllegalStateException
          }
         ProductEntity productEntity = conversionService.convert(product, ProductEntity.class);
@@ -65,7 +65,7 @@ public class ProductService implements IProductService {
             throw new RuntimeException("Data base is empty");
         }
         if (!conversionService.canConvert(ProductEntity.class, ProductModel.class)) {
-            throw new RuntimeException("Can not convert ProductEntity.class to ProductModel.class");
+            throw new IllegalStateException("Can not convert ProductEntity.class to ProductModel.class");
         }
         List<ProductModel> content = all.getContent().stream()
                 .map(s -> conversionService.convert(s,ProductModel.class))
@@ -87,7 +87,7 @@ public class ProductService implements IProductService {
         ProductEntity productEntity  = dao.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("There is no product with id '"+id+"'"));
         if (!conversionService.canConvert(ProductEntity.class, ProductModel.class)) {
-            throw new RuntimeException("Can not convert ProductDTO.class to ProductModel.class");
+            throw new IllegalStateException("Can not convert ProductDTO.class to ProductModel.class");
         }
          return conversionService.convert(productEntity,ProductModel.class);
     }

@@ -1,8 +1,5 @@
 package it.academy.fitness_studio.entity;
 
-import it.academy.fitness_studio.core.enums.UserRole;
-import it.academy.fitness_studio.core.enums.UserStatus;
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
@@ -125,8 +122,9 @@ public class UserEntity {
         this.password = password;
     }
 
-    public void setUuid(UUID uuid) {
+    public UUID setUuid(UUID uuid) {
         this.uuid = uuid;
+        return uuid;
     }
 
     public void setDtCreate(Instant dtCreate) {

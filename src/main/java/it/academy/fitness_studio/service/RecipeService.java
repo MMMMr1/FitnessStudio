@@ -50,7 +50,7 @@ public class RecipeService implements IRecipeService {
         checkDoubleRecipe(recipeDTO);
         List<IngredientDTO> ingredientDTO = recipeDTO.getComposition();
         if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
-            throw new RuntimeException("Can not convert IngredientDTO.class to IngredientEntity.class");
+            throw new IllegalStateException("Can not convert IngredientDTO.class to IngredientEntity.class");
         }
         List<IngredientEntity> collect = ingredientDTO.stream()
                 .map(s -> {
@@ -70,7 +70,7 @@ public class RecipeService implements IRecipeService {
     public Pages<RecipeModel> getPageRecipe(Pageable paging) {
         Page<RecipeEntity> all = dao.findAll(paging);
         if (!conversionService.canConvert(RecipeEntity.class, RecipeModel.class)) {
-            throw new RuntimeException("Can not convert RecipeEntity.class to RecipeModel.class");
+            throw new IllegalStateException("Can not convert RecipeEntity.class to RecipeModel.class");
         }
         List<RecipeModel> content = all.getContent().stream()
                 .map(s -> conversionService.convert(s,RecipeModel.class))
@@ -92,7 +92,7 @@ public class RecipeService implements IRecipeService {
             throw new InvalidVersionException("Version is not correct");
         }
         if (!conversionService.canConvert(ProductModel.class, ProductEntity.class)) {
-            throw new RuntimeException("Can not convert ProductModel.class to ProductEntity.class");
+            throw new IllegalStateException("Can not convert ProductModel.class to ProductEntity.class");
         }
         List<IngredientEntity> collect = product.getComposition().stream()
                 .map(s -> {
