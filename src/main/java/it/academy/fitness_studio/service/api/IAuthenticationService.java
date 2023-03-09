@@ -7,5 +7,5 @@ import it.academy.fitness_studio.core.exception.ValidationUserException;
 public interface IAuthenticationService {
     void create(UserRegistrationDTO user);
     void verify(String code,String mail);
-    void login(UserLoginDTO user);
+    String login(UserLoginDTO user);
 }

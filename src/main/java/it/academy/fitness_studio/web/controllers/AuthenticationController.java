@@ -1,10 +1,13 @@
 package it.academy.fitness_studio.web.controllers;
 
 import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
+import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
+import it.academy.fitness_studio.service.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +40,11 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 //    @RequestMapping(path = "/me", method = RequestMethod.GET)
-//    public UserEntity getUserInfo(@RequestBody UserLogin userLogin) {
-//        return new UserEntity();
+//    public UserModel getUserInfo(@RequestBody UserLoginDTO userLogin) {
+//
+//        public UserDetails details(){
+//            return holder.getUser();
+//        }
+//        return ;
 //    }
 }

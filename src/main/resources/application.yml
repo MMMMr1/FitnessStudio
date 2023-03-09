@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/fitness_studio
+    url: jdbc:postgresql://localhost:5432/fitness_studio?currentSchema=security
     username: postgres
     password: pass
   jpa:

@@ -14,6 +14,8 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.util.Properties;
@@ -26,11 +28,16 @@ public class ServiceConfiguration {
         return new UserService(dao, conversionService);
     }
     @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+    @Bean
     public IAuthenticationService authenticationService(IAuthenticationDao dao,
                                                         IUserService service,
                                                         IEmailService emailService,
-                                                        ConversionService conversionService){
-        return new AuthenticationService(dao, service, emailService, conversionService);
+                                                        ConversionService conversionService,
+                                                        BCryptPasswordEncoder encoder){
+        return new AuthenticationService(dao, service, emailService, conversionService, encoder);
     }
     @Bean
     public IProductService productService(IProductDao dao,
