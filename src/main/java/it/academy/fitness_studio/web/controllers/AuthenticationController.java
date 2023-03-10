@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/users")
 public class AuthenticationController {
+    UserDetails userDetails;
     private IAuthenticationService service;
 
     public AuthenticationController(IAuthenticationService service) {
@@ -37,14 +38,18 @@ public class AuthenticationController {
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody @Validated UserLoginDTO user) {
         service.login(user);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(service.login(user));
     }
-//    @RequestMapping(path = "/me", method = RequestMethod.GET)
-//    public UserModel getUserInfo(@RequestBody UserLoginDTO userLogin) {
+    @RequestMapping(path = "/me", method = RequestMethod.GET)
+    public ResponseEntity<?>  getUserInfo() {
+        UserHolder userHolder = new UserHolder();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userHolder.getUser());
 //
 //        public UserDetails details(){
 //            return holder.getUser();
 //        }
 //        return ;
-//    }
+    }
 }

@@ -1,15 +1,13 @@
 package it.academy.fitness_studio.web.filter;
 
-import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.service.UserService;
+import it.academy.fitness_studio.service.api.IUserService;
 import it.academy.fitness_studio.web.utils.JwtTokenUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,11 +25,14 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService   userService;
+//    private final UserDetailsManager userManager;
 
-    public JwtFilter(
-            UserService userService
-    ) {
+//    public JwtFilter(UserDetailsManager userManager) {
+//        this.userManager = userManager;
+//    }
+    private final IUserService userService;
+
+    public JwtFilter(IUserService userService) {
         this.userService = userService;
     }
 
@@ -55,6 +56,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
+//        UserDetails userDetails = userManager
+//                .loadUserByUsername(JwtTokenUtil.getUsermail(token));
+//
+//        UsernamePasswordAuthenticationToken
+//                authentication = new UsernamePasswordAuthenticationToken(
+//                userDetails, null,
+//                userDetails == null ?
+//                        List.of() : userDetails.getAuthorities()
+//        );
+
 
         UserModel userModel = userService.getUser(JwtTokenUtil.getUserMail(token));
 
@@ -77,4 +88,5 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
+
 }

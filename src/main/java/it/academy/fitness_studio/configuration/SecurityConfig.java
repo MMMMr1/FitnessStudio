@@ -4,14 +4,26 @@ package it.academy.fitness_studio.configuration;
 import it.academy.fitness_studio.web.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -24,6 +36,7 @@ public class SecurityConfig
     public SecurityConfig(JwtFilter filter) {
         this.filter = filter;
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http = http.cors().and().csrf().disable();
@@ -48,7 +61,9 @@ public class SecurityConfig
         http
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/api/v1/users/registration").permitAll()
-                                .antMatchers("/api/v1/users").hasRole("ADMIN")
+                        .antMatchers("/api/v1/users/login").permitAll()
+                        .antMatchers("/api/v1/users/verification").permitAll()
+                                .antMatchers("/api/v1/users").hasRole("ROLE_ADMIN")
                         .anyRequest().authenticated()
 //                        .antMatchers("/api/v1/users/registration").permitAll()
 //                        // Our private endpoints
@@ -62,6 +77,25 @@ public class SecurityConfig
 
         return http.build();
     }
+//    @Bean
+//    public DataSource dataSource() {
+//        return new EmbeddedDatabaseBuilder()
+//                .setType(EmbeddedDatabaseType.H2)
+//                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+//                .build();
+//    }
+
+//    @Bean
+//    public UserDetailsManager users(DataSource dataSource) {
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+//        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+//        users.createUser(user);
+//        return users;
+//    }
 
 
 //    @Override
@@ -102,4 +136,5 @@ public class SecurityConfig
 //                UsernamePasswordAuthenticationFilter.class
 //        );
 //    }
+
 }

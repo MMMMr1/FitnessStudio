@@ -2,6 +2,7 @@ package it.academy.fitness_studio.web.utils;
 
 import io.jsonwebtoken.*;
 import it.academy.fitness_studio.core.dto.user.UserModel;
+import it.academy.fitness_studio.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
@@ -13,7 +14,10 @@ public class JwtTokenUtil {
     private static final String jwtIssuer = "ITAcademy";
 
 
-    public static String generateAccessToken(UserModel user) {
+//    public static String generateAccessToken(UserDetails user) {
+//        return generateAccessToken(user.getUsername());
+//    }
+    public static String generateAccessToken(UserEntity user) {
         return generateAccessToken(user.getMail());
     }
 

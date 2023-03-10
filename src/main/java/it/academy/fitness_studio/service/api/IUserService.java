@@ -5,6 +5,7 @@ import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.ValidationUserException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.time.Instant;
 import java.util.UUID;

@@ -14,6 +14,11 @@ import it.academy.fitness_studio.service.api.IUserService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
@@ -26,10 +31,14 @@ public class UserService implements IUserService {
     private final IUserDao dao;
 
     private ConversionService conversionService;
+    private PasswordEncoder encoder;
 
-    public UserService(IUserDao dao, ConversionService conversionService) {
+    public UserService(IUserDao dao,
+                       ConversionService conversionService,
+                       PasswordEncoder encoder) {
         this.dao = dao;
         this.conversionService = conversionService;
+        this.encoder = encoder;
     }
 
 
@@ -37,6 +46,8 @@ public class UserService implements IUserService {
     @Override
     public void create(@Validated UserDTO user) {
         checkDoubleMail(user);
+        String encode = encoder.encode(user.getPassword());
+        user.setPassword(encode);
         if (!conversionService.canConvert(UserDTO.class, UserEntity.class)) {
             throw new RuntimeException("Can not convert UserDTO.class to UserEntity.class");
         }
@@ -111,4 +122,6 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
     }
+
+
 }
