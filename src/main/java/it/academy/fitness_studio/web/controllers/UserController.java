@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/admin")
 public class UserController {
     private IUserService service;
 

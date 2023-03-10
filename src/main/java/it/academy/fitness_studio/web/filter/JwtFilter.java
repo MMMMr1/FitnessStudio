@@ -5,6 +5,7 @@ import it.academy.fitness_studio.service.api.IUserService;
 import it.academy.fitness_studio.web.utils.JwtTokenUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
@@ -54,6 +57,43 @@ public class JwtFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
+        // Get user identity and set it on the spring security context
+//        UserDetails userDetails = new UserDetails() {
+//            @Override
+//            public Collection<? extends GrantedAuthority> getAuthorities() {
+//                return null;
+//            }
+//
+//            @Override
+//            public String getPassword() {
+//                return null;
+//            }
+//
+//            @Override
+//            public String getUsername() {
+//                return JwtTokenUtil.getUserMail(token);
+//            }
+//
+//            @Override
+//            public boolean isAccountNonExpired() {
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean isAccountNonLocked() {
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean isCredentialsNonExpired() {
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean isEnabled() {
+//                return true;
+//            }
+//        };
 
         // Get user identity and set it on the spring security context
 //        UserDetails userDetails = userManager
@@ -70,15 +110,19 @@ public class JwtFilter extends OncePerRequestFilter {
         UserModel userModel = userService.getUser(JwtTokenUtil.getUserMail(token));
 
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_"+userModel.getRole()));
-
+        String s = userModel.getRole().toString();
+        String role ="ROLE_"+s;
+        roles.add(new SimpleGrantedAuthority(role));
+        roles.size();
+//        return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority("ROLE_"+role.toString()));
+//
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
                 userModel, null,
                 roles
 //                userModel == null ?
-//                        List.of() : roles
+//                        List.of() : Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority("ROLE_"+userModel.getRole().toString()))
         );
 
         authentication.setDetails(

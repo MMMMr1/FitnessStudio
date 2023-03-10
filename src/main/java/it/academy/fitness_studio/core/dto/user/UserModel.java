@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserModel
-//        implements UserDetails
+        implements UserDetails
 {
     @JsonProperty("uuid")
     private UUID uuid;
@@ -79,7 +79,44 @@ public class UserModel
     public UserRole getRole() {
         return role;
     }
-//
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+         return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role.toString()));
+//        "ROLE_"+
+
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return mail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+    //
 //    @Override
 //    public String getPassword() {
 //        return null;

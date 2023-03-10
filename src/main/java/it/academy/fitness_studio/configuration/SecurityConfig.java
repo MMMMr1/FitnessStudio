@@ -60,10 +60,14 @@ public class SecurityConfig
                 .and();
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers("/api/v1/users/registration").permitAll()
-                        .antMatchers("/api/v1/users/login").permitAll()
-                        .antMatchers("/api/v1/users/verification").permitAll()
-                                .antMatchers("/api/v1/users").hasRole("ROLE_ADMIN")
+                                .antMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+                                .antMatchers("/api/v1/users/**").authenticated()
+                                .antMatchers("/**").permitAll()
+//                        .antMatchers("/api/v1/users/registration").permitAll()
+//                        .antMatchers("/api/v1/users/login").permitAll()
+//                        .antMatchers("/api/v1/users/verification").permitAll()
+//                        .antMatchers("/api/v1/users/me").authenticated()
+//                        .antMatchers("/api/v1/admin/**").hasRole("ROLE_ADMIN")
                         .anyRequest().authenticated()
 //                        .antMatchers("/api/v1/users/registration").permitAll()
 //                        // Our private endpoints
