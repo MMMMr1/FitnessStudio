@@ -1,11 +1,20 @@
 {
   "Servers": {
     "1": {
-      "Name": "fitness_docker",
+      "Name": "product-service",
       "Group": "Server Group 1",
       "Port": 5432,
       "Username": "postgres",
-      "Host": "db",
+      "Host": "db-product-service",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    },
+    "2": {
+      "Name": "user-service",
+      "Group": "Server Group 2",
+      "Port": 5432,
+      "Username": "postgres",
+      "Host": "db-user-service",
       "SSLMode": "prefer",
       "MaintenanceDB": "postgres"
     }

@@ -1,6 +1,15 @@
 version: '3.5'
 services:
-  db:
+  db-user-service:
+    build: postgresql
+    image: fitness_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    networks:
+      - fitness_ntwrk
+  db-product-service:
     build: postgresql
     image: fitness_postgresql:1.0.0
     restart: always
@@ -17,7 +26,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
-      - "82:80"
+      - "82:8080"
     networks:
       - fitness_ntwrk
   swagger-ui:
@@ -28,9 +37,15 @@ services:
     networks:
       - fitness_ntwrk
 
-  fitness-service:
-    build: fitness-service
-    image: fitness_fitness-service:1.0.0
+  product-service:
+    build: product-service
+    image: fitness_product-service:1.0.0
+
+    networks:
+      - fitness_ntwrk
+  users-service:
+    build: users-service
+    image: fitness_user-service:1.0.0
 
     networks:
       - fitness_ntwrk
@@ -40,7 +55,7 @@ services:
     build: proxy
     image: fitness_proxy:1.0.0
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - fitness_ntwrk
 networks:
