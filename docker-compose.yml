@@ -35,7 +35,6 @@ services:
     networks:
       - fitness_ntwrk
 
-
   proxy:
     build: proxy
     image: fitness_proxy:1.0.0

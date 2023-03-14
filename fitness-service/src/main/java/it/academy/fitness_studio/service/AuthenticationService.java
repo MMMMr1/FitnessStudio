@@ -71,12 +71,12 @@ public class AuthenticationService implements IAuthenticationService  {
         } else throw new ValidationUserException("Incorrect mail and code");
     }
     @Override
-    public String login(@Validated UserLoginDTO user) {
+    public UserModel login(@Validated UserLoginDTO user) {
         UserEntity userEntity = find(user.getMail());
         if(!encoder.matches(user.getPassword(),userEntity.getPassword())){
             throw new ValidationUserException("Incorrect mail and password");
         }
-        return JwtTokenUtil.generateAccessToken( userEntity );
+        return conversionService.convert(userEntity,UserModel.class);
     }
     private UserEntity find(String mail){
         return dao.findByMail(mail)

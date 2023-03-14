@@ -1,6 +1,7 @@
 package it.academy.fitness_studio.web.filter;
 
 import it.academy.fitness_studio.core.dto.user.UserModel;
+import it.academy.fitness_studio.core.exception.UserNotFoundException;
 import it.academy.fitness_studio.service.api.IUserService;
 import it.academy.fitness_studio.web.utils.JwtTokenUtil;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 //    private final UserDetailsManager userManager;
 
-//    public JwtFilter(UserDetailsManager userManager) {
+    //    public JwtFilter(UserDetailsManager userManager) {
 //        this.userManager = userManager;
 //    }
     private final IUserService userService;
@@ -58,64 +59,19 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         // Get user identity and set it on the spring security context
-//        UserDetails userDetails = new UserDetails() {
-//            @Override
-//            public Collection<? extends GrantedAuthority> getAuthorities() {
-//                return null;
-//            }
-//
-//            @Override
-//            public String getPassword() {
-//                return null;
-//            }
-//
-//            @Override
-//            public String getUsername() {
-//                return JwtTokenUtil.getUserMail(token);
-//            }
-//
-//            @Override
-//            public boolean isAccountNonExpired() {
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean isAccountNonLocked() {
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean isCredentialsNonExpired() {
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean isEnabled() {
-//                return true;
-//            }
-//        };
 
-        // Get user identity and set it on the spring security context
-//        UserDetails userDetails = userManager
-//                .loadUserByUsername(JwtTokenUtil.getUsermail(token));
-//
-//        UsernamePasswordAuthenticationToken
-//                authentication = new UsernamePasswordAuthenticationToken(
-//                userDetails, null,
-//                userDetails == null ?
-//                        List.of() : userDetails.getAuthorities()
-//        );
+        UserModel userModel;
 
+        try {
 
-        UserModel userModel = userService.getUser(JwtTokenUtil.getUserMail(token));
-
+            userModel = userService.getUser(JwtTokenUtil.getUserMail(token));
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException(e.getMessage());
+        }
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
         String s = userModel.getRole().toString();
-        String role ="ROLE_"+s;
+        String role = "ROLE_" + s;
         roles.add(new SimpleGrantedAuthority(role));
-        roles.size();
-//        return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority("ROLE_"+role.toString()));
-//
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

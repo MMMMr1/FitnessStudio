@@ -5,6 +5,7 @@ import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.service.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
+import it.academy.fitness_studio.web.utils.JwtTokenUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,9 +38,9 @@ public class AuthenticationController {
 //    Получить информацию о пользователе
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody @Validated UserLoginDTO user) {
-        service.login(user);
+        UserModel login = service.login(user);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(service.login(user));
+                .body(JwtTokenUtil.generateAccessToken( login ));
     }
     @RequestMapping(path = "/me", method = RequestMethod.GET)
     public ResponseEntity<?>  getUserInfo() {

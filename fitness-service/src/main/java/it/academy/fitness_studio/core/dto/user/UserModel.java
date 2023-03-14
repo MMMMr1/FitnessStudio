@@ -1,5 +1,6 @@
 package it.academy.fitness_studio.core.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class UserModel
         implements UserDetails
 {
@@ -81,6 +82,7 @@ public class UserModel
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
          return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role.toString()));
 //        "ROLE_"+
@@ -88,31 +90,37 @@ public class UserModel
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return null;
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return mail;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

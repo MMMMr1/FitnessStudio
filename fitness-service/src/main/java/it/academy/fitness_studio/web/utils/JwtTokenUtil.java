@@ -2,10 +2,12 @@ package it.academy.fitness_studio.web.utils;
 
 import io.jsonwebtoken.*;
 import it.academy.fitness_studio.core.dto.user.UserModel;
+import it.academy.fitness_studio.core.exception.UserNotFoundException;
 import it.academy.fitness_studio.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class JwtTokenUtil {
@@ -17,13 +19,17 @@ public class JwtTokenUtil {
 //    public static String generateAccessToken(UserDetails user) {
 //        return generateAccessToken(user.getUsername());
 //    }
-    public static String generateAccessToken(UserEntity user) {
-        return generateAccessToken(user.getMail());
+    public static String generateAccessToken(UserModel user) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("mail", user.getMail());
+        map.put("role", user.getRole());
+        return generateAccessToken(user.getMail(),map);
     }
 
-    public static String generateAccessToken(String name) {
+    public static String generateAccessToken(String mail,HashMap<String, Object> map) {
         return Jwts.builder()
-                .setSubject(name)
+                .setSubject(mail)
+//                .setClaims(map)
 //                .setAudience("ROLE_"+role.getRole().name())
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
@@ -39,6 +45,7 @@ public class JwtTokenUtil {
                 .getBody();
 
         return claims.getSubject();
+
     }
 
     public static Date getExpirationDate(String token) {

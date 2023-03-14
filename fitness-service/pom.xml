@@ -11,8 +11,6 @@
 	<groupId>it.academy</groupId>
 	<artifactId>fitness-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-<!--	<name>fitness-service</name>-->
-<!--	<description>FitnessStudio</description>-->
 	<properties>
 		<java.version>11</java.version>
 	</properties>

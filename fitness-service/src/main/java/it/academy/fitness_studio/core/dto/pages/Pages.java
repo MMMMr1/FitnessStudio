@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pages<T> {
     @JsonProperty("number")
     private int number;
