@@ -28,9 +28,15 @@ services:
     networks:
       - fitness_ntwrk
 
-  fitness-service:
-    build: fitness-service
-    image: fitness_fitness-service:1.0.0
+  user-service:
+    build: user-service
+    image: fitness_user-service:1.0.0
+
+    networks:
+      - fitness_ntwrk
+  product-service:
+    build: product-service
+    image: fitness_product-service:1.0.0
 
     networks:
       - fitness_ntwrk
