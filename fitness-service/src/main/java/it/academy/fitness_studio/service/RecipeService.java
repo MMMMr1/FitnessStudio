@@ -56,16 +56,15 @@ public class RecipeService implements IRecipeService {
                 .map(s -> {
                     ProductModel product = service.getProduct(s.getProduct());
                     ProductEntity productEntity = conversionService.convert(product, ProductEntity.class);
-                    return new IngredientEntity(productEntity, s.getWeight());})
+                    return new IngredientEntity(productEntity, s.getWeight());
+                })
                 .collect(Collectors.toList());
         UUID uuid = UUID.randomUUID();
 
-        Instant dt =  Instant.now();
+        Instant dt = Instant.now();
         dao.save(new RecipeEntity(uuid, dt, dt, recipeDTO.getTitle(), collect));
-//        Instant dtCreated =  Instant.now();
-//        Instant dtUpdated = dtCreated;
-//        dao.save(new RecipeEntity(uuid, dtCreated, dtUpdated, recipeDTO.getTitle(), collect));
     }
+
     @Override
     public Pages<RecipeModel> getPageRecipe(Pageable paging) {
         Page<RecipeEntity> all = dao.findAll(paging);
@@ -73,7 +72,7 @@ public class RecipeService implements IRecipeService {
             throw new IllegalStateException("Can not convert RecipeEntity.class to RecipeModel.class");
         }
         List<RecipeModel> content = all.getContent().stream()
-                .map(s -> conversionService.convert(s,RecipeModel.class))
+                .map(s -> conversionService.convert(s, RecipeModel.class))
                 .collect(Collectors.toList());
         return Pages.PagesBuilder.<RecipeModel>create()
                 .setNumber(all.getNumber()).setContent(content)
@@ -82,13 +81,13 @@ public class RecipeService implements IRecipeService {
                 .setSize(all.getSize()).setTotalPages(all.getTotalPages())
                 .setTotalElements(all.getTotalElements()).build();
     }
+
     @Override
     public void update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException {
         validator.validate(product);
         RecipeEntity recipeEntity = dao.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException("There is no recipe with such id"));
-//        if ( !version.equals(recipeEntity.getDtUpdate()) ) {
-        if(version.toEpochMilli() != recipeEntity.getDtUpdate().toEpochMilli()){
+        if (version.toEpochMilli() != recipeEntity.getDtUpdate().toEpochMilli()) {
             throw new InvalidVersionException("Version is not correct");
         }
         if (!conversionService.canConvert(ProductModel.class, ProductEntity.class)) {
@@ -98,12 +97,14 @@ public class RecipeService implements IRecipeService {
                 .map(s -> {
                     ProductModel productModel = service.getProduct(s.getProduct());
                     ProductEntity productEntity = conversionService.convert(productModel, ProductEntity.class);
-                    return new IngredientEntity(productEntity,s.getWeight());})
+                    return new IngredientEntity(productEntity, s.getWeight());
+                })
                 .collect(Collectors.toList());
         recipeEntity.setTitle(product.getTitle());
         recipeEntity.setComposition(collect);
         dao.save(recipeEntity);
     }
+
     private void checkDoubleRecipe(RecipeDTO recipe) {
         String title = recipe.getTitle();
         if (dao.findByTitle(title) != null) {

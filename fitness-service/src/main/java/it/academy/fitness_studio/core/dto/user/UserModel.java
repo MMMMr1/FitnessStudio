@@ -85,8 +85,6 @@ public class UserModel
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
          return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role.toString()));
-//        "ROLE_"+
-
     }
 
     @Override
@@ -124,83 +122,4 @@ public class UserModel
     public boolean isEnabled() {
         return true;
     }
-    //
-//    @Override
-//    public String getPassword() {
-//        return null;
-//    }
-//
-//    public UserStatus getStatus() {
-//        return status;
-//    }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority("ROLE_"+role.toString()));
-//    }
-//
-////    @Override
-////    public String getPassword() {
-////        return password;
-////    }
-//
-//    @Override
-//    public String getUsername() {
-//        return mail;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role.toString()));
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return null;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return mail;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
 }

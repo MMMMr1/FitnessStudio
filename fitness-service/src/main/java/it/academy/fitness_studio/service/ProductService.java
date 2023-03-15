@@ -27,12 +27,12 @@ public class ProductService implements IProductService {
                           ConversionService conversionService) {
         this.dao = dao;
         this.conversionService = conversionService;
-    }    @Override
+    }
+    @Override
     public void create( @Validated ProductDTO product) {
         checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
              throw new IllegalStateException("Can not convert ProductDTO.class");
-//             IllegalStateException
          }
         ProductEntity productEntity = conversionService.convert(product, ProductEntity.class);
         productEntity.setUuid(UUID.randomUUID());
@@ -46,7 +46,6 @@ public class ProductService implements IProductService {
     public void update(UUID id, Instant version,@Validated ProductDTO product) {
         ProductEntity productEntity = dao.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("There is no product with such id"));
-//        if (!version.equals(productEntity.getDtUpdate())) {
         if(version.toEpochMilli() != productEntity.getDtUpdate().toEpochMilli()){
             throw new InvalidVersionException("Version is not correct");
         }

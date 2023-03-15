@@ -35,12 +35,6 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-//    @ExceptionHandler(value = {ValidationUserException.class})
-//    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentProductNotValidException(
-//            ValidationUserException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-//    }
     @ExceptionHandler(value = {ValidationRecipeException.class})
     public ResponseEntity<ExceptionListDTO> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
@@ -85,7 +79,7 @@ public class ExceptionGlobal {
     }
 //    500
     @ExceptionHandler
-    public ResponseEntity<List<ExceptionErrorDTO>> handlerNPE(Throwable e){
+    public ResponseEntity<List<ExceptionErrorDTO>> handler(Throwable e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }

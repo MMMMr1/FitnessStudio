@@ -128,15 +128,6 @@ public class RecipeModel {
             this.composition = composition;
             return this;
         }
-//        public RecipeModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
-//            this.weight = weightAndTotal.getWeight();
-//            this.fats = weightAndTotal.getFats();
-//            this.carbohydrates = weightAndTotal.getCarbohydrates();
-//            this.proteins = weightAndTotal.getProteins();
-//            this.calories = weightAndTotal.getCalories();
-//            return this;
-//        }
-
         public RecipeModelBuilder setWeight(Integer weight) {
             this.weight = weight;
             return this;
@@ -177,24 +168,3 @@ public class RecipeModel {
         }
     }
 }
-//    public RecipeModelBuilder setWeight(List<IngredientModel> composition) {
-//        this.weight = composition.stream().mapToInt(IngredientModel::getWeight).sum();
-//        return this;
-//    }
-//    public RecipeModelBuilder setCalories( List<IngredientModel> composition) {
-//        this.calories = composition.stream().mapToInt(IngredientModel::getCalories).sum();
-//        return this;
-//    }
-//    public RecipeModelBuilder setProteins(List<IngredientModel> composition ) {
-//        this.proteins = composition.stream().mapToDouble(IngredientModel::getProteins).sum();
-//        return this;
-//    }
-//    public RecipeModelBuilder setFats( List<IngredientModel> composition) {
-//        this.fats = composition.stream().mapToDouble(IngredientModel::getFats).sum();
-//        return this;
-//    }
-//    public RecipeModelBuilder setCarbohydrates(List<IngredientModel> composition ) {
-//        this.carbohydrates = composition.stream()
-//                .mapToDouble(IngredientModel::getCarbohydrates).sum();
-//        return this;
-//    }

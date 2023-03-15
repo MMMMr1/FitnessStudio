@@ -18,6 +18,5 @@ public class UserDTOToUserEntity implements Converter<UserDTO,UserEntity> {
                 new RoleEntity(user.getRole()),
                 new StatusEntity(user.getStatus()),
                 user.getPassword());
-
     }
 }

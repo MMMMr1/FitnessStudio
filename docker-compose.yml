@@ -39,7 +39,7 @@ services:
     build: proxy
     image: fitness_proxy:1.0.0
     ports:
-      - "80:80"
+      - "8080:8080"
     networks:
       - fitness_ntwrk
 networks:

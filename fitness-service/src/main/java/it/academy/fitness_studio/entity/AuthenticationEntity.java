@@ -10,7 +10,6 @@ import javax.persistence.Table;
 public class AuthenticationEntity {
     @Id
     private String mail;
-//    @Column(name = "code", table= "verification")
     @Column(name = "code")
     private String code;
 

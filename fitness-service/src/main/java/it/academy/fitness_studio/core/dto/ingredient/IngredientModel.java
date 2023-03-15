@@ -80,14 +80,6 @@ public class IngredientModel {
             this.product = product;
             return this;
         }
-//        public IngredientModelBuilder setWeightAndTotal(WeightAndTotal weightAndTotal){
-//            this.weight = weightAndTotal.getWeight();
-//            this.fats = weightAndTotal.getFats();
-//            this.carbohydrates = weightAndTotal.getCarbohydrates();
-//            this.proteins = weightAndTotal.getProteins();
-//            this.calories = weightAndTotal.getCalories();
-//            return this;
-//        }
         public IngredientModelBuilder setWeight(Integer weight) {
             this.weight = weight;
             return this;
@@ -117,12 +109,6 @@ public class IngredientModel {
                     proteins,
                     fats,
                     carbohydrates);
-        }
-        private void checkWeight(Integer weight) {
-            if (weight <= 0) {
-                throw new NumberFormatException("Check product with id : " +
-                        product.getUuid() + ". Weight can not be <= 0");
-            }
         }
     }
 }

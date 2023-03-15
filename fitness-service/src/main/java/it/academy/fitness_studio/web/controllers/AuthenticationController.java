@@ -35,7 +35,6 @@ public class AuthenticationController {
         service.verify(code,mail);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-//    Получить информацию о пользователе
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody @Validated UserLoginDTO user) {
         UserModel login = service.login(user);
@@ -44,13 +43,8 @@ public class AuthenticationController {
     }
     @RequestMapping(path = "/me", method = RequestMethod.GET)
     public ResponseEntity<?>  getUserInfo() {
-        UserHolder userHolder = new UserHolder();
+        UserHolder userHolder = new  UserHolder();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userHolder.getUser());
-//
-//        public UserDetails details(){
-//            return holder.getUser();
-//        }
-//        return ;
     }
 }

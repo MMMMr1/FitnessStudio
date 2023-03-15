@@ -1,6 +1,5 @@
 package it.academy.fitness_studio.core.dto.ingredient;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
 public class IngredientDTO {

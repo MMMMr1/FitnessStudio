@@ -8,46 +8,61 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class JwtTokenUtil {
 
     private static final String jwtSecret = "NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw";
     private static final String jwtIssuer = "ITAcademy";
 
-
-//    public static String generateAccessToken(UserDetails user) {
-//        return generateAccessToken(user.getUsername());
-//    }
+//    генерация токена(кладем в него имя пользователя и authorities)
     public static String generateAccessToken(UserModel user) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("mail", user.getMail());
-        map.put("role", user.getRole());
-        return generateAccessToken(user.getMail(),map);
+        Map<String, Object> claims = new HashMap<>();
+        String commaSeparatedListOfAuthorities=  user.getAuthorities().stream().map(a-> a.getAuthority()).collect(Collectors.joining(","));
+
+        claims.put("authorities", commaSeparatedListOfAuthorities);
+
+        return generateAccessToken(claims , user.getMail());
     }
 
-    public static String generateAccessToken(String mail,HashMap<String, Object> map) {
-        return Jwts.builder()
-                .setSubject(mail)
-//                .setClaims(map)
-//                .setAudience("ROLE_"+role.getRole().name())
+    public static String generateAccessToken(Map<String, Object> claims, String subject ) {
+        return Jwts.builder().setClaims(claims)
+                .setSubject(subject)
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-    }
-
-    public static String getUserMail(String token) {
+    }    //извлечение имени пользователя из токена (внутри валидация токена)
+    public static String extractUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
-
+//        return extractClaim(token, Claims::getSubject);
     }
 
+    //извлечение authorities (внутри валидация токена)
+    public  static String extractAuthorities(String token) {
+        Function<Claims, String> claimsListFunction = claims -> {
+            return (String)claims.get("authorities");
+        };
+        return extractClaim(token, claimsListFunction);
+    }
+
+    private static  <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private static Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    }
     public static Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)

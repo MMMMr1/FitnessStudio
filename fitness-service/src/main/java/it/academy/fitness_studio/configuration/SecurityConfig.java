@@ -1,6 +1,5 @@
 package it.academy.fitness_studio.configuration;
 
-//import by.itacademy.user.controller.filter.JwtFilter;
 import it.academy.fitness_studio.web.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,7 @@ public class SecurityConfig  {
         this.filter = filter;
     }
 
-    @Bean
+     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http = http.cors().and().csrf().disable();
         http = http

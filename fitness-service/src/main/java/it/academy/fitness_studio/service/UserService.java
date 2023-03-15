@@ -40,9 +40,6 @@ public class UserService implements IUserService {
         this.conversionService = conversionService;
         this.encoder = encoder;
     }
-
-
-
     @Override
     public void create(@Validated UserDTO user) {
         checkDoubleMail(user);
@@ -53,7 +50,6 @@ public class UserService implements IUserService {
         }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         userEntity.setUuid(UUID.randomUUID());
-//        Instant dtCreated = Instant.ofEpochMilli(Instant.now().toEpochMilli());
         Instant dtCreated = Instant.now();
         Instant dtUpdated = dtCreated;
         userEntity.setDtCreate(dtCreated);
@@ -122,6 +118,4 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
     }
-
-
 }
