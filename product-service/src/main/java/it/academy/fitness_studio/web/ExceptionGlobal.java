@@ -44,6 +44,13 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionListDTO(collect));
     }
+    @ExceptionHandler(value = {ProductNotFoundException.class,
+            RecipeNotFoundException.class})
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotFoundException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
 
     //    409
     @ExceptionHandler(value = {ProductAlreadyExistException.class})

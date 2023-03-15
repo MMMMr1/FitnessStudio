@@ -102,9 +102,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserModel getUser(String mail) {
+    public UserModel getUser(String mail) throws UsernameNotFoundException {
         UserEntity userEntity = dao.findByMail(mail)
-                .orElseThrow(() -> new UserNotFoundException("There is no user with such mail"));
+                .orElseThrow(() -> new UsernameNotFoundException("There is no user with such mail"));
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
             throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
         }

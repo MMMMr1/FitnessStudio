@@ -6,6 +6,7 @@ import it.academy.fitness_studio.core.dto.error.ExceptionListDTO;
 import it.academy.fitness_studio.core.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,15 +35,25 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-
-
-
+    @ExceptionHandler(value = {UserNotFoundException.class })
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotFoundException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
+    @ExceptionHandler(value = {UsernameNotFoundException.class })
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUsernameNotFoundException(
+            RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
     @ExceptionHandler(value = {UserAlreadyExistException.class })
     public ResponseEntity<List<ExceptionErrorDTO>> ArgumentUserAlreadyExistException(
             RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }    @ExceptionHandler(value = {InvalidVersionException.class})
+    }
+    @ExceptionHandler(value = {InvalidVersionException.class})
     public ResponseEntity<List<ExceptionErrorDTO>> ArgumentInvalidVersionException(
             RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

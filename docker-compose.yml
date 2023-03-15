@@ -1,8 +1,17 @@
 version: '3.5'
 services:
-  db:
-    build: postgresql
-    image: fitness_postgresql:1.0.0
+  database-user-service:
+    build: user-postgresql
+    image: user_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    networks:
+      - fitness_ntwrk
+  database-product-service:
+    build: product-postgresql
+    image: product_postgresql:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
