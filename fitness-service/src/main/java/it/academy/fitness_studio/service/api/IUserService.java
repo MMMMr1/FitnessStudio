@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.time.Instant;
 import java.util.UUID;
 
-public interface IUserService {
+public interface IUserService extends UserDetailsService {
     void create(UserDTO user);
     UserModel getUser(UUID id);
     UserModel getUser(String mail);

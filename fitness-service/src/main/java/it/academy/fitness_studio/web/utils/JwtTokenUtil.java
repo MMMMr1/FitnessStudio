@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.UserNotFoundException;
 import it.academy.fitness_studio.entity.UserEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
@@ -21,10 +22,10 @@ public class JwtTokenUtil {
 //    генерация токена(кладем в него имя пользователя и authorities)
     public static String generateAccessToken(UserModel user) {
         Map<String, Object> claims = new HashMap<>();
-        String commaSeparatedListOfAuthorities=  user.getAuthorities().stream().map(a-> a.getAuthority()).collect(Collectors.joining(","));
-
+        String commaSeparatedListOfAuthorities=  user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
         claims.put("authorities", commaSeparatedListOfAuthorities);
-
         return generateAccessToken(claims , user.getMail());
     }
 
@@ -38,20 +39,12 @@ public class JwtTokenUtil {
                 .compact();
     }    //извлечение имени пользователя из токена (внутри валидация токена)
     public static String extractUsername(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject();
-//        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, Claims::getSubject);
     }
 
     //извлечение authorities (внутри валидация токена)
     public  static String extractAuthorities(String token) {
-        Function<Claims, String> claimsListFunction = claims -> {
-            return (String)claims.get("authorities");
-        };
+        Function<Claims, String> claimsListFunction = claims -> (String)claims.get("authorities");
         return extractClaim(token, claimsListFunction);
     }
 

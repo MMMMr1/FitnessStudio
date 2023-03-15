@@ -51,9 +51,8 @@ public class UserService implements IUserService {
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         userEntity.setUuid(UUID.randomUUID());
         Instant dtCreated = Instant.now();
-        Instant dtUpdated = dtCreated;
         userEntity.setDtCreate(dtCreated);
-        userEntity.setDtUpdate(dtUpdated);
+        userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
     }
 
@@ -117,5 +116,11 @@ public class UserService implements IUserService {
         if (dao.findByMail(mail).isPresent()) {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
+    }
+    @Override
+    public UserModel loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity myUser = dao.findByMail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Unknown user: " + username));
+        return conversionService.convert(myUser, UserModel.class);
     }
 }

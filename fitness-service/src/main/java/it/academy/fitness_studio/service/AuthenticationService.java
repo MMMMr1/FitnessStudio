@@ -23,7 +23,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 
-public class AuthenticationService implements IAuthenticationService, UserDetailsService  {
+public class AuthenticationService implements IAuthenticationService  {
     private final IAuthenticationDao dao;
     private final IUserService service;
     private final IEmailService emailService;
@@ -73,13 +73,5 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
     private UserEntity find(String mail){
         return dao.findByMail(mail)
                 .orElseThrow(() -> new UserNotFoundException("User with this mail is not registered"));
-    }
-
-
-    @Override
-    public UserModel loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity myUser = dao.findByMail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Unknown user: " + username));
-        return  conversionService.convert(myUser,UserModel.class);
     }
 }

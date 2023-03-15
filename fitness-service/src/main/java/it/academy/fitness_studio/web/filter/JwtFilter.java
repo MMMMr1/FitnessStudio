@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -51,14 +52,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         // Get user identity and set it on the spring security context
 
-        String userMail = null;
-        UserModel userModel = userService.getUser(JwtTokenUtil.extractUsername(token));
+        UserDetails userModel = userService.loadUserByUsername(JwtTokenUtil.extractUsername(token));
         String jwt = null;
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-             userMail = JwtTokenUtil.extractUsername(jwt);
         }
-        if (userMail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userModel != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             String commaSeparatedListOfAuthorities = JwtTokenUtil.extractAuthorities(jwt);
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" +commaSeparatedListOfAuthorities);
@@ -71,5 +70,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
 }
