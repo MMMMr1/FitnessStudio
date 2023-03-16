@@ -1,10 +1,59 @@
 spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://database-product-service:5432/postgres
-#    url: jdbc:postgresql://localhost:5432/fitness_studio
     username: postgres
     password: root
-#    password: pass
+---
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/fitness_studio
+    username: postgres
+    password: pass
+---
   jpa:
     show-sql: true
+
+
+
+
+
+
+
+
+#spring:
+#  profiles:
+#    active: @spring.profiles.active@
+#
+#  prop: used-always-in-all-profiles
+#  spring:
+#    config:
+#      activate:
+#        on-profile: dev
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://database-product-service:5432/postgres
+##    url: jdbc:postgresql://localhost:5432/fitness_studio
+#    username: postgres
+#    password: root
+##    password: pass
+#
+#  spring:
+#    config:
+#      activate:
+#        on-profile:  production
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#      url: jdbc:postgresql://database-product-service:5432/postgres
+#      #    url: jdbc:postgresql://localhost:5432/fitness_studio
+#      username: postgres
+#      password: root #    password: pass
+#  jpa:
+#    show-sql: true

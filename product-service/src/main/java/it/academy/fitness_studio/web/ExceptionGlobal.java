@@ -33,13 +33,7 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionListDTO(error));
     }
-//    400
-    @ExceptionHandler(value = {NumberFormatException.class})
-    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotValidException(
-            ValidationUserException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }
+
     @ExceptionHandler(value = {ValidationRecipeException.class})
     public ResponseEntity<ExceptionListDTO> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
@@ -76,12 +70,12 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-    @ExceptionHandler()
-    public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
-            HttpMessageNotReadableException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }
+//    @ExceptionHandler()
+//    public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
+//            HttpMessageNotReadableException e) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+//    }
 
 //    500
     @ExceptionHandler
