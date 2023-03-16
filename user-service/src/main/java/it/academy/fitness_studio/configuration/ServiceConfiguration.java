@@ -12,7 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+//import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.util.Properties;
 
@@ -34,42 +34,44 @@ public class ServiceConfiguration {
     @Bean
     public IAuthenticationService authenticationService(IAuthenticationDao dao,
                                                         IUserService service,
-                                                        IMailService emailService,
+//                                                        IMailService emailService,
                                                         ConversionService conversionService,
                                                         BCryptPasswordEncoder encoder){
 
-        return new AuthenticationService(dao, service, emailService, conversionService, encoder);
+        return new AuthenticationService(dao, service,
+//                emailService,
+                conversionService, encoder);
     }
-    @Bean
-    public IMailService emailService(JavaMailSender emailSender, SimpleMailMessage template,
-                                     SpringTemplateEngine thymeleafTemplateEngine){
-        return new MailService(emailSender,template,thymeleafTemplateEngine);
-    }
+//    @Bean
+//    public IMailService emailService(JavaMailSender emailSender, SimpleMailMessage template,
+//                                     SpringTemplateEngine thymeleafTemplateEngine){
+//        return new MailService(emailSender,template,thymeleafTemplateEngine);
+//    }
 
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.mail.ru");
-        mailSender.setPort(465);
-
-        mailSender.setUsername("maksim.maks.23@mail.ru");
-        mailSender.setPassword("DhrzvYXCZRL5RdPwTQbA");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtps");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.ssl.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
-    }
-
-    @Bean
-    public SimpleMailMessage templateSimpleMessage() {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setText("This is the test email template for your email:\n%s\n");
-        return message;
-    }
+//    @Bean
+//    public JavaMailSender getJavaMailSender() {
+//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//        mailSender.setHost("smtp.mail.ru");
+//        mailSender.setPort(465);
+//
+//        mailSender.setUsername("maksim.maks.23@mail.ru");
+//        mailSender.setPassword("n6uLLA7AmjfZb1mxwWbM");
+//
+//        Properties props = mailSender.getJavaMailProperties();
+//        props.put("mail.transport.protocol", "smtps");
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.ssl.enable", "true");
+//        props.put("mail.debug", "true");
+//
+//        return mailSender;
+//    }
+//
+//    @Bean
+//    public SimpleMailMessage templateSimpleMessage() {
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setText("This is the test email template for your email:\n%s\n");
+//        return message;
+//    }
 
 
 //    @Bean

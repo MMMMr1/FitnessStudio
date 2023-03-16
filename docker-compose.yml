@@ -49,6 +49,12 @@ services:
 
     networks:
       - fitness_ntwrk
+  mail-service:
+    build: mail-service
+    image: fitness_mail-service:1.0.0
+
+    networks:
+      - fitness_ntwrk
 
   proxy:
     build: proxy

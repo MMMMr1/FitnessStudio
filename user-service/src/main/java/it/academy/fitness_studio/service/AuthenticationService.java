@@ -11,30 +11,37 @@ import it.academy.fitness_studio.dao.api.IAuthenticationDao;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
-import it.academy.fitness_studio.service.api.IMailService;
+//import it.academy.fitness_studio.service.api.IMailService;
 import it.academy.fitness_studio.service.api.IUserService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.UUID;
 
 public class AuthenticationService implements IAuthenticationService  {
     private final IAuthenticationDao dao;
     private final IUserService service;
-    private final IMailService emailService;
+//    private final IMailService emailService;
     private ConversionService conversionService;
     private BCryptPasswordEncoder encoder;
 
     public AuthenticationService(IAuthenticationDao dao,
                                  IUserService service,
-                                 IMailService emailService,
+//                                 IMailService emailService,
                                  ConversionService conversionService,
                                  BCryptPasswordEncoder encoder
     ) {
         this.dao = dao;
         this.service = service;
-        this.emailService = emailService;
+//        this.emailService = emailService;
         this.conversionService = conversionService;
         this.encoder = encoder;
     }
@@ -45,8 +52,8 @@ public class AuthenticationService implements IAuthenticationService  {
         String code = UUID.randomUUID().toString();
         userEntity.setCode(code);
         dao.save(userEntity);
-        emailService.sendSimpleMessage("maksim.maks.23@mail.ru",
-                code, "hello");
+       sendSimpleMessage(user.getMail(),
+                code, "Подтвердите e-mail адрес.");
     }
 
     @Override
@@ -69,5 +76,21 @@ public class AuthenticationService implements IAuthenticationService  {
     private UserEntity find(String mail){
         return dao.findByMail(mail)
                 .orElseThrow(() -> new UserNotFoundException("User with this mail is not registered"));
+    }
+    private void sendSimpleMessage(String to, String subject, String text){
+        try {
+            JSONObject object =new JSONObject();
+            object.put("to", to);
+            object.put("subject", subject);
+            object.put("text",text);
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://mail-service:8080/api/v1/mail"))
+                    .setHeader("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
+            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (JSONException | InterruptedException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -53,8 +53,7 @@ public class SecurityConfig  {
                         .antMatchers(HttpMethod.PUT,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults());
+                );
         http.addFilterBefore(
                 filter,
                 UsernamePasswordAuthenticationFilter.class

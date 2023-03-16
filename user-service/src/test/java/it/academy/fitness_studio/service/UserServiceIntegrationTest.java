@@ -35,6 +35,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -83,19 +84,19 @@ public class UserServiceIntegrationTest {
             secondUser.setPassword("12345678");
             secondUser.setMail("Motto.second@fr.com");
             secondUser.setFio("Second Second");
-            Mockito.when(dao.save(secondUser)).thenReturn(secondUser);
+            when(dao.save(secondUser)).thenReturn(secondUser);
             List<UserEntity> userEntities = Arrays.asList(firstUser, secondUser);
-            Mockito.when(dao.findByMail(firstUser.getMail()))
+            when(dao.findByMail(firstUser.getMail()))
                     .thenReturn(Optional.of(firstUser));
-            Mockito.when(dao.findByMail(secondUser.getMail()))
+            when(dao.findByMail(secondUser.getMail()))
                     .thenReturn(Optional.of(secondUser));
-            Mockito.when(dao.findByMail("wrong_mail"))
+            when(dao.findByMail("wrong_mail"))
                     .thenThrow(new UserNotFoundException("There is no user with such mail"));
-            Mockito.when(dao.findById(firstUser.getUuid()))
+            when(dao.findById(firstUser.getUuid()))
                     .thenReturn(Optional.of(firstUser));
-            Mockito.when(dao.findAll())
+            when(dao.findAll())
                     .thenReturn(userEntities);
-            Mockito.when(dao.findById(UUID.fromString("5541a2b-d0b3-4752-a706-ed959ed02533")))
+            when(dao.findById(UUID.fromString("5541a2b-d0b3-4752-a706-ed959ed02533")))
                     .thenThrow(new UserNotFoundException("There is no user with such mail"));
 
         }
@@ -133,22 +134,22 @@ public class UserServiceIntegrationTest {
         }
 
         private void verifyFindByMailIsCalledOnce(String name) {
-            Mockito.verify(dao, VerificationModeFactory.times(1))
+            verify(dao, VerificationModeFactory.times(1))
                     .findByMail(name);
-            Mockito.reset(dao);
+            reset(dao);
         }
 
         private void verifyFindByIdIsCalledOnce() {
-            Mockito.verify(dao, VerificationModeFactory
+            verify(dao, VerificationModeFactory
                             .times(1))
-                    .findById(Mockito.any(UUID.class));
-            Mockito.reset(dao);
+                    .findById(any(UUID.class));
+            reset(dao);
         }
 
         private void verifyFindAllUsersIsCalledOnce() {
-            Mockito.verify(dao, VerificationModeFactory.times(1))
+            verify(dao, VerificationModeFactory.times(1))
                     .findAll();
-            Mockito.reset(dao);
+            reset(dao);
         }
 }
 //        UserDTO userDTO = new UserDTO("hello.hello@test.com",
