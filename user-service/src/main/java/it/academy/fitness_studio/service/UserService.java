@@ -14,15 +14,13 @@ import it.academy.fitness_studio.service.api.IUserService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -101,16 +99,6 @@ public class UserService implements IUserService {
         return conversionService.convert(userEntity, UserModel.class);
     }
 
-    @Override
-    public UserModel getUser(String mail) throws UsernameNotFoundException {
-        UserEntity userEntity = dao.findByMail(mail)
-                .orElseThrow(() -> new UsernameNotFoundException("There is no user with such mail"));
-        if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
-            throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
-        }
-        return conversionService.convert(userEntity, UserModel.class);
-    }
-
     private void checkDoubleMail(UserDTO user) {
         String mail = user.getMail(); 
         if (dao.findByMail(mail).isPresent()) {
@@ -118,9 +106,10 @@ public class UserService implements IUserService {
         }
     }
     @Override
-    public UserModel loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserModel loadUserByUsername(String username) throws UsernameNotFoundException{
         UserEntity myUser = dao.findByMail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Unknown user: " + username));
-        return conversionService.convert(myUser, UserModel.class);
-    }
+                    .orElseThrow(() -> new UsernameNotFoundException("Unknown user: "));
+        return conversionService.convert(myUser,UserModel.class);
+     }
 }
+//eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyc2VyLmFuZEBnbWFpbC5jb20iLCJpc3MiOiJJVEFjYWRlbXkiLCJleHAiOjE2Nzk1MTUyNzksImlhdCI6MTY3ODkxMDQ3OSwiYXV0aG9yaXRpZXMiOiJVU0VSIn0.DZRM-j7H73zeSejqwbHA9K79c664r1r3ktEC0e2LLDpa0liV2Bg2SP6KWg2qpbZyC5sfo3ajFz7RGo0Y6yde4g

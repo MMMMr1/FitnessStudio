@@ -1,16 +1,19 @@
 package it.academy.fitness_studio.web.filter;
 
 import it.academy.fitness_studio.core.dto.user.UserModel;
+import it.academy.fitness_studio.core.exception.UserNotFoundException;
 import it.academy.fitness_studio.service.api.IUserService;
 import it.academy.fitness_studio.web.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,7 +31,7 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 public class JwtFilter extends OncePerRequestFilter {
     private final IUserService userService;
 
-    public JwtFilter( IUserService userService) {
+    public JwtFilter(IUserService userService) {
         this.userService = userService;
     }
 
@@ -44,26 +47,33 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Get jwt token and validate
         final String token = authorizationHeader.split(" ")[1].trim();
         if (!JwtTokenUtil.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
-        // Get user identity and set it on the spring security context
 
-        UserDetails userModel = userService.loadUserByUsername(JwtTokenUtil.extractUsername(token));
         String jwt = null;
+        UserDetails userModel = null;
+
+        try {
+            userModel = userService.loadUserByUsername(JwtTokenUtil.extractUsername(token));
+        } catch (UsernameNotFoundException e) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
         }
         if (userModel != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             String commaSeparatedListOfAuthorities = JwtTokenUtil.extractAuthorities(jwt);
-            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" +commaSeparatedListOfAuthorities);
+            List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + commaSeparatedListOfAuthorities);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                          userModel, null, authorities);
+                            userModel, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
