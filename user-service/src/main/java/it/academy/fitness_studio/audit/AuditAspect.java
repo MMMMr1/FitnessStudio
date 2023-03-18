@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.json.JSONObject;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -30,52 +31,17 @@ public class AuditAspect {
     }
     @AfterReturning(
             pointcut="@annotation(auditable)",
-            argNames = "auditable, uuid", returning = "uuid")
-    public void doAudit (Auditable auditable, UUID uuid) {
+            argNames = "auditable, usermodel", returning = "usermodel")
+//    @AfterReturning(pointcut="com.xyz.myapp.SystemArchitecture.dataAccessOperation()",
+//            returning="retVal")
+    public void doAudit (Auditable auditable, UserModel userModel) {
         AuditCode value = auditable.value();
-        UserModel user = new UserHolder().getUser();
-        sendAudit(user, uuid, value.name());
+        UserHolder userHolder = new UserHolder();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserModel user =  principal instanceof String  ? userModel : userHolder.getUser();
+        sendAudit(user, userModel.getUuid(), value.name());
     }
-//    @AfterReturning(pointcut = "@annotation(it.academy.fitness_studio.audit.Audit)", returning = "uuid")
-//    private void log(JoinPoint joinPoint, UUID uuid) throws IllegalAccessException {
-////        String methodMessage = getMethodMessage(joinPoint);
-//        UserHolder userHolder = new UserHolder();
-//        UserModel user = userHolder.getUser();
-//        sendAudit(user, uuid, "Dddd");
 
-//        Class<?> objectClass = object.getClass();
-//        Map<String, String> logElements = new HashMap<>();
-//        Set<String> displayFields = new HashSet<>();
-//        for (Field field : objectClass.getDeclaredFields()) {
-//            field.setAccessible(true);
-//            if (field.isAnnotationPresent(Logger.class)) {
-//                if (checkIsShowDataEnabled(field)) {
-//                    logElements.put(getFieldValue(field), String.valueOf(field.get(object)));
-//                } else {
-//                    displayFields.add(getFieldValue(field));
-//                }
-//            }
-//        }
-//        logger.info("method message: " + methodMessage);
-//        logger.info("displayed fields: " + String.join(", ", displayFields));
-//        logger.info("displayed fields with data: " + logElements.toString());
-
-
-//    private static String getMethodMessage(JoinPoint joinPoint) {
-//        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-//        Method method = signature.getMethod();
-//          method.getAnnotation( );
-//        return aspectLogger.value();
-//    }
-
-//    private static String getFieldValue(Field field) {
-//        String fieldValue = field.getAnnotation(Logger.class).value();
-//        return fieldValue.isEmpty() ? field.getName() : fieldValue;
-//    }
-//
-//    private static boolean checkIsShowDataEnabled(Field field) {
-////        return field.getAnnotation(Logger.class).showData();
-//    }
         private void sendAudit( UserModel auditor, UUID uuid, String action){
         JSONObject object =new JSONObject();
         object.put("uuid", auditor.getUuid());

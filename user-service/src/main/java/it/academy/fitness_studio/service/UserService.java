@@ -40,7 +40,7 @@ public class UserService implements IUserService {
     }
     @Override
     @Auditable(AuditCode.CREATED)
-    public UUID create(@Validated UserDTO user) {
+    public UserModel create(@Validated UserDTO user) {
         checkDoubleMail(user);
         String encode = encoder.encode(user.getPassword());
         user.setPassword(encode);
@@ -54,11 +54,12 @@ public class UserService implements IUserService {
         userEntity.setDtCreate(dtCreated);
         userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
-        return uuid;
+
+        return conversionService.convert(userEntity,UserModel.class);
     }
     @Override
     @Auditable(AuditCode.UPDATE)
-    public UUID update(UUID id, Instant version, @Validated UserDTO user) {
+    public UserModel update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
         if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
@@ -70,7 +71,7 @@ public class UserService implements IUserService {
             userEntity.setPassword(user.getPassword());
             userEntity.setRole(new RoleEntity(user.getRole()));
             dao.save(userEntity);
-            return id;
+            return conversionService.convert(userEntity,UserModel.class);
     }
     public Pages<UserModel> getPageUser(Pageable paging) {
         Page<UserEntity> all = dao.findAll(paging);

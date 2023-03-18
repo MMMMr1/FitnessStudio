@@ -61,12 +61,12 @@ public class ExceptionGlobal  {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-//    @ExceptionHandler()
-//    public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
-//            HttpMessageNotReadableException e) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-//    }
+    @ExceptionHandler()
+    public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
+            HttpMessageNotReadableException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class,
             MethodArgumentConversionNotSupportedException.class})
     public ResponseEntity<List<ExceptionErrorDTO>> onArgumentTypeMismatchException(
