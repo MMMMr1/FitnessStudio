@@ -1,5 +1,7 @@
 package it.academy.fitness_studio.service;
 
+import it.academy.fitness_studio.audit.AuditCode;
+import it.academy.fitness_studio.audit.Auditable;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
@@ -14,13 +16,11 @@ import it.academy.fitness_studio.service.api.IUserService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,8 @@ public class UserService implements IUserService {
         this.encoder = encoder;
     }
     @Override
-    public void create(@Validated UserDTO user) {
+    @Auditable(AuditCode.CREATED)
+    public UUID create(@Validated UserDTO user) {
         checkDoubleMail(user);
         String encode = encoder.encode(user.getPassword());
         user.setPassword(encode);
@@ -47,15 +48,17 @@ public class UserService implements IUserService {
             throw new RuntimeException("Can not convert UserDTO.class to UserEntity.class");
         }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
-        userEntity.setUuid(UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        userEntity.setUuid(uuid);
         Instant dtCreated = Instant.now();
         userEntity.setDtCreate(dtCreated);
         userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
+        return uuid;
     }
-
     @Override
-    public void update(UUID id, Instant version, @Validated UserDTO user) {
+    @Auditable(AuditCode.UPDATE)
+    public UUID update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
         if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
@@ -67,8 +70,8 @@ public class UserService implements IUserService {
             userEntity.setPassword(user.getPassword());
             userEntity.setRole(new RoleEntity(user.getRole()));
             dao.save(userEntity);
+            return id;
     }
-
     public Pages<UserModel> getPageUser(Pageable paging) {
         Page<UserEntity> all = dao.findAll(paging);
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
@@ -88,7 +91,6 @@ public class UserService implements IUserService {
                 .setTotalElements(all.getTotalElements())
                 .build();
     }
-
     @Override
     public UserModel getUser(UUID id) {
         UserEntity userEntity = dao.findById(id)
@@ -105,11 +107,5 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
     }
-    @Override
-    public UserModel loadUserByUsername(String username) throws UsernameNotFoundException{
-        UserEntity myUser = dao.findByMail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Unknown user: "));
-        return conversionService.convert(myUser,UserModel.class);
-     }
 }
 //eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyc2VyLmFuZEBnbWFpbC5jb20iLCJpc3MiOiJJVEFjYWRlbXkiLCJleHAiOjE2Nzk1MTUyNzksImlhdCI6MTY3ODkxMDQ3OSwiYXV0aG9yaXRpZXMiOiJVU0VSIn0.DZRM-j7H73zeSejqwbHA9K79c664r1r3ktEC0e2LLDpa0liV2Bg2SP6KWg2qpbZyC5sfo3ajFz7RGo0Y6yde4g

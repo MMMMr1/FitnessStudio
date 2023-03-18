@@ -1,16 +1,10 @@
 package it.academy.fitness_studio.service.api;
 
-
-import it.academy.fitness_studio.core.MailDTO;
-
-import javax.mail.MessagingException;
-import java.util.Map;
+import it.academy.fitness_studio.core.VerificationMailDTO;
 
 public interface IMailService {
-    void sendSimpleMessage(MailDTO mailDTO);
-//    void sendMessageUsingThymeleafTemplate(
-//            String to, String subject, Map<String, Object> templateModel)
-//            throws MessagingException;
+    void sendVerificationMessage(VerificationMailDTO mailDTO);
+
 }
 //    String to,
 //    String subject,

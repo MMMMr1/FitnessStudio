@@ -1,7 +1,6 @@
 package it.academy.fitness_studio.web.controllers;
 
-import it.academy.fitness_studio.core.MailDTO;
-import it.academy.fitness_studio.core.dto.VerificationDTO;
+import it.academy.fitness_studio.core.VerificationMailDTO;
 import it.academy.fitness_studio.service.api.IMailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +17,9 @@ public class MailController {
         this.service = service;
     }
 
-    @RequestMapping( method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody @Validated MailDTO user) {
-        service.sendSimpleMessage(user);
+    @RequestMapping( path = "/verification", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody @Validated VerificationMailDTO user) {
+        service.sendVerificationMessage(user);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -10,10 +10,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.time.Instant;
 import java.util.UUID;
 
-public interface IUserService extends UserDetailsService {
-    void create(UserDTO user);
+public interface IUserService
+//        extends UserDetailsService
+{
+    UUID create(UserDTO user);
     UserModel getUser(UUID id);
 //    UserModel getUser(String mail);
-    void update(UUID id, Instant version, UserDTO user) throws ValidationUserException;
+    UUID update(UUID id, Instant version, UserDTO user) throws ValidationUserException;
     Pages <UserModel> getPageUser(Pageable paging);
 }

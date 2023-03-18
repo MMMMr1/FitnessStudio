@@ -18,6 +18,15 @@ services:
       POSTGRES_PASSWORD: root
     networks:
       - fitness_ntwrk
+  database-audit-service:
+    build: audit-postgresgl
+    image: audit_postgresgl:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    networks:
+      - fitness_ntwrk
   pgadmin:
     build: pgadmin
     image: fitness_pgadmin:1.0.0
@@ -55,7 +64,12 @@ services:
 
     networks:
       - fitness_ntwrk
+  audit-service:
+    build: audit-service
+    image: fitness_audit-service:1.0.0
 
+    networks:
+      - fitness_ntwrk
   proxy:
     build: proxy
     image: fitness_proxy:1.0.0

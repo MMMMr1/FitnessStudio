@@ -1,15 +1,18 @@
 package it.academy.fitness_studio.entity;
 
+
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 @Entity
+//@EntityListeners(AuditTrailListener.class)
 @Table(schema = "app",name = "users")
 @SecondaryTable(
         schema = "app",name = "verification",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "id")
 )
-public class UserEntity {
+public class UserEntity   {
     @Id
     @Column(name = "id")
     private UUID uuid;

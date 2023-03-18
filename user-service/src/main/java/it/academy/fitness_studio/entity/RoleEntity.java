@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.entity;
 
+
 import it.academy.fitness_studio.core.enums.UserRole;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 

@@ -29,19 +29,16 @@ import java.util.UUID;
 public class AuthenticationService implements IAuthenticationService  {
     private final IAuthenticationDao dao;
     private final IUserService service;
-//    private final IMailService emailService;
     private ConversionService conversionService;
     private BCryptPasswordEncoder encoder;
 
     public AuthenticationService(IAuthenticationDao dao,
                                  IUserService service,
-//                                 IMailService emailService,
                                  ConversionService conversionService,
                                  BCryptPasswordEncoder encoder
     ) {
         this.dao = dao;
         this.service = service;
-//        this.emailService = emailService;
         this.conversionService = conversionService;
         this.encoder = encoder;
     }
@@ -52,8 +49,7 @@ public class AuthenticationService implements IAuthenticationService  {
         String code = UUID.randomUUID().toString();
         userEntity.setCode(code);
         dao.save(userEntity);
-       sendSimpleMessage(user.getMail(),
-                code, "Подтвердите e-mail адрес.");
+        sendMessage(user.getMail(),code);
     }
 
     @Override
@@ -77,19 +73,24 @@ public class AuthenticationService implements IAuthenticationService  {
         return dao.findByMail(mail)
                 .orElseThrow(() -> new UserNotFoundException("User with this mail is not registered"));
     }
-    private void sendSimpleMessage(String to, String subject, String text){
+    private void sendMessage(String to, String code ){
         try {
             JSONObject object =new JSONObject();
             object.put("to", to);
-            object.put("subject", subject);
-            object.put("text",text);
+            object.put("subject", "Активируйте свою учетную запись в Thyme ");
+            object.put("text",code);
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://mail-service:8080/api/v1/mail"))
+                    .uri(URI.create("http://mail-service:8080/api/v1/mail/verification"))
                     .setHeader("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
-            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (JSONException | InterruptedException | IOException e) {
+//            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            httpClient.sendAsync(request,HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .exceptionally(e -> "Exception: "+ e);
+        } catch (JSONException e
+//                 | InterruptedException | IOException e
+        ) {
             throw new RuntimeException(e);
         }
     }

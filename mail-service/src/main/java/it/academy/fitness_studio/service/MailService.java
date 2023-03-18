@@ -1,23 +1,11 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.MailDTO;
+import it.academy.fitness_studio.core.VerificationMailDTO;
 import it.academy.fitness_studio.service.api.IMailService;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.xml.crypto.Data;
-import java.io.File;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Map;
 
 public class MailService implements IMailService {
 
@@ -37,26 +25,32 @@ public class MailService implements IMailService {
         this.template = template;
         this.thymeleafTemplateEngine = thymeleafTemplateEngine;
     }
-
-    public void sendSimpleMessage(MailDTO mailDTO) {
-        String to = mailDTO.getTo();
-        String subject = mailDTO.getSubject();
-        String text = mailDTO.getText();
+    @Override
+    public void sendVerificationMessage(VerificationMailDTO mailDTO) {
+        String mail = mailDTO.getTo();
+        String subject = "Активируйте свою учетную запись в Thyme ";
+        String code = mailDTO.getText();
         try {
 //      SimpleMailMessage шаблон для электронной почты
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(NOREPLY_ADDRESS);
             message.setTo(NOREPLY_ADDRESS);
             message.setSubject(subject);
-
-            message.setText("Для завершения процесса регистрации, пожалуйста, пройдите по ссылке: \n http://localhost:8080/api/v1/users/verification?code=" + subject + "&mail=" + to);
-
+            message.setText("Добро пожаловать в Thyme!\n" +
+                    "Для завершения процесса регистрации, пожалуйста, пройдите по ссылке: \n http://localhost:8080/api/v1/users/verification?code=" + code + "&mail=" + mail+"\n"+
+                    "\n" +
+                    "Если вы не зарегистрировали аккаунт в Thyme, пожалуйста, проигнорируйте это сообщение.\n" +
+                    "\n" +
+                    "С любовью,\n" +
+                    "Команда Thyme.");
             emailSender.send(message);
 
         } catch (MailException exception) {
             exception.printStackTrace();
         }
     }
+
+
 
 //    @Override
 //    public void sendSimpleMessageUsingTemplate(String to,

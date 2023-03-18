@@ -1,17 +1,24 @@
 package it.academy.fitness_studio.core;
 
-public class MailDTO {
+import it.academy.fitness_studio.core.validator.ValidEmail;
+
+import javax.validation.constraints.NotBlank;
+
+public class VerificationMailDTO {
+    @ValidEmail
     private String to;
+    @NotBlank
     private String subject;
+    @NotBlank
     private String text;
 
-    public MailDTO(String to, String subject, String text) {
+    public VerificationMailDTO(String to, String subject, String text) {
         this.to = to;
         this.subject = subject;
         this.text = text;
     }
 
-    public MailDTO() {
+    public VerificationMailDTO() {
     }
 
     public String getTo() {
