@@ -1,11 +1,15 @@
 package it.academy.fitness_studio.web.filter;
 
-import it.academy.fitness_studio.web.utils.JwtTokenUtil;
+import it.academy.fitness_studio.core.dto.UserDTO;
+import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,7 +24,13 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+    private final UserDetailsManager userManager;
+    private final JwtTokenHandler jwtHandler;
 
+    public JwtFilter(UserDetailsManager userManager, JwtTokenHandler jwtHandler) {
+        this.userManager = userManager;
+        this.jwtHandler = jwtHandler;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -35,28 +45,55 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         final String token = authorizationHeader.split(" ")[1].trim();
-        if (!JwtTokenUtil.validate(token)) {
+        if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
 
+        UserDetails userDetails = null;
+        UserDTO userDTO = null;
         String userMail = null;
         String jwt = null;
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            userMail = JwtTokenUtil.extractUsername(token);
-        }
-        if (userMail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            userMail = jwtHandler.extractUsername(token);
+            String fio = jwtHandler.extractFio(token);
+            String uuid = jwtHandler.extractUUID(token);
+            userDTO = new UserDTO( );
+            userDTO.setMail(userMail);
+            userDTO.setUuid(uuid);
+            userDTO.setName(fio);
 
-            String commaSeparatedListOfAuthorities = JwtTokenUtil.extractAuthorities(jwt);
+        }
+        if (userDTO != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            String commaSeparatedListOfAuthorities = jwtHandler.extractAuthorities(jwt);
+            userDTO.setRole(commaSeparatedListOfAuthorities);
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" +commaSeparatedListOfAuthorities);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
-                          userMail, null, authorities);
-
+                          userDTO, null, authorities);
+            usernamePasswordAuthenticationToken.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+            );
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
         }
         chain.doFilter(request, response);
     }
+//    private UserModel loadUserByUsername (String name){
+//        JSONObject object =new JSONObject();
+//        HttpClient httpClient = HttpClient.newHttpClient();
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(URI.create("http://user-service:8080/api/v1/audit"))
+//                .setHeader("Content-Type", "application/json")
+//                .header("mail",name)
+//                .GET().build();
+//        HttpResponse<UserModel> response = httpClient
+//                .send(request, HttpResponse.BodyHandlers.)
+//
+////                .GET(HttpRequest.BodyPublishers.ofString(name)).build();
+//
+//    }
+
 }

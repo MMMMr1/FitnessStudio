@@ -1,18 +1,21 @@
 package it.academy.fitness_studio.audit;
 
-import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.service.UserHolder;
+import it.academy.fitness_studio.core.dto.UserDTO;
+import it.academy.fitness_studio.web.utils.JwtTokenHandler;
+import it.academy.fitness_studio.web.utils.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.json.JSONObject;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.*;
+import java.util.UUID;
 
 @Aspect
 @Component
@@ -22,23 +25,23 @@ public class AuditAspect {
     }
     @AfterReturning(
             pointcut="@annotation(auditable)",
-            argNames = "auditable, usermodel", returning = "usermodel")
-    public void doAudit (Auditable auditable, UserModel userModel) {
-        AuditCode value = auditable.value();
+            argNames = "auditable, uuid", returning = "uuid")
+    public void doAudit (Auditable auditable, UUID uuid) {
+        AuditCode value = auditable.auditCode();
+        AuditEntityType type = auditable.auditType();
         UserHolder userHolder = new UserHolder();
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel user =  principal instanceof String  ? userModel : userHolder.getUser();
-        sendAudit(user, userModel.getUuid(), value.getDescription());
+        UserDTO user = userHolder.getUser();
+        sendAudit(user, uuid, value.getDescription(), type.toString());
     }
 
-        private void sendAudit( UserModel auditor, UUID uuid, String action){
+        private void sendAudit( UserDTO auditor, UUID uuid, String action, String type ){
         JSONObject object =new JSONObject();
         object.put("uuid", auditor.getUuid());
         object.put("mail", auditor.getMail());
         object.put("fio", auditor.getName());
         object.put("role", auditor.getRole());
         object.put("text", action);
-        object.put("type","USER");
+        object.put("type",type);
         object.put("id",uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()

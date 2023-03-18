@@ -1,10 +1,9 @@
 package it.academy.fitness_studio.core.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.converter.CustomInstantConverter;
+import it.academy.fitness_studio.core.converter.jackson.CustomInstantConverter;
 import it.academy.fitness_studio.core.enums.UserRole;
 import it.academy.fitness_studio.core.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;

@@ -23,6 +23,9 @@ jpa:
 
   hibernate:
     ddl-auto: none
+jwt:
+  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  issuer: ITAcademy
 #mail:
 #  host: smtp.mail.ru
 #  port: 465

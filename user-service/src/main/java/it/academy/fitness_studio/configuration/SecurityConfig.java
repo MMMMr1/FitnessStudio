@@ -1,5 +1,6 @@
 package it.academy.fitness_studio.configuration;
 
+import it.academy.fitness_studio.configuration.properties.JWTProperty;
 import it.academy.fitness_studio.web.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig  {

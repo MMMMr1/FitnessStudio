@@ -9,8 +9,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 public interface IProductService {
-    void create(ProductDTO product);
-    void update(UUID id, Instant version, ProductDTO product);
+    UUID create(ProductDTO product);
+    UUID update(UUID id, Instant version, ProductDTO product);
     Pages getPageProduct(Pageable paging);
     ProductModel getProduct(UUID id);
 }

@@ -18,8 +18,11 @@ spring:
     username: postgres
     password: pass
 ---
-  jpa:
-    show-sql: true
+jpa:
+  show-sql: true
+jwt:
+  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  issuer: ITAcademy
 
 
 

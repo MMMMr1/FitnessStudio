@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public interface IRecipeService {
-    void create(RecipeDTO recipe) throws ValidationRecipeException;
+    UUID create(RecipeDTO recipe) throws ValidationRecipeException;
     Pages<RecipeModel> getPageRecipe(Pageable paging);
-    void update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException;
+    UUID update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException;
 }

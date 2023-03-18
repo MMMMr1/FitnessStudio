@@ -1,16 +1,10 @@
 package it.academy.fitness_studio.web.filter;
 
-import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.core.exception.UserNotFoundException;
-import it.academy.fitness_studio.service.api.IUserService;
-import it.academy.fitness_studio.web.utils.JwtTokenUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
@@ -31,9 +24,12 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userService;
+    private final JwtTokenHandler jwtHandler;
 
-    public JwtFilter(UserDetailsService userService) {
+
+    public JwtFilter(UserDetailsService userService, JwtTokenHandler jwtHandler) {
         this.userService = userService;
+        this.jwtHandler = jwtHandler;
     }
 
     @Override
@@ -49,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         final String token = authorizationHeader.split(" ")[1].trim();
-        if (!JwtTokenUtil.validate(token)) {
+        if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
@@ -58,26 +54,24 @@ public class JwtFilter extends OncePerRequestFilter {
         UserDetails userModel = null;
 
         try {
-            userModel = userService.loadUserByUsername(JwtTokenUtil.extractUsername(token));
+            userModel = userService.loadUserByUsername(jwtHandler.extractUsername(token));
         } catch (UsernameNotFoundException e) {
             chain.doFilter(request, response);
             return;
         }
-
-
+        
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
         }
         if (userModel != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            String commaSeparatedListOfAuthorities = JwtTokenUtil.extractAuthorities(jwt);
+            String commaSeparatedListOfAuthorities = jwtHandler.extractAuthorities(jwt);
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + commaSeparatedListOfAuthorities);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
                             userModel, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
         }
         chain.doFilter(request, response);
     }

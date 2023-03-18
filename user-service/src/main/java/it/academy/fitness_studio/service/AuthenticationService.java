@@ -11,7 +11,6 @@ import it.academy.fitness_studio.dao.api.IAuthenticationDao;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
-//import it.academy.fitness_studio.service.api.IMailService;
 import it.academy.fitness_studio.service.api.IUserService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +18,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -68,6 +66,15 @@ public class AuthenticationService implements IAuthenticationService  {
             throw new ValidationUserException("Incorrect mail and password");
         }
         return conversionService.convert(userEntity,UserModel.class);
+    }
+    @Override
+    public UserModel getUser(String mail) {
+        UserEntity userEntity = dao.findByMail(mail)
+                .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
+        if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
+            throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
+        }
+        return conversionService.convert(userEntity, UserModel.class);
     }
     private UserEntity find(String mail){
         return dao.findByMail(mail)

@@ -1,8 +1,10 @@
 package it.academy.fitness_studio.web.utils;
 
 import io.jsonwebtoken.*;
+import it.academy.fitness_studio.configuration.properties.JWTProperty;
+import it.academy.fitness_studio.core.dto.user.UserModel;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -10,61 +12,64 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+@Component
+public class JwtTokenHandler {
+    private final JWTProperty property;
 
-public class JwtTokenUtil {
+    public JwtTokenHandler(JWTProperty property) {
+        this.property = property;
+    }
 
-    private static final String jwtSecret = "NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw";
-    private static final String jwtIssuer = "ITAcademy";
-
-//    генерация токена(кладем в него имя пользователя и authorities)
-    public static String generateAccessToken(UserDetails user) {
+    public  String generateAccessToken(UserModel user) {
         Map<String, Object> claims = new HashMap<>();
         String commaSeparatedListOfAuthorities=  user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         claims.put("authorities", commaSeparatedListOfAuthorities);
-        return generateAccessToken(claims , user.getUsername());
+        claims.put("uuid", user.getUuid());
+        claims.put("fio", user.getName());
+        return generateAccessToken(claims , user.getMail());
     }
 
-    public static String generateAccessToken(Map<String, Object> claims, String subject ) {
+    public String generateAccessToken(Map<String, Object> claims, String subject ) {
         return Jwts.builder().setClaims(claims)
                 .setSubject(subject)
-                .setIssuer(jwtIssuer)
+                .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
     }    //извлечение имени пользователя из токена (внутри валидация токена)
-    public static String extractUsername(String token) {
+    public  String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     //извлечение authorities (внутри валидация токена)
-    public  static String extractAuthorities(String token) {
+    public String extractAuthorities(String token) {
         Function<Claims, String> claimsListFunction = claims -> (String)claims.get("authorities");
         return extractClaim(token, claimsListFunction);
     }
 
-    private static  <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private   <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private static Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    private  Claims extractAllClaims(String token) {
+        return Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token).getBody();
     }
-    public static Date getExpirationDate(String token) {
+    public   Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getExpiration();
     }
 
-    public static boolean validate(String token) {
+    public  boolean validate(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
             //logger.error("Invalid JWT signature - {}", ex.getMessage());

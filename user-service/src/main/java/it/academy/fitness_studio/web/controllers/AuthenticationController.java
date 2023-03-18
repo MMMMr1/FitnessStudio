@@ -6,21 +6,21 @@ import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.service.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
-import it.academy.fitness_studio.web.utils.JwtTokenUtil;
+import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class AuthenticationController {
-    UserDetails userDetails;
     private IAuthenticationService service;
+    private final JwtTokenHandler handler;
 
-    public AuthenticationController(IAuthenticationService service) {
+    public AuthenticationController(IAuthenticationService service, JwtTokenHandler handler) {
         this.service = service;
+        this.handler = handler;
     }
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
     protected ResponseEntity<?> create(
@@ -40,12 +40,18 @@ public class AuthenticationController {
     public ResponseEntity<?> login(@RequestBody @Validated UserLoginDTO user) {
         UserModel login = service.login(user);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(JwtTokenUtil.generateAccessToken( login ));
+                .body(handler.generateAccessToken(login));
     }
     @RequestMapping(path = "/me", method = RequestMethod.GET)
     public ResponseEntity<?>  getUserInfo() {
         UserHolder userHolder = new  UserHolder();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userHolder.getUser());
+    }
+    @RequestMapping( path = "/details", method = RequestMethod.GET)
+    protected ResponseEntity<?> verify(
+            @RequestParam(name = "mail") String mail)  {
+        service.getUser(mail);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

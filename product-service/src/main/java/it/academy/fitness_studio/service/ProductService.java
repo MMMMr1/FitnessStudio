@@ -1,5 +1,8 @@
 package it.academy.fitness_studio.service;
 
+import it.academy.fitness_studio.audit.AuditCode;
+import it.academy.fitness_studio.audit.AuditEntityType;
+import it.academy.fitness_studio.audit.Auditable;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
@@ -28,22 +31,26 @@ public class ProductService implements IProductService {
         this.dao = dao;
         this.conversionService = conversionService;
     }
+    @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.PRODUCT)
     @Override
-    public void create( @Validated ProductDTO product) {
+    public UUID create( @Validated ProductDTO product) {
         checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
              throw new IllegalStateException("Can not convert ProductDTO.class");
          }
         ProductEntity productEntity = conversionService.convert(product, ProductEntity.class);
-        productEntity.setUuid(UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        productEntity.setUuid(uuid);
         Instant dtCreated =  Instant.now();
         Instant dtUpdated = dtCreated;
         productEntity.setDtCreate(dtCreated);
         productEntity.setDtUpdate(dtUpdated);
         dao.save(productEntity);
+        return uuid;
     }
+    @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.PRODUCT)
     @Override
-    public void update(UUID id, Instant version,@Validated ProductDTO product) {
+    public UUID update(UUID id, Instant version,@Validated ProductDTO product) {
         ProductEntity productEntity = dao.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("There is no product with such id"));
         if(version.toEpochMilli() != productEntity.getDtUpdate().toEpochMilli()){
@@ -56,7 +63,7 @@ public class ProductService implements IProductService {
             productEntity.setTitle(product.getTitle());
             productEntity.setWeight(product.getWeight());
             dao.save(productEntity);
-
+            return id;
     }
     public Pages<ProductModel> getPageProduct(Pageable paging) {
         Page<ProductEntity> all = dao.findAll(paging);

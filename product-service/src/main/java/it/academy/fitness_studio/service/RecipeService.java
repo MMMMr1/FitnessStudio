@@ -1,6 +1,9 @@
 package it.academy.fitness_studio.service;
 
 
+import it.academy.fitness_studio.audit.AuditCode;
+import it.academy.fitness_studio.audit.AuditEntityType;
+import it.academy.fitness_studio.audit.Auditable;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.ingredient.IngredientDTO;
 import it.academy.fitness_studio.core.dto.product.*;
@@ -43,9 +46,9 @@ public class RecipeService implements IRecipeService {
         this.conversionService = conversionService;
         this.validator = validator;
     }
-
+    @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.RECIPE)
     @Override
-    public void create(@Validated RecipeDTO recipeDTO) throws ValidationRecipeException {
+    public UUID create(@Validated RecipeDTO recipeDTO) throws ValidationRecipeException {
         validator.validate(recipeDTO);
         checkDoubleRecipe(recipeDTO);
         List<IngredientDTO> ingredientDTO = recipeDTO.getComposition();
@@ -63,6 +66,7 @@ public class RecipeService implements IRecipeService {
 
         Instant dt = Instant.now();
         dao.save(new RecipeEntity(uuid, dt, dt, recipeDTO.getTitle(), collect));
+        return uuid;
     }
 
     @Override
@@ -81,9 +85,9 @@ public class RecipeService implements IRecipeService {
                 .setSize(all.getSize()).setTotalPages(all.getTotalPages())
                 .setTotalElements(all.getTotalElements()).build();
     }
-
+    @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.RECIPE)
     @Override
-    public void update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException {
+    public UUID update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException {
         validator.validate(product);
         RecipeEntity recipeEntity = dao.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException("There is no recipe with such id"));
@@ -103,6 +107,7 @@ public class RecipeService implements IRecipeService {
         recipeEntity.setTitle(product.getTitle());
         recipeEntity.setComposition(collect);
         dao.save(recipeEntity);
+        return id;
     }
 
     private void checkDoubleRecipe(RecipeDTO recipe) {
