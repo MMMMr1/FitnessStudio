@@ -1,6 +1,6 @@
 package it.academy.fitness_studio.core.converter.converter;
 
-import it.academy.fitness_studio.core.dto.user.AuditDTO;
+import it.academy.fitness_studio.core.dto.audit.AuditDTO;
 import it.academy.fitness_studio.core.enums.TypeOfAudit;
 import it.academy.fitness_studio.core.enums.UserRole;
 import it.academy.fitness_studio.entity.AuditEntity;

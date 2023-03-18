@@ -1,13 +1,12 @@
-package it.academy.fitness_studio.web.filter;
+package it.academy.fitness_studio.web.controllers.filter;
 
-import it.academy.fitness_studio.core.dto.UserDetailsDTO;
-import it.academy.fitness_studio.web.utils.JwtTokenHandler;
+import it.academy.fitness_studio.core.dto.user.UserDetailsDTO;
+import it.academy.fitness_studio.web.controllers.utils.JwtTokenHandler;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -50,7 +49,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetails userDetails = null;
         UserDetailsDTO userDTO = null;
         String userMail = null;
         String jwt = null;
@@ -59,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
             userMail = jwtHandler.extractUsername(token);
             String fio = jwtHandler.extractFio(token);
             String uuid = jwtHandler.extractUUID(token);
-            userDTO = new UserDetailsDTO( );
+            userDTO = new UserDetailsDTO();
             userDTO.setMail(userMail);
             userDTO.setUuid(uuid);
             userDTO.setName(fio);

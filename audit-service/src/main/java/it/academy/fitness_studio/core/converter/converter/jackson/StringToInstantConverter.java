@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.converter.converter;
+package it.academy.fitness_studio.core.converter.converter.jackson;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

@@ -1,17 +1,15 @@
-package it.academy.fitness_studio.core.dto;
+package it.academy.fitness_studio.core.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.UUID;
 
 
-public class UserDTO
+public class UserDetailsDTO
         implements UserDetails
 {
 
@@ -23,13 +21,13 @@ public class UserDTO
 
     private String role;
 
-    public UserDTO() {
+    public UserDetailsDTO() {
     }
 
-    public UserDTO(String uuid,
-                   String mail,
-                   String fio,
-                   String role ) {
+    public UserDetailsDTO(String uuid,
+                          String mail,
+                          String fio,
+                          String role ) {
         this.uuid = uuid;
         this.mail = mail;
         this.name = fio;
@@ -47,11 +45,9 @@ public class UserDTO
     public void setMail(String mail) {
         this.mail = mail;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public void setRole(String role) {
         this.role = role;
     }
@@ -71,7 +67,7 @@ public class UserDTO
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-         return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role.toString()));
+         return Collections.<GrantedAuthority>singletonList(new SimpleGrantedAuthority(role));
     }
 
     @Override

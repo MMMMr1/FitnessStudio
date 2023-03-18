@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.converter.converter;
+package it.academy.fitness_studio.core.converter.converter.jackson;
 
 import com.fasterxml.jackson.databind.util.StdConverter;
 

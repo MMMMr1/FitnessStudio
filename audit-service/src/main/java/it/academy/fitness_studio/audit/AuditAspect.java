@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.audit;
 
-import it.academy.fitness_studio.core.dto.UserDetailsDTO;
-import it.academy.fitness_studio.web.utils.UserHolder;
+import it.academy.fitness_studio.core.dto.user.UserDetailsDTO;
+import it.academy.fitness_studio.web.controllers.utils.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.json.JSONObject;
@@ -16,9 +16,7 @@ import java.util.UUID;
 @Aspect
 @Component
 public class AuditAspect {
-    private AuditAspect(){
 
-    }
     @AfterReturning(
             pointcut="@annotation(auditable)",
             argNames = "auditable, uuid", returning = "uuid")

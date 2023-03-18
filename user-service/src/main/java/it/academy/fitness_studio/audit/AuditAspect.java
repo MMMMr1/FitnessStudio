@@ -42,7 +42,7 @@ public class AuditAspect {
         object.put("id",uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://audit-service:8080/api/v1/audit"))
+                .uri(URI.create("http://audit-service:8080/api/v1/audit/fix"))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
 

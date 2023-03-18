@@ -1,28 +1,13 @@
-package it.academy.fitness_studio.core.dto.user;
-
-import it.academy.fitness_studio.core.enums.TypeOfAudit;
-import it.academy.fitness_studio.core.enums.UserRole;
-import it.academy.fitness_studio.core.validator.ValidEmail;
-import it.academy.fitness_studio.core.validator.ValidName;
-import it.academy.fitness_studio.core.validator.ValueOfEnum;
-
-import java.time.Instant;
-import java.util.UUID;
+package it.academy.fitness_studio.core.dto.audit;
 
 public class AuditDTO {
     private String role;
     private String mail;
-
-
     private String text;
-//    Создана запись в журнале питания
-//    Описание действия пользователя
     private String id;
     private String type;
     private String uuid;
     private String fio;
-//    id той сущности с которой производили действия
-
     public AuditDTO() {
     }
 

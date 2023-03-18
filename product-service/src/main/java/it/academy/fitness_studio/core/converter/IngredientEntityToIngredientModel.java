@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 public class IngredientEntityToIngredientModel implements Converter<IngredientEntity, IngredientModel> {
@@ -20,7 +21,7 @@ public class IngredientEntityToIngredientModel implements Converter<IngredientEn
     @Override
     public IngredientModel convert(IngredientEntity ingredient) {
         ProductModel product = conversionService.convert(ingredient.getProduct());
-        BigDecimal factor = (BigDecimal.valueOf(ingredient.getWeight())).divide(BigDecimal.valueOf(product.getWeight()));
+        BigDecimal factor = (BigDecimal.valueOf(ingredient.getWeight())).divide(BigDecimal.valueOf(product.getWeight()), RoundingMode.HALF_DOWN);
         Integer calories = factor.multiply(BigDecimal.valueOf(product.getCalories())).intValue();
         BigDecimal proteins = factor.multiply(product.getProteins());
         BigDecimal fats = factor.multiply(product.getFats());
