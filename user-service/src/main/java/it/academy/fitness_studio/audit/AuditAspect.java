@@ -1,7 +1,7 @@
 package it.academy.fitness_studio.audit;
 
 import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.service.UserHolder;
+import it.academy.fitness_studio.core.dto.user.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.json.JSONObject;
@@ -17,6 +17,7 @@ import java.util.*;
 @Aspect
 @Component
 public class AuditAspect {
+    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit";
     private AuditAspect(){
 
     }
@@ -42,7 +43,7 @@ public class AuditAspect {
         object.put("id",uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://audit-service:8080/api/v1/audit/fix"))
+                .uri(URI.create(HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
 

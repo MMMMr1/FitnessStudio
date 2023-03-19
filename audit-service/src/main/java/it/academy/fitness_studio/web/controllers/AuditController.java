@@ -18,16 +18,14 @@ import java.util.UUID;
 @RequestMapping("/api/v1/audit")
 public class AuditController {
     private IAuditService service;
-
     public AuditController( IAuditService service) {
         this.service = service;
     }
-    @RequestMapping(path = "/fix",method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     protected ResponseEntity<?> create(@RequestBody @Validated AuditDTO user)   {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
     @RequestMapping(method = RequestMethod.GET)
     protected ResponseEntity<Pages<AuditModel>> getAll(
             @RequestParam(name = "page", defaultValue = "0")  Integer page,
@@ -36,7 +34,6 @@ public class AuditController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getAllReport(paging));
     }
-
     @RequestMapping(path = "/{uuid}", method = RequestMethod.GET)
     public ResponseEntity<AuditModel> get(@PathVariable("uuid") UUID uuid) {
         return ResponseEntity.status(HttpStatus.OK)

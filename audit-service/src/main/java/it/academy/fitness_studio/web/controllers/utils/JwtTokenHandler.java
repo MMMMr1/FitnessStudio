@@ -20,7 +20,6 @@ public class JwtTokenHandler {
         this.property = property;
     }
 
-//    генерация токена(кладем в него имя пользователя и authorities)
     public   String generateAccessToken(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
         String commaSeparatedListOfAuthorities=  user.getAuthorities().stream()
@@ -38,7 +37,7 @@ public class JwtTokenHandler {
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
                 .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
-    }    //извлечение имени пользователя из токена (внутри валидация токена)
+    }
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -51,7 +50,6 @@ public class JwtTokenHandler {
         return extractClaim(token, claimsListFunction);
     }
 
-    //извлечение authorities (внутри валидация токена)
     public  String extractAuthorities(String token) {
         Function<Claims, String> claimsListFunction = claims -> (String)claims.get("authorities");
         return extractClaim(token, claimsListFunction);

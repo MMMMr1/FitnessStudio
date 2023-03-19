@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
-    private ValidationRecipeException e;
+//    private ValidationRecipeException e;
 
     //400 @Validated
     @ExceptionHandler(MethodArgumentNotValidException.class)

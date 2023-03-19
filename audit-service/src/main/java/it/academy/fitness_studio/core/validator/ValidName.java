@@ -16,8 +16,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ValidName {
 
     String message() default "Invalid name";
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 }

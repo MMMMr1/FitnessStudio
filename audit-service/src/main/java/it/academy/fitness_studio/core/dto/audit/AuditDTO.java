@@ -1,12 +1,27 @@
 package it.academy.fitness_studio.core.dto.audit;
 
+import it.academy.fitness_studio.core.enums.AuditType;
+import it.academy.fitness_studio.core.enums.UserRole;
+import it.academy.fitness_studio.core.validator.ValidEmail;
+import it.academy.fitness_studio.core.validator.ValidName;
+import it.academy.fitness_studio.core.validator.ValueOfEnum;
+
+import javax.validation.constraints.NotBlank;
+
 public class AuditDTO {
+    @ValueOfEnum(enumClass = UserRole.class)
     private String role;
+    @ValidEmail
     private String mail;
+    @NotBlank
     private String text;
+    @NotBlank
     private String id;
+    @ValueOfEnum(enumClass = AuditType.class)
     private String type;
+    @NotBlank
     private String uuid;
+    @ValidName
     private String fio;
     public AuditDTO() {
     }

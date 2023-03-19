@@ -81,19 +81,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-//    private UserModel loadUserByUsername (String name){
-//        JSONObject object =new JSONObject();
-//        HttpClient httpClient = HttpClient.newHttpClient();
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(URI.create("http://user-service:8080/api/v1/audit"))
-//                .setHeader("Content-Type", "application/json")
-//                .header("mail",name)
-//                .GET().build();
-//        HttpResponse<UserModel> response = httpClient
-//                .send(request, HttpResponse.BodyHandlers.)
-//
-////                .GET(HttpRequest.BodyPublishers.ofString(name)).build();
-//
-//    }
-
 }

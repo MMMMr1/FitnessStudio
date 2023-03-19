@@ -1,13 +1,15 @@
 package it.academy.fitness_studio.core.dto.audit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.academy.fitness_studio.core.converter.converter.jackson.CustomInstantConverter;
-import it.academy.fitness_studio.core.enums.TypeOfAudit;
+import it.academy.fitness_studio.core.dto.user.UserDetailsDTO;
+import it.academy.fitness_studio.core.enums.AuditType;
 
 import java.time.Instant;
 import java.util.UUID;
-
+@JsonIgnoreProperties
 public class AuditModel {
     @JsonProperty("uuid")
     private UUID uuid;
@@ -15,21 +17,21 @@ public class AuditModel {
     @JsonProperty("dt_create")
     private Instant dtCreate;
     @JsonProperty("user")
-    private ActorModel auditorModel;
+    private UserDetailsDTO userDetails;
     @JsonProperty("text")
     private String text;
     @JsonProperty("type")
-    private TypeOfAudit type;
+    private AuditType type;
     @JsonProperty("id")
     private String id;
 
     public AuditModel() {
     }
 
-    public AuditModel(UUID uuid, Instant dtCreate, ActorModel auditorModel, String text, TypeOfAudit type, String id) {
+    public AuditModel(UUID uuid, Instant dtCreate, UserDetailsDTO userDetails, String text, AuditType type, String id) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
-        this.auditorModel = auditorModel;
+        this.userDetails = userDetails;
         this.text = text;
         this.type = type;
         this.id = id;
@@ -51,12 +53,12 @@ public class AuditModel {
         this.dtCreate = dtCreate;
     }
 
-    public ActorModel getAuditModel() {
-        return auditorModel;
+    public UserDetailsDTO getUserDetails() {
+        return userDetails;
     }
 
-    public void setAuditorModel(ActorModel auditModel) {
-        this.auditorModel = auditModel;
+    public void setUserDetails(UserDetailsDTO userDetails) {
+        this.userDetails = userDetails;
     }
 
     public String getText() {
@@ -67,11 +69,11 @@ public class AuditModel {
         this.text = text;
     }
 
-    public TypeOfAudit getType() {
+    public AuditType getType() {
         return type;
     }
 
-    public void setType(TypeOfAudit type) {
+    public void setType(AuditType type) {
         this.type = type;
     }
 

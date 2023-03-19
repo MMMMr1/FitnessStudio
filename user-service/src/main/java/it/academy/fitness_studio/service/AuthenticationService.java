@@ -25,6 +25,7 @@ import java.net.http.HttpResponse;
 import java.util.UUID;
 
 public class AuthenticationService implements IAuthenticationService  {
+    public static final String HTTP_MAIL_SERVICE_8080_API_V_1_MAIL_VERIFICATION = "http://mail-service:8080/api/v1/mail/verification";
     private final IAuthenticationDao dao;
     private final IUserService service;
     private ConversionService conversionService;
@@ -88,7 +89,7 @@ public class AuthenticationService implements IAuthenticationService  {
             object.put("text",code);
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://mail-service:8080/api/v1/mail/verification"))
+                    .uri(URI.create(HTTP_MAIL_SERVICE_8080_API_V_1_MAIL_VERIFICATION))
                     .setHeader("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
 //            httpClient.send(request, HttpResponse.BodyHandlers.ofString());

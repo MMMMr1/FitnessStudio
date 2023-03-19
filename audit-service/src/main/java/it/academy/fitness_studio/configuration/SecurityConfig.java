@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .and();
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .antMatchers(HttpMethod.POST,"/api/v1/audit/fix").permitAll()
+                        .antMatchers(HttpMethod.POST,"/api/v1/audit").permitAll()
                         .antMatchers(HttpMethod.GET,"/api/v1/audit").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.GET,"/api/v1/audit/{uuid}").hasAuthority("ROLE_ADMIN")
 //                        .anyRequest().authenticated()

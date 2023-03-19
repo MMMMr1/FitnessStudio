@@ -4,7 +4,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
-import it.academy.fitness_studio.service.UserHolder;
+import it.academy.fitness_studio.core.dto.user.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.springframework.http.HttpStatus;

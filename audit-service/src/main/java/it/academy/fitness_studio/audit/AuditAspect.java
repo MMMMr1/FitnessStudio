@@ -1,9 +1,13 @@
 package it.academy.fitness_studio.audit;
 
+import it.academy.fitness_studio.core.dto.audit.AuditModel;
+import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDetailsDTO;
+import it.academy.fitness_studio.core.enums.AuditType;
 import it.academy.fitness_studio.web.controllers.utils.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +21,26 @@ import java.util.UUID;
 @Component
 public class AuditAspect {
 
+    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit";
+
+
+    @AfterReturning( "@annotation(audited)")
+    public void audit(Audited audited) {
+        AuditCode code =  audited.auditCode();
+        AuditEntityType  type =  audited.auditType();
+        UserHolder userHolder = new UserHolder();
+        UserDetailsDTO user = userHolder.getUser();
+        sendAudit(user, UUID.randomUUID(), "Запрос на предоставление общего отчета", AuditType.REPORT.toString());
+    }
     @AfterReturning(
             pointcut="@annotation(auditable)",
-            argNames = "auditable, uuid", returning = "uuid")
-    public void doAudit (Auditable auditable, UUID uuid) {
+            argNames = "auditable, auditmodel", returning = "auditmodel")
+    public void doAudit (Auditable auditable, AuditModel auditModel) {
         AuditCode value = auditable.auditCode();
         AuditEntityType type = auditable.auditType();
         UserHolder userHolder = new UserHolder();
         UserDetailsDTO user = userHolder.getUser();
-        sendAudit(user, uuid, value.getDescription(), type.toString());
+        sendAudit(user, auditModel.getUuid(), value.getDescription(), type.toString());
     }
 
         private void sendAudit(UserDetailsDTO auditor, UUID uuid, String action, String type ){
@@ -39,10 +54,9 @@ public class AuditAspect {
         object.put("id",uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://audit-service:8080/api/v1/audit/fix"))
+                .uri(URI.create(HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
-
                 httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
         }
