@@ -41,11 +41,6 @@ public class SecurityConfig  {
                 .and();
         http
                 .authorizeHttpRequests((authz) -> authz
-//                        .antMatchers("/api/v1/users/registration").permitAll()
-//                        .antMatchers("/api/v1/users/verification").permitAll()
-//                        .antMatchers("/api/v1/users/me").authenticated()
-//                        .antMatchers("/api/v1/users/login").permitAll()
-//                        .antMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.GET,"/api/v1/product").permitAll()
                         .antMatchers(HttpMethod.PUT,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")

@@ -2,7 +2,7 @@ mail:
   host: smtp.mail.ru
   port: 465
   username: maksim.maks.23@mail.ru
-  password: n6uLLA7AmjfZb1mxwWbM
+  password: DMzh6dgxcF4e2i9ecUi7
 properties:
   mail:
     smtp:

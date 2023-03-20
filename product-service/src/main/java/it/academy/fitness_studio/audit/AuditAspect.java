@@ -16,14 +16,12 @@ import java.util.UUID;
 @Aspect
 @Component
 public class AuditAspect {
-    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit";
-    private AuditAspect(){
+    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit/report";
 
-    }
     @AfterReturning(
-            pointcut="@annotation(auditable)",
+            pointcut = "@annotation(auditable)",
             argNames = "auditable, uuid", returning = "uuid")
-    public void doAudit (Auditable auditable, UUID uuid) {
+    public void doAudit(Auditable auditable, UUID uuid) {
         AuditCode value = auditable.auditCode();
         AuditEntityType type = auditable.auditType();
         UserHolder userHolder = new UserHolder();
@@ -31,22 +29,20 @@ public class AuditAspect {
         sendAudit(user, uuid, value.getDescription(), type.toString());
     }
 
-        private void sendAudit(UserDetailsDTO auditor, UUID uuid, String action, String type ){
-        JSONObject object =new JSONObject();
+    private void sendAudit(UserDetailsDTO auditor, UUID uuid, String action, String type) {
+        JSONObject object = new JSONObject();
         object.put("uuid", auditor.getUuid());
         object.put("mail", auditor.getMail());
         object.put("fio", auditor.getName());
         object.put("role", auditor.getRole());
         object.put("text", action);
-        object.put("type",type);
-        object.put("id",uuid);
+        object.put("type", type);
+        object.put("id", uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
-
-                httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-
-        }
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+    }
 }

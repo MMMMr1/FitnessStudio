@@ -20,25 +20,6 @@ public class JwtTokenHandler {
         this.property = property;
     }
 
-//    генерация токена(кладем в него имя пользователя и authorities)
-    public   String generateAccessToken(UserDetails user) {
-        Map<String, Object> claims = new HashMap<>();
-        String commaSeparatedListOfAuthorities=  user.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-        claims.put("authorities", commaSeparatedListOfAuthorities);
-        return generateAccessToken(claims , user.getUsername());
-    }
-
-    public  String generateAccessToken(Map<String, Object> claims, String subject ) {
-        return Jwts.builder().setClaims(claims)
-                .setSubject(subject)
-                .setIssuer(property.getIssuer())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
-                .signWith(SignatureAlgorithm.HS512, property.getSecret())
-                .compact();
-    }    //извлечение имени пользователя из токена (внутри валидация токена)
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -50,18 +31,14 @@ public class JwtTokenHandler {
         Function<Claims, String> claimsListFunction = claims -> (String)claims.get("fio");
         return extractClaim(token, claimsListFunction);
     }
-
-    //извлечение authorities (внутри валидация токена)
     public  String extractAuthorities(String token) {
         Function<Claims, String> claimsListFunction = claims -> (String)claims.get("authorities");
         return extractClaim(token, claimsListFunction);
     }
-
     private  <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token).getBody();
     }
@@ -73,7 +50,6 @@ public class JwtTokenHandler {
 
         return claims.getExpiration();
     }
-
     public boolean validate(String token) {
         try {
             Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);

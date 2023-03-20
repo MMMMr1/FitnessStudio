@@ -4,7 +4,6 @@ package it.academy.fitness_studio.entity;
 import it.academy.fitness_studio.core.enums.UserRole;
 
 import javax.persistence.*;
-
 @Entity
 @Table(schema = "app",name = "role")
 public class RoleEntity {

@@ -30,17 +30,18 @@ public class ExceptionGlobal  {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionListDTO(error));
     }
-    @ExceptionHandler
-    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUsernameNotFoundException(
-            UsernameNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }
-//    400
+    //    400
     @ExceptionHandler(value = {NumberFormatException.class})
     public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotValidException(
             ValidationUserException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    }
+    //    404
+    @ExceptionHandler
+    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUsernameNotFoundException(
+            UsernameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
     @ExceptionHandler(value = {UserNotFoundException.class })
@@ -49,6 +50,7 @@ public class ExceptionGlobal  {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
+    //    409
     @ExceptionHandler(value = {UserAlreadyExistException.class })
     public ResponseEntity<List<ExceptionErrorDTO>> ArgumentUserAlreadyExistException(
             RuntimeException e) {
@@ -61,6 +63,8 @@ public class ExceptionGlobal  {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
+
+    //    500
     @ExceptionHandler()
     public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
             HttpMessageNotReadableException e) {
@@ -74,7 +78,6 @@ public class ExceptionGlobal  {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-//    500
     @ExceptionHandler
     public ResponseEntity<List<ExceptionErrorDTO>> handler(Throwable e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

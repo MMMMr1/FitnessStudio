@@ -37,40 +37,33 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
-
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (isEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
-
         final String token = authorizationHeader.split(" ")[1].trim();
         if (!jwtHandler.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
-
         String jwt = null;
         UserDetails userModel = null;
-
         try {
             userModel = userService.loadUserByUsername(jwtHandler.extractUsername(token));
         } catch (UsernameNotFoundException e) {
             chain.doFilter(request, response);
             return;
         }
-        
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
         }
         if (userModel != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             String commaSeparatedListOfAuthorities = jwtHandler.extractAuthorities(jwt);
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_" + commaSeparatedListOfAuthorities);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(
                             userModel, null, authorities);
-
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
         chain.doFilter(request, response);

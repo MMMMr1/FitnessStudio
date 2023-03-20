@@ -21,7 +21,7 @@ public class AuditController {
     public AuditController( IAuditService service) {
         this.service = service;
     }
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path = "/report",method = RequestMethod.POST)
     protected ResponseEntity<?> create(@RequestBody @Validated AuditDTO user)   {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();

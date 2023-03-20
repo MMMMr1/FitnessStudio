@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core;
+package it.academy.fitness_studio.core.dto;
 
 import it.academy.fitness_studio.core.validator.ValidEmail;
 

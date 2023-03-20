@@ -54,7 +54,6 @@ public class UserService implements IUserService {
         userEntity.setDtCreate(dtCreated);
         userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
-
         return conversionService.convert(userEntity,UserModel.class);
     }
     @Override

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class JWTProperty {
     private String secret;
     private String issuer;
-
     public String getSecret() {
         return secret;
     }

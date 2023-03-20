@@ -18,17 +18,14 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private IUserService service;
-
     public UserController(IUserService service) {
         this.service = service;
     }
-
     @RequestMapping(method = RequestMethod.POST)
     protected ResponseEntity<?> create(@RequestBody @Validated UserDTO user)   {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
     @RequestMapping(method = RequestMethod.GET)
     protected ResponseEntity<Pages<UserModel>> getAll(
             @RequestParam(name = "page", defaultValue = "0")  Integer page,

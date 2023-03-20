@@ -1,8 +1,8 @@
 package it.academy.fitness_studio.audit;
 
 public enum AuditCode {
-    GET("Создание отчета по конкретному событию"),
-    GETAll("Создание общего отчета") ;
+    GET("Предоставление отчета по конкретному событию"),
+    GETAll("Предоставление общего отчета") ;
     private String description;
     private AuditCode(String description){
         this.description = description;

@@ -19,10 +19,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-mail</artifactId>-->
+<!--		</dependency>-->
+		 <dependency>
+			 <groupId>org.springframework.boot</groupId>
+			 <artifactId>spring-boot-starter-security</artifactId>
+		 </dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -31,6 +39,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.thymeleaf.extras</groupId>-->
+<!--			<artifactId>thymeleaf-extras-springsecurity5</artifactId>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -61,6 +73,12 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.14.2</version>
 		</dependency>
+<!--for password`s validator -->
+<!--		<dependency>-->
+<!--			<groupId>org.passay</groupId>-->
+<!--			<artifactId>passay</artifactId>-->
+<!--			<version>1.6.0</version>-->
+<!--		</dependency>-->
 <!--		for test-->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -88,7 +106,6 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-<!--	send	mail -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -100,10 +117,9 @@
 			<version>4.3.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -114,23 +130,5 @@
 			</plugin>
 		</plugins>
 	</build>
-<!--	for test -->
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<spring.profiles.active>dev</spring.profiles.active>
-			</properties>
-		</profile>
-		<profile>
-			<id>test</id>
-			<properties>
-				<spring.profiles.active>test</spring.profiles.active>
-			</properties>
-		</profile>
-	</profiles>
 
 </project>

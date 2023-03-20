@@ -1,13 +1,10 @@
 package it.academy.fitness_studio.audit;
 
 import it.academy.fitness_studio.core.dto.audit.AuditModel;
-import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDetailsDTO;
-import it.academy.fitness_studio.core.enums.AuditType;
-import it.academy.fitness_studio.web.controllers.utils.UserHolder;
+import it.academy.fitness_studio.web.utils.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +12,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.UUID;
 
 @Aspect
 @Component
 public class AuditAspect {
 
-    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit";
+    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit/report";
 
 
     @AfterReturning( "@annotation(audited)")
@@ -30,7 +26,7 @@ public class AuditAspect {
         AuditEntityType  type =  audited.auditType();
         UserHolder userHolder = new UserHolder();
         UserDetailsDTO user = userHolder.getUser();
-        sendAudit(user, UUID.randomUUID(), "Запрос на предоставление общего отчета", AuditType.REPORT.toString());
+        sendAudit(user, " ", code.getDescription(), type.toString());
     }
     @AfterReturning(
             pointcut="@annotation(auditable)",
@@ -40,10 +36,10 @@ public class AuditAspect {
         AuditEntityType type = auditable.auditType();
         UserHolder userHolder = new UserHolder();
         UserDetailsDTO user = userHolder.getUser();
-        sendAudit(user, auditModel.getUuid(), value.getDescription(), type.toString());
+        sendAudit(user, auditModel.getUuid().toString(), value.getDescription(), type.toString());
     }
 
-        private void sendAudit(UserDetailsDTO auditor, UUID uuid, String action, String type ){
+        private void sendAudit(UserDetailsDTO auditor, String uuid, String action, String type ){
         JSONObject object =new JSONObject();
         object.put("uuid", auditor.getUuid());
         object.put("mail", auditor.getMail());

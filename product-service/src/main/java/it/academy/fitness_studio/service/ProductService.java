@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 public class ProductService implements IProductService {
     private final IProductDao dao;
     private ConversionService conversionService;
@@ -31,8 +30,8 @@ public class ProductService implements IProductService {
         this.dao = dao;
         this.conversionService = conversionService;
     }
-    @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.PRODUCT)
     @Override
+    @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.PRODUCT)
     public UUID create( @Validated ProductDTO product) {
         checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
@@ -48,8 +47,8 @@ public class ProductService implements IProductService {
         dao.save(productEntity);
         return uuid;
     }
-    @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.PRODUCT)
     @Override
+    @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.PRODUCT)
     public UUID update(UUID id, Instant version,@Validated ProductDTO product) {
         ProductEntity productEntity = dao.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("There is no product with such id"));

@@ -2,6 +2,7 @@ package it.academy.fitness_studio.configuration;
 
 import it.academy.fitness_studio.service.*;
 import it.academy.fitness_studio.service.api.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
@@ -19,10 +20,9 @@ import java.util.Properties;
 public class ServiceConfiguration {
 
     @Bean
-    public IMailService emailService(JavaMailSender emailSender,
-                                     SimpleMailMessage template,
-                                     SpringTemplateEngine thymeleafTemplateEngine){
-        return new MailService(emailSender,template,thymeleafTemplateEngine);
+    public IMailService emailService(
+            JavaMailSender emailSender){
+        return new MailService(emailSender);
     }
 
     @Bean
@@ -32,7 +32,7 @@ public class ServiceConfiguration {
         mailSender.setPort(465);
 
         mailSender.setUsername("maksim.maks.23@mail.ru");
-        mailSender.setPassword("n6uLLA7AmjfZb1mxwWbM");
+        mailSender.setPassword("DMzh6dgxcF4e2i9ecUi7");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtps");
@@ -42,46 +42,4 @@ public class ServiceConfiguration {
 
         return mailSender;
     }
-
-    @Bean
-    public SimpleMailMessage templateSimpleMessage() {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setText("This is the test email template for your email:\n%s\n");
-        return message;
-    }
-
-
-//    @Bean
-//    @Description("Thymeleaf Template Resolver")
-//    public ServletContextTemplateResolver templateResolver() {
-//        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-//        templateResolver.setPrefix("/WEB-INF/views/");
-//        templateResolver.setSuffix(".html");
-//        templateResolver.setTemplateMode("HTML5");
-//
-//        return templateResolver;
-//    }
-//    @Bean
-//    @Description("Thymeleaf View Resolver")
-//    public ThymeleafViewResolver viewResolver() {
-//        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-//        viewResolver.setTemplateEngine(templateEngine());
-//        viewResolver.setOrder(1);
-//        return viewResolver;
-//    }
-//    @Bean
-//    @Description("Thymeleaf Template Engine")
-//    public SpringTemplateEngine templateEngine() {
-//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//        templateEngine.setTemplateResolver(templateResolver());
-//        templateEngine.setTemplateEngineMessageSource(messageSource());
-//        return templateEngine;
-//    }
-//    @Bean
-//    @Description("Spring Message Resolver")
-//    public ResourceBundleMessageSource messageSource() {
-//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-//        messageSource.setBasename("messages");
-//        return messageSource;
-//    }
 }

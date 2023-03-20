@@ -1,12 +1,9 @@
 package it.academy.fitness_studio.entity;
 
-
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 @Entity
-//@EntityListeners(AuditTrailListener.class)
 @Table(schema = "app",name = "users")
 @SecondaryTable(
         schema = "app",name = "verification",
@@ -49,25 +46,24 @@ public class UserEntity   {
     private String code;
     private String password;
     public UserEntity(){
-
     }
-    public UserEntity(UUID uuid,
-                      Instant dtCreate,
-                      Instant dtUpdate,
-                      String mail,
-                      String fio,
-                      RoleEntity role,
-                      StatusEntity status,
-                      String password) {
-        this.uuid = uuid;
-        this.dtCreate = dtCreate;
-        this.dtUpdate = dtUpdate;
-        this.mail = mail;
-        this.fio = fio;
-        this.role = role;
-        this.status = status;
-        this.password = password;
-    }
+//    public UserEntity(UUID uuid,
+//                      Instant dtCreate,
+//                      Instant dtUpdate,
+//                      String mail,
+//                      String fio,
+//                      RoleEntity role,
+//                      StatusEntity status,
+//                      String password) {
+//        this.uuid = uuid;
+//        this.dtCreate = dtCreate;
+//        this.dtUpdate = dtUpdate;
+//        this.mail = mail;
+//        this.fio = fio;
+//        this.role = role;
+//        this.status = status;
+//        this.password = password;
+//    }
 
     public UserEntity(String mail, String fio, RoleEntity role, StatusEntity status, String password) {
         this.mail = mail;
@@ -76,8 +72,6 @@ public class UserEntity   {
         this.status = status;
         this.password = password;
     }
-
-
 
     public UUID getUuid() {
         return uuid;
@@ -100,11 +94,9 @@ public class UserEntity   {
     public StatusEntity getStatus() {
         return status;
     }
-
     public String getPassword() {
         return password;
     }
-
     public String getCode() {
         return code;
     }

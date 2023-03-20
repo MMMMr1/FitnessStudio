@@ -7,7 +7,6 @@ public enum AuditCode {
     private AuditCode(String description){
         this.description = description;
     }
-
     public String getDescription() {
         return description;
     }

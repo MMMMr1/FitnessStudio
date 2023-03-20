@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserServiceConfiguration {
     private final IUserDao dao;
     private final ConversionService conversionService;
-
     public UserServiceConfiguration(IUserDao dao, ConversionService conversionService) {
         this.dao = dao;
         this.conversionService = conversionService;
@@ -29,25 +28,20 @@ public class UserServiceConfiguration {
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public IUserService userService(IUserDao dao,
                                     ConversionService conversionService,
-                                    PasswordEncoder encoder
-    ) {
+                                    PasswordEncoder encoder) {
         return new UserService(dao, conversionService, encoder);
     }
-
     @Bean
     public IAuthenticationService authenticationService(IAuthenticationDao dao,
                                                         IUserService service,
                                                         ConversionService conversionService,
                                                         BCryptPasswordEncoder encoder) {
-
         return new AuthenticationService(dao, service,
                 conversionService, encoder);
     }
-
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> conversionService.convert(dao.findByMail(username)

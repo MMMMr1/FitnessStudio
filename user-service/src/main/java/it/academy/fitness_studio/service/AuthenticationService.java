@@ -70,8 +70,7 @@ public class AuthenticationService implements IAuthenticationService  {
     }
     @Override
     public UserModel getUser(String mail) {
-        UserEntity userEntity = dao.findByMail(mail)
-                .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
+        UserEntity userEntity = find(mail);
         if (!conversionService.canConvert(UserEntity.class, UserModel.class)) {
             throw new IllegalStateException("Can not convert UserEntity.class to UserModel.class");
         }
@@ -92,13 +91,10 @@ public class AuthenticationService implements IAuthenticationService  {
                     .uri(URI.create(HTTP_MAIL_SERVICE_8080_API_V_1_MAIL_VERIFICATION))
                     .setHeader("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
-//            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             httpClient.sendAsync(request,HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
                     .exceptionally(e -> "Exception: "+ e);
-        } catch (JSONException e
-//                 | InterruptedException | IOException e
-        ) {
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }

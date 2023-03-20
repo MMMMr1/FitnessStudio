@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://database-audit-service:5432/postgres
+    username: postgres
+    password: root
+---
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/fitness_studio
+    username: postgres
+    password: pass
+---
+jpa:
+  show-sql: true
+
+hibernate:
+  ddl-auto: none
+jwt:
+  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  issuer: ITAcademy
+

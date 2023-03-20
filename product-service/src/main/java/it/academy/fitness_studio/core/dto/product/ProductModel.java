@@ -3,8 +3,8 @@ package it.academy.fitness_studio.core.dto.product;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.academy.fitness_studio.core.converter.CustomBigDecimalConverter;
-import it.academy.fitness_studio.core.converter.CustomInstantConverter;
+import it.academy.fitness_studio.core.converter.jackson.CustomBigDecimalConverter;
+import it.academy.fitness_studio.core.converter.jackson.CustomInstantConverter;
 
 import java.math.BigDecimal;
 import java.time.Instant;

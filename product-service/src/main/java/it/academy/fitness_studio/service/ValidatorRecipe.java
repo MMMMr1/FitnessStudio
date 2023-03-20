@@ -7,14 +7,11 @@ import it.academy.fitness_studio.service.api.IProductService;
 import it.academy.fitness_studio.service.api.IValidatorRecipe;
 
 import java.util.List;
-
 public class ValidatorRecipe implements IValidatorRecipe {
     private final IProductService service;
-
     public ValidatorRecipe(IProductService service) {
         this.service = service;
     }
-
     @Override
     public void validate(RecipeDTO recipe) throws ValidationRecipeException {
         ValidationRecipeException validationRecipeException = new ValidationRecipeException();

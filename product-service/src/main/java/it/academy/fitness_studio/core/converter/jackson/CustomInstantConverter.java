@@ -1,4 +1,4 @@
-package it.academy.fitness_studio.core.converter;
+package it.academy.fitness_studio.core.converter.jackson;
 
 import com.fasterxml.jackson.databind.util.StdConverter;
 import org.springframework.stereotype.Component;

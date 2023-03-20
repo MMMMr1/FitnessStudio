@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
-//    private ValidationRecipeException e;
-
-    //400 @Validated
+    //400
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
@@ -33,7 +31,6 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionListDTO(error));
     }
-
     @ExceptionHandler(value = {ValidationRecipeException.class})
     public ResponseEntity<ExceptionListDTO> ArgumentRecipeNotValidException(
             ValidationRecipeException e) {
@@ -43,6 +40,7 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionListDTO(collect));
     }
+//    404
     @ExceptionHandler(value = {ProductNotFoundException.class,
             RecipeNotFoundException.class})
     public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotFoundException(
@@ -70,13 +68,6 @@ public class ExceptionGlobal {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
-//    @ExceptionHandler()
-//    public ResponseEntity<List<ExceptionErrorDTO>> onHttpMessageNotReadableException(
-//            HttpMessageNotReadableException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-//    }
-
 //    500
     @ExceptionHandler
     public ResponseEntity<List<ExceptionErrorDTO>> handler(Throwable e){
@@ -84,10 +75,3 @@ public class ExceptionGlobal {
                 .body(List.of(new ExceptionErrorDTO(e.getMessage())));
     }
 }
-
-//    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class, MethodArgumentConversionNotSupportedException.class})
-//    public ResponseEntity<List<ExceptionErrorDTO>> onArgumentTypeMismatchException(
-//            HttpMessageNotReadableException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-//    }

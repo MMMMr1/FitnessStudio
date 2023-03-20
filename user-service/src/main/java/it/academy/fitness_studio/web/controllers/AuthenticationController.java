@@ -4,7 +4,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
-import it.academy.fitness_studio.core.dto.user.UserHolder;
+import it.academy.fitness_studio.web.utils.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private IAuthenticationService service;
     private final JwtTokenHandler handler;
-
     public AuthenticationController(IAuthenticationService service, JwtTokenHandler handler) {
         this.service = service;
         this.handler = handler;
@@ -28,7 +27,6 @@ public class AuthenticationController {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
     @RequestMapping( path = "/verification", method = RequestMethod.GET)
     protected ResponseEntity<?> verify(
             @RequestParam(name = "code") String code,

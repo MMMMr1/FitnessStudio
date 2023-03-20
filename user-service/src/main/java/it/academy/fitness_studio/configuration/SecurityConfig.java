@@ -14,11 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 public class SecurityConfig  {
     private final JwtFilter filter;
-
     public SecurityConfig(JwtFilter filter) {
         this.filter = filter;
     }
-
      @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http = http.cors().and().csrf().disable();
@@ -44,12 +42,6 @@ public class SecurityConfig  {
                         .antMatchers("/api/v1/users/me").authenticated()
                         .antMatchers("/api/v1/users/login").permitAll()
                         .antMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
-//                        .antMatchers(HttpMethod.GET,"/api/v1/product").permitAll()
-//                        .antMatchers(HttpMethod.PUT,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")
-//                        .antMatchers(HttpMethod.POST,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")
-//                        .antMatchers(HttpMethod.GET,"/api/v1/recipe").permitAll()
-//                        .antMatchers(HttpMethod.PUT,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
-//                        .antMatchers(HttpMethod.POST,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(
