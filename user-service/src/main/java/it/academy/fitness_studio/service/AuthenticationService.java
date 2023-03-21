@@ -42,7 +42,7 @@ public class AuthenticationService implements IAuthenticationService  {
         this.encoder = encoder;
     }
     @Override
-    public void create(UserRegistrationDTO user) {
+    public void create(@Validated UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
         UserEntity userEntity = find(user.getMail());
         String code = UUID.randomUUID().toString();

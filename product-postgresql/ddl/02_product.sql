@@ -10,6 +10,5 @@ CREATE TABLE IF NOT EXISTS app.product
     carbohydrates double precision,
     fats double precision,
     proteins double precision,
-    CONSTRAINT product_pkey PRIMARY KEY (id),
-    CONSTRAINT product_title_key UNIQUE (title)
+    CONSTRAINT product_pkey PRIMARY KEY (id)
 )

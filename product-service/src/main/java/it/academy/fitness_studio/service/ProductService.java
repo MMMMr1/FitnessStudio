@@ -33,7 +33,7 @@ public class ProductService implements IProductService {
     @Override
     @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.PRODUCT)
     public UUID create( @Validated ProductDTO product) {
-        checkDoubleProduct(product);
+//        checkDoubleProduct(product);
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
              throw new IllegalStateException("Can not convert ProductDTO.class");
          }
@@ -96,10 +96,10 @@ public class ProductService implements IProductService {
         }
          return conversionService.convert(productEntity,ProductModel.class);
     }
-    private void checkDoubleProduct(ProductDTO product){
-        String title = product.getTitle();
-        if (dao.findByTitle(title) != null){
-            throw new ProductAlreadyExistException("Product with such title has already exist");
-        }
-    }
+//    private void checkDoubleProduct(ProductDTO product){
+//        String title = product.getTitle();
+//        if (dao.findByTitle(title) != null){
+//            throw new ProductAlreadyExistException("Product with such title has already exist");
+//        }
+//    }
 }
