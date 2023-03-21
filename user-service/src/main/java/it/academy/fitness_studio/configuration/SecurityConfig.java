@@ -26,14 +26,10 @@ public class SecurityConfig  {
                 .and();
         http = http
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> {
+                .authenticationEntryPoint((request, response, ex) -> {
                             response.sendError(
                                     HttpServletResponse.SC_UNAUTHORIZED,
-                                    ex.getMessage()
-                            );
-                        }
-                )
+                                    ex.getMessage());})
                 .and();
         http
                 .authorizeHttpRequests((authz) -> authz

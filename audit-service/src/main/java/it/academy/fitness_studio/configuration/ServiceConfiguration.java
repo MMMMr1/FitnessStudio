@@ -12,8 +12,7 @@ import org.springframework.core.convert.ConversionService;
 public class ServiceConfiguration {
     @Bean
     public IAuditService IAuditService(IAuditDao dao,
-                                       ConversionService conversionService
-    ) {
+                                       ConversionService conversionService) {
         return new AuditService(dao, conversionService );
     }
 }

@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS app.audit
 (
     id uuid NOT NULL,
@@ -10,6 +9,5 @@ CREATE TABLE IF NOT EXISTS app.audit
     mail_user character varying(255) COLLATE pg_catalog."default",
     fio_user character varying(255) COLLATE pg_catalog."default",
     role_user character varying(255) COLLATE pg_catalog."default",
-
     CONSTRAINT audit_pkey PRIMARY KEY (id)
  )

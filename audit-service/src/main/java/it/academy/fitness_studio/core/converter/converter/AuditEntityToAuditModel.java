@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 public class AuditEntityToAuditModel implements Converter< AuditEntity, AuditModel> {
     @Override
     public AuditModel convert(AuditEntity user) {
-
-
         return new AuditModel(
                 user.getId(),
                 user.getDtCreate(),

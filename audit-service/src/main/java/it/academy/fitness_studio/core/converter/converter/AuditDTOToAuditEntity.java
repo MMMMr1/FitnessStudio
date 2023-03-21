@@ -11,14 +11,11 @@ import org.springframework.stereotype.Component;
 public class AuditDTOToAuditEntity implements Converter<AuditDTO, AuditEntity> {
     @Override
     public AuditEntity convert(AuditDTO user) {
-        String role = user.getRole();
-        UserRole userRole = Enum.valueOf(UserRole.class, role);
-
         return new AuditEntity(
                 user.getUuid(),
                 user.getMail(),
                 user.getFio(),
-                userRole,
+                Enum.valueOf(UserRole.class, user.getRole()),
                 user.getText(),
                 Enum.valueOf(AuditType.class, user.getType()),
                 user.getId());

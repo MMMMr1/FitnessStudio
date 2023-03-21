@@ -8,7 +8,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface IAuditDao extends PagingAndSortingRepository<AuditEntity, UUID>
-{
-
-}
+public interface IAuditDao extends PagingAndSortingRepository<AuditEntity, UUID> {}

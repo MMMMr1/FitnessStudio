@@ -11,13 +11,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.http.HttpServletResponse;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
-public class SecurityConfig  {
+public class SecurityConfiguration {
     private final JwtFilter filter;
 
-    public SecurityConfig(JwtFilter filter) {
+    public SecurityConfiguration(JwtFilter filter) {
         this.filter = filter;
     }
 
@@ -30,14 +28,10 @@ public class SecurityConfig  {
                 .and();
         http = http
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> {
+                .authenticationEntryPoint((request, response, ex) -> {
                             response.sendError(
                                     HttpServletResponse.SC_UNAUTHORIZED,
-                                    ex.getMessage()
-                            );
-                        }
-                )
+                                    ex.getMessage());})
                 .and();
         http
                 .authorizeHttpRequests((authz) -> authz
@@ -47,8 +41,7 @@ public class SecurityConfig  {
                         .antMatchers(HttpMethod.GET,"/api/v1/recipe").permitAll()
                         .antMatchers(HttpMethod.PUT,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated()
-                );
+                        .anyRequest().authenticated());
         http.addFilterBefore(
                 filter,
                 UsernamePasswordAuthenticationFilter.class

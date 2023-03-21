@@ -26,22 +26,3 @@ jpa:
 jwt:
   secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
   issuer: ITAcademy
-#mail:
-#  host: smtp.mail.ru
-#  port: 465
-#  username: maksim.maks.23@mail.ru
-#  password: DhrzvYXCZRL5RdPwTQbA
-#properties:
-#  mail:
-#    smtp:
-#      starttls:
-#        enable: true
-#        required: true
-#      auth: true
-#      ssl:
-#        trust:smtp.mail.ru
-#    spring.mail.properties.mail.smtp.starttls.enable: true
-#    generate-ddl: true
-#    hibernate:
-#      ddl-auto: create
-#    database: postgresql

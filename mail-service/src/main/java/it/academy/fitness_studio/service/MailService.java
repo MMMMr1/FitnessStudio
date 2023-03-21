@@ -7,7 +7,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 public class MailService implements IMailService {
-
     private JavaMailSender emailSender;
     private String NOREPLY_ADDRESS = "maksim.maks.23@mail.ru";
     public MailService(JavaMailSender emailSender  ) {
@@ -31,7 +30,6 @@ public class MailService implements IMailService {
                     "С любовью,\n" +
                     "Команда Thyme.");
             emailSender.send(message);
-
         } catch (MailException exception) {
             exception.printStackTrace();
         }
