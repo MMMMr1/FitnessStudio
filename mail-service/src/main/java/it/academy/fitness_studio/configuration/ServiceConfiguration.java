@@ -32,7 +32,7 @@ public class ServiceConfiguration {
         mailSender.setPort(465);
 
         mailSender.setUsername("maksim.maks.23@mail.ru");
-        mailSender.setPassword("DMzh6dgxcF4e2i9ecUi7");
+        mailSender.setPassword("m8x7AeqawwuPHqybSrLQ");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtps");

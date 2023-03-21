@@ -101,21 +101,7 @@ public class UserServiceIntegrationTest {
 
         }
 
-        @Test
-        public void whenValidMail_thenUserShouldBeFound() {
-//            String mail = "Motto.first@fr.com";
-//            UserModel user = userService.getUser(mail);
-//            assertThat(user.getMail()).isEqualTo(mail);
-//            verifyFindByMailIsCalledOnce("Motto.first@fr.com");
-        }
 
-//        @Test
-//        public void whenInvalidMail_thenUserShouldNotBeFound() {
-//            Throwable exception = assertThrows(UserNotFoundException.class,
-//                    () -> userService.getUser("wrong_mail"));
-//            assertEquals("There is no user with such mail", exception.getMessage());
-//            verifyFindByMailIsCalledOnce("wrong_mail");
-//        }
 
         @Test
         public void whenValidId_thenUserShouldBeFound() {
@@ -152,8 +138,3 @@ public class UserServiceIntegrationTest {
             reset(dao);
         }
 }
-//        UserDTO userDTO = new UserDTO("hello.hello@test.com",
-//                "Hello Hello",
-//                "USER",
-//                "ACTIVATED",
-//                "12345678");

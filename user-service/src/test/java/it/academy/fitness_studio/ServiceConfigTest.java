@@ -2,12 +2,8 @@ package it.academy.fitness_studio;
 
 import it.academy.fitness_studio.core.converter.*;
 import it.academy.fitness_studio.dao.api.IAuthenticationDao;
-//import it.academy.fitness_studio.dao.api.IProductDao;
-//import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.dao.api.IUserDao;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
-//import it.academy.fitness_studio.service.api.IProductService;
-//import it.academy.fitness_studio.service.api.IRecipeService;
 import it.academy.fitness_studio.service.api.IUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,22 +26,15 @@ public class ServiceConfigTest {
     @Test
     public void givenBeanWhenSearchingInAppContextThenFindThem(){
         assertNotNull(applicationContext.getBean(IUserService.class));
-//        assertNotNull(applicationContext.getBean(IProductService.class));
-//        assertNotNull(applicationContext.getBean(IRecipeService.class));
         assertNotNull(applicationContext.getBean(IAuthenticationService.class));
     }
     @Test
     public void givenBeanDaoWhenSearchingInAppContextThenFindThem(){
-//        assertNotNull(applicationContext.getBean(IProductDao.class));
-//        assertNotNull(applicationContext.getBean(IRecipeDao.class));
         assertNotNull(applicationContext.getBean(IAuthenticationDao.class));
         assertNotNull(applicationContext.getBean(IUserDao.class));
     }
     @Test
     public void givenScannedScopeComponent_whenSearchingInApplicationContext_thenFindIt() {
-//        assertNotNull(applicationContext.getBean(ProductDTOToProductEntity.class));
-//        assertNotNull(applicationContext.getBean(ProductEntityToProductModel.class));
-//        assertNotNull(applicationContext.getBean(ProductModelToProductEntity.class));
         assertNotNull(applicationContext.getBean(UserDTOToUserEntity.class));
         assertNotNull(applicationContext.getBean(UserEntityToUserModel.class));
         assertNotNull(applicationContext.getBean(ConversionService.class));
