@@ -5,6 +5,7 @@ import it.academy.fitness_studio.web.utils.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -16,8 +17,8 @@ import java.util.UUID;
 @Aspect
 @Component
 public class AuditAspect {
-    public static final String HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT = "http://audit-service:8080/api/v1/audit/report";
-
+    @Value("${audit.url}")
+    private String auditUrl;
     @AfterReturning(
             pointcut = "@annotation(auditable)",
             argNames = "auditable, uuid", returning = "uuid")
@@ -40,7 +41,7 @@ public class AuditAspect {
         object.put("id", uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(HTTP_AUDIT_SERVICE_8080_API_V_1_AUDIT))
+                .uri(URI.create(auditUrl))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());

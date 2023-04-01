@@ -14,6 +14,8 @@ import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IUserService;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -23,9 +25,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
-
+@ConfigurationProperties(prefix = "mail")
 public class AuthenticationService implements IAuthenticationService  {
-    public static final String HTTP_MAIL_SERVICE_8080_API_V_1_MAIL_VERIFICATION = "http://mail-service:8080/api/v1/mail/verification";
+    @Value("${mail.url}")
+    private String mailUrl;
     private final IAuthenticationDao dao;
     private final IUserService service;
     private ConversionService conversionService;
@@ -88,7 +91,7 @@ public class AuthenticationService implements IAuthenticationService  {
             object.put("text",code);
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(HTTP_MAIL_SERVICE_8080_API_V_1_MAIL_VERIFICATION))
+                    .uri(URI.create(mailUrl))
                     .setHeader("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
             httpClient.sendAsync(request,HttpResponse.BodyHandlers.ofString())

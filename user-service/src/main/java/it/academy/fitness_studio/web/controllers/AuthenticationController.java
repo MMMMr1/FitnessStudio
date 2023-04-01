@@ -6,7 +6,7 @@ import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.web.utils.UserHolder;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
-import it.academy.fitness_studio.web.utils.JwtTokenHandler;
+import it.academy.fitness_studio.web.utils.JwtTokenHandler; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
