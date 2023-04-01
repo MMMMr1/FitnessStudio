@@ -6,9 +6,9 @@ spring:
   profiles: dev
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://database-user-service:5432/postgres
-    username: postgres
-    password: root
+    url: ${SPRING_DATASOURCE_URL_USER}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
 ---
 spring:
   profiles: test
@@ -23,8 +23,10 @@ jpa:
   hibernate:
     ddl-auto: none
 jwt:
-  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
-  issuer: ITAcademy
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
+#  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+#  issuer: ITAcademy
 mail:
   url: http://mail-service:8080/api/v1/mail/verification
 audit:

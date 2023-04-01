@@ -24,6 +24,6 @@ jpa:
 hibernate:
   ddl-auto: none
 jwt:
-  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
-  issuer: ITAcademy
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
 

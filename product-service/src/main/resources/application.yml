@@ -10,19 +10,19 @@ spring:
     username: postgres
     password: root
 ---
-spring:
-  profiles: test
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/fitness_studio
-    username: postgres
-    password: pass
+#spring:
+#  profiles: test
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/fitness_studio
+#    username: postgres
+#    password: pass
 ---
 jpa:
   show-sql: true
 
 jwt:
-  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
-  issuer: ITAcademy
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
 audit:
   url: http://audit-service:8080/api/v1/audit/report
