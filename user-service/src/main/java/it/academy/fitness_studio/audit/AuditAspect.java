@@ -30,20 +30,20 @@ public class AuditAspect {
         UserModel user =  principal instanceof String  ? userModel : userHolder.getUser();
         sendAudit(user, userModel.getUuid(), value.getDescription());
     }
-        private void sendAudit( UserModel auditor, UUID uuid, String action){
-        JSONObject object =new JSONObject();
+    private void sendAudit(UserModel auditor, UUID uuid, String action) {
+        JSONObject object = new JSONObject();
         object.put("uuid", auditor.getUuid());
         object.put("mail", auditor.getMail());
         object.put("fio", auditor.getName());
         object.put("role", auditor.getRole());
         object.put("text", action);
-        object.put("type","USER");
-        object.put("id",uuid);
+        object.put("type", "USER");
+        object.put("id", uuid);
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(auditUrl))
                 .setHeader("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-        }
+    }
 }

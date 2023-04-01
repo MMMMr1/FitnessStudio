@@ -29,7 +29,6 @@ public class AuditAspect {
         UserDetailsDTO user = userHolder.getUser();
         sendAudit(user, uuid, value.getDescription(), type.toString());
     }
-
     private void sendAudit(UserDetailsDTO auditor, UUID uuid, String action, String type) {
         JSONObject object = new JSONObject();
         object.put("uuid", auditor.getUuid());

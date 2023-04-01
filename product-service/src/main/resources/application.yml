@@ -20,6 +20,7 @@ spring:
 ---
 jpa:
   show-sql: true
+
 jwt:
   secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
   issuer: ITAcademy
