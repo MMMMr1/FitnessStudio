@@ -10,14 +10,6 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 ---
-spring:
-  profiles: test
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/fitness_studio
-    username: postgres
-    password: pass
----
 jpa:
   show-sql: true
   hibernate:
@@ -25,8 +17,6 @@ jpa:
 jwt:
   secret: ${JWT_SECRET}
   issuer: ${JWT_ISSUER}
-#  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
-#  issuer: ITAcademy
 mail:
   url: http://mail-service:8080/api/v1/mail/verification
 audit:

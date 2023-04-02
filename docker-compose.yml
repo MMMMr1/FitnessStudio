@@ -53,6 +53,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_USER}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER}
     depends_on:
       - database-user-service
     networks:
@@ -60,18 +62,35 @@ services:
   product-service:
     build: product-service
     image: fitness_product-service:1.0.0
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_PRODUCT}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER}
+    depends_on:
+      - database-product-service
     networks:
       - fitness_ntwrk
   mail-service:
     build: mail-service
     image: fitness_mail-service:1.0.0
-
+    environment:
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
     networks:
       - fitness_ntwrk
   audit-service:
     build: audit-service
     image: fitness_audit-service:1.0.0
-
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_AUDIT}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER}
+    depends_on:
+      - database-audit-service
     networks:
       - fitness_ntwrk
   proxy:
