@@ -1,4 +1,4 @@
-# fitnessStudio is a microservices-based web application for managing a healthy fitness diet. It is built using the following technologies:
+# FitnessStudio is a microservices-based web application for managing a healthy fitness diet. It is built using the following technologies:
 
 Spring Boot
 
