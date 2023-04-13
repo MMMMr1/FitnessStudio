@@ -3,12 +3,12 @@ mail:
   port: 465
   username: ${MAIL_USER}
   password: ${MAIL_PASSWORD}
-properties:
-  mail:
-    smtp:
-      starttls:
-        enable: true
-        required: true
-      auth: true
-      ssl:
-        trust:smtp.mail.ru
+  properties:
+    mail:
+      smtps:
+        starttls:
+          enable: true
+          required: true
+        auth: true
+        ssl: trust:smtp.mail.ru
+  protocol: smtps
