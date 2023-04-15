@@ -16,9 +16,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 
-public class UserModel
-        implements UserDetails
-{
+public class UserModel implements UserDetails {
     @JsonProperty("uuid")
     private UUID uuid;
 

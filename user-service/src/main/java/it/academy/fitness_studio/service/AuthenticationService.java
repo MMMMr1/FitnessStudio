@@ -12,11 +12,15 @@ import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IUserService;
+import it.academy.fitness_studio.web.controllers.UserController;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.net.URI;
@@ -24,6 +28,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
+@Transactional
 public class AuthenticationService implements IAuthenticationService  {
     @Value("${mail.url}")
     private String mailUrl;
@@ -31,6 +36,8 @@ public class AuthenticationService implements IAuthenticationService  {
     private final IUserService service;
     private ConversionService conversionService;
     private BCryptPasswordEncoder encoder;
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthenticationService.class);
     public AuthenticationService(IAuthenticationDao dao,
                                  IUserService service,
                                  ConversionService conversionService,
@@ -42,27 +49,41 @@ public class AuthenticationService implements IAuthenticationService  {
         this.encoder = encoder;
     }
     @Override
+    @Transactional
     public void create(@Validated UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
+        logger.info("Create new user: {}", user);
         UserEntity userEntity = find(user.getMail());
         String code = UUID.randomUUID().toString();
         userEntity.setCode(code);
         dao.save(userEntity);
+        logger.info("Send verification code to new user: {}", user);
         sendMessage(user.getMail(),code);
     }
     @Override
+    @Transactional
     public void verify(String code,String mail) {
         UserEntity userEntity = find(mail);
         if(code.equals(userEntity.getCode())){
             userEntity.setStatus(new StatusEntity(UserStatus.ACTIVATED));
             userEntity.setCode(null);
             dao.save(userEntity);
-        } else throw new ValidationUserException("Incorrect mail and code");
+            logger.info("Successful verification of user with mail: "+mail+" "+code);
+        } else {
+            logger.error("Unsuccessful verification: "+mail+" "+code);
+            throw new ValidationUserException("Incorrect mail and code");
+        }
+
     }
     @Override
     public UserModel login(@Validated UserLoginDTO user) {
         UserEntity userEntity = find(user.getMail());
         if(!encoder.matches(user.getPassword(),userEntity.getPassword())){
+            logger.error("Unsuccessful login with "+ user.getMail());
+            throw new ValidationUserException("Incorrect mail and password");
+        }
+        if (!userEntity.getStatus().getStatus().equals(UserStatus.ACTIVATED)) {
+            logger.error("Unsuccessful login with "+ user.getMail()+ " user is not activated");
             throw new ValidationUserException("Incorrect mail and password");
         }
         return conversionService.convert(userEntity,UserModel.class);
@@ -83,7 +104,7 @@ public class AuthenticationService implements IAuthenticationService  {
         try {
             JSONObject object =new JSONObject();
             object.put("to", to);
-            object.put("subject", "Активируйте свою учетную запись в Thyme ");
+            object.put("subject", "Активируйте свою учетную запись в Healthy Cloud ");
             object.put("text",code);
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()

@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 
-public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
+public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, String> {
     private List<String> acceptedValues;
     @Override
     public void initialize(ValueOfEnum annotation) {
@@ -17,10 +17,10 @@ public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, Ch
                 .collect(Collectors.toList());
     }
     @Override
-    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
             return true;
         }
-        return acceptedValues.contains(value.toString());
+        return acceptedValues.contains(value);
     }
 }

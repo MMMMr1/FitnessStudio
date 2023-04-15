@@ -17,6 +17,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 
 public class UserService implements IUserService {
     private final IUserDao dao;
-
     private ConversionService conversionService;
     private PasswordEncoder encoder;
 
@@ -39,13 +39,14 @@ public class UserService implements IUserService {
         this.encoder = encoder;
     }
     @Override
+    @Transactional
     @Auditable(AuditCode.CREATED)
     public UserModel create(@Validated UserDTO user) {
         checkDoubleMail(user);
         String encode = encoder.encode(user.getPassword());
         user.setPassword(encode);
         if (!conversionService.canConvert(UserDTO.class, UserEntity.class)) {
-            throw new RuntimeException("Can not convert UserDTO.class to UserEntity.class");
+            throw new IllegalStateException("Can not convert UserDTO.class to UserEntity.class");
         }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         UUID uuid = UUID.randomUUID();
@@ -58,6 +59,7 @@ public class UserService implements IUserService {
     }
     @Override
     @Auditable(AuditCode.UPDATE)
+    @Transactional
     public UserModel update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));

@@ -47,23 +47,6 @@ public class UserEntity   {
     private String password;
     public UserEntity(){
     }
-//    public UserEntity(UUID uuid,
-//                      Instant dtCreate,
-//                      Instant dtUpdate,
-//                      String mail,
-//                      String fio,
-//                      RoleEntity role,
-//                      StatusEntity status,
-//                      String password) {
-//        this.uuid = uuid;
-//        this.dtCreate = dtCreate;
-//        this.dtUpdate = dtUpdate;
-//        this.mail = mail;
-//        this.fio = fio;
-//        this.role = role;
-//        this.status = status;
-//        this.password = password;
-//    }
 
     public UserEntity(String mail, String fio, RoleEntity role, StatusEntity status, String password) {
         this.mail = mail;
