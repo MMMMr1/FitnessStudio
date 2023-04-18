@@ -12,7 +12,6 @@ import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IAuthenticationService;
 import it.academy.fitness_studio.service.api.IUserService;
-import it.academy.fitness_studio.web.controllers.UserController;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -52,12 +51,11 @@ public class AuthenticationService implements IAuthenticationService  {
     @Transactional
     public void create(@Validated UserRegistrationDTO user) {
         service.create(new UserDTO(user.getMail(), user.getFio(), user.getPassword()));
-        logger.info("Create new user: {}", user);
         UserEntity userEntity = find(user.getMail());
         String code = UUID.randomUUID().toString();
         userEntity.setCode(code);
         dao.save(userEntity);
-        logger.info("Send verification code to new user: {}", user);
+        logger.info("Send verification code {"+code+"} to user: ", user);
         sendMessage(user.getMail(),code);
     }
     @Override
@@ -68,12 +66,10 @@ public class AuthenticationService implements IAuthenticationService  {
             userEntity.setStatus(new StatusEntity(UserStatus.ACTIVATED));
             userEntity.setCode(null);
             dao.save(userEntity);
-            logger.info("Successful verification of user with mail: "+mail+" "+code);
         } else {
             logger.error("Unsuccessful verification: "+mail+" "+code);
             throw new ValidationUserException("Incorrect mail and code");
         }
-
     }
     @Override
     public UserModel login(@Validated UserLoginDTO user) {
@@ -98,7 +94,7 @@ public class AuthenticationService implements IAuthenticationService  {
     }
     private UserEntity find(String mail){
         return dao.findByMail(mail)
-                .orElseThrow(() -> new UserNotFoundException("User with this mail is not registered"));
+                .orElseThrow(() -> new UserNotFoundException("User with mail {"+mail+"} is not registered"));
     }
     private void sendMessage(String to, String code ){
         try {
@@ -117,6 +113,5 @@ public class AuthenticationService implements IAuthenticationService  {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

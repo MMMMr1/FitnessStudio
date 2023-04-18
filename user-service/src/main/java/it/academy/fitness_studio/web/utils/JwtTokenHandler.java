@@ -58,12 +58,11 @@ public class JwtTokenHandler {
     private  Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token).getBody();
     }
-    public   Date getExpirationDate(String token) {
+    public Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
-
         return claims.getExpiration();
     }
 

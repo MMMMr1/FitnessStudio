@@ -4,6 +4,8 @@ import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.service.api.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,14 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private IUserService service;
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserController.class);
     public UserController(IUserService service) {
         this.service = service;
     }
     @RequestMapping(method = RequestMethod.POST)
     protected ResponseEntity<?> create(@RequestBody @Validated UserDTO user)   {
+        logger.info("create "+ user);
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -37,15 +42,17 @@ public class UserController {
 
     @RequestMapping(path = "/{uuid}", method = RequestMethod.GET)
     public ResponseEntity<UserModel> get(@PathVariable("uuid") UUID uuid) {
-         return ResponseEntity.status(HttpStatus.OK)
+        logger.info("get user with "+ uuid);
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getUser(uuid));
     }
 
     @RequestMapping(path = "/{uuid}/dt_update/{dt_update}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("uuid") UUID uuid,
                                         @PathVariable("dt_update") Instant dtUpdate,
-                                        @RequestBody @Validated UserDTO user)  {
+                                        @RequestBody @Validated UserDTO user) {
         service.update(uuid, dtUpdate, user);
+        logger.info("update user with "+ uuid);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

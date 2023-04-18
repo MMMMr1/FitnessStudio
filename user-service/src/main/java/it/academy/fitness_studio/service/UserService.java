@@ -13,6 +13,8 @@ import it.academy.fitness_studio.entity.RoleEntity;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
 import it.academy.fitness_studio.service.api.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +32,8 @@ public class UserService implements IUserService {
     private final IUserDao dao;
     private ConversionService conversionService;
     private PasswordEncoder encoder;
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserService.class);
     public UserService(IUserDao dao,
                        ConversionService conversionService,
                        PasswordEncoder encoder) {
@@ -55,6 +58,7 @@ public class UserService implements IUserService {
         userEntity.setDtCreate(dtCreated);
         userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
+        logger.info("successful create of user: "+ user);
         return conversionService.convert(userEntity,UserModel.class);
     }
     @Override
@@ -64,6 +68,7 @@ public class UserService implements IUserService {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
         if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
+            logger.error("Can not update user "+ id+ "invalid version "+ version);
             throw new InvalidVersionException("Invalid version");
         }
             userEntity.setFio(user.getFio());
@@ -72,6 +77,7 @@ public class UserService implements IUserService {
             userEntity.setPassword(user.getPassword());
             userEntity.setRole(new RoleEntity(user.getRole()));
             dao.save(userEntity);
+            logger.info("successful update of user: "+ user);
             return conversionService.convert(userEntity,UserModel.class);
     }
     public Pages<UserModel> getPageUser(Pageable paging) {

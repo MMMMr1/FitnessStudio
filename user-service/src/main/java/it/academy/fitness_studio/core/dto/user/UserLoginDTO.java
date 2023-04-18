@@ -22,4 +22,11 @@ public class UserLoginDTO {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String toString() {
+        return "UserLoginDTO{" +
+                "mail='" + mail + '\'' +
+                '}';
+    }
 }
