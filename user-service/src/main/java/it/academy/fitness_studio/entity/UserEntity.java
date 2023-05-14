@@ -1,6 +1,7 @@
 package it.academy.fitness_studio.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 @Entity
@@ -9,7 +10,7 @@ import java.util.UUID;
         schema = "app",name = "verification",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "id")
 )
-public class UserEntity   {
+public class UserEntity implements Serializable {
     @Id
     @Column(name = "id")
     private UUID uuid;
