@@ -1,0 +1,20 @@
+#spring:
+#  profiles: module-test
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: ${DATASOURCE_URL_USER}
+#    username: ${POSTGRES_USER}
+#    password: ${POSTGRES_PASSWORD}
+#jwt:
+#  secret: ${JWT_SECRET}
+#  issuer: ${JWT_ISSUER}
+db:
+  username: test
+  password: test
+spring:
+  datasource:
+    username: test
+    password: test
+  jpa:
+    properties.hibernate:
+      hbm2ddl.auto: validate
