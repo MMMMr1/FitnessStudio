@@ -5,7 +5,7 @@ import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.web.utils.UserHolder;
-import it.academy.fitness_studio.service.api.IAuthenticationService;
+import it.academy.fitness_studio.service.api.AuthenticationService;
 import it.academy.fitness_studio.web.utils.JwtTokenHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/users")
 public class AuthenticationController {
-    private IAuthenticationService service;
+    private AuthenticationService service;
     private final JwtTokenHandler handler;
     private static final Logger logger =
             LoggerFactory.getLogger(AuthenticationController.class);
-    public AuthenticationController(IAuthenticationService service, JwtTokenHandler handler) {
+    public AuthenticationController(AuthenticationService service, JwtTokenHandler handler) {
         this.service = service;
         this.handler = handler;
     }

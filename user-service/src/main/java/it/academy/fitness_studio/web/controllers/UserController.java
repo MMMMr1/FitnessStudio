@@ -3,7 +3,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.user.UserDTO;
 import it.academy.fitness_studio.core.dto.user.UserModel;
-import it.academy.fitness_studio.service.api.IUserService;
+import it.academy.fitness_studio.service.api.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +19,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    private IUserService service;
+    private UserService service;
     private static final Logger logger =
             LoggerFactory.getLogger(UserController.class);
-    public UserController(IUserService service) {
+    public UserController(UserService service) {
         this.service = service;
     }
     @RequestMapping(method = RequestMethod.POST)

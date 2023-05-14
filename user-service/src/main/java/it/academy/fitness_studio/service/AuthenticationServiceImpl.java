@@ -7,11 +7,11 @@ import it.academy.fitness_studio.core.dto.user.UserLoginDTO;
 import it.academy.fitness_studio.core.dto.user.UserRegistrationDTO;
 import it.academy.fitness_studio.core.exception.UserNotFoundException;
 import it.academy.fitness_studio.core.exception.ValidationUserException;
-import it.academy.fitness_studio.dao.api.IAuthenticationDao;
+import it.academy.fitness_studio.dao.api.AuthenticationDao;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
-import it.academy.fitness_studio.service.api.IAuthenticationService;
-import it.academy.fitness_studio.service.api.IUserService;
+import it.academy.fitness_studio.service.api.AuthenticationService;
+import it.academy.fitness_studio.service.api.UserService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -28,19 +28,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
 @Transactional
-public class AuthenticationService implements IAuthenticationService  {
+public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${mail.url}")
     private String mailUrl;
-    private final IAuthenticationDao dao;
-    private final IUserService service;
+    private final AuthenticationDao dao;
+    private final UserService service;
     private ConversionService conversionService;
     private BCryptPasswordEncoder encoder;
     private static final Logger logger =
-            LoggerFactory.getLogger(AuthenticationService.class);
-    public AuthenticationService(IAuthenticationDao dao,
-                                 IUserService service,
-                                 ConversionService conversionService,
-                                 BCryptPasswordEncoder encoder
+            LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+    public AuthenticationServiceImpl(AuthenticationDao dao,
+                                     UserService service,
+                                     ConversionService conversionService,
+                                     BCryptPasswordEncoder encoder
     ) {
         this.dao = dao;
         this.service = service;

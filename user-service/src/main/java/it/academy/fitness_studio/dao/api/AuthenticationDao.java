@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
-public interface IAuthenticationDao extends CrudRepository<UserEntity,String> {
+public interface AuthenticationDao extends CrudRepository<UserEntity,String> {
     Optional<UserEntity> findByMail(String mail);
 }

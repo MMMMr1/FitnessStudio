@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.UUID;
 
-public interface IUserService {
+public interface UserService {
     UserModel create(UserDTO user);
     UserModel getUser(UUID id);
     UserModel update(UUID id, Instant version, UserDTO user);

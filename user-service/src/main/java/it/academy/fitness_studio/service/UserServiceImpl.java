@@ -8,11 +8,11 @@ import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.core.exception.InvalidVersionException;
 import it.academy.fitness_studio.core.exception.UserAlreadyExistException;
 import it.academy.fitness_studio.core.exception.UserNotFoundException;
-import it.academy.fitness_studio.dao.api.IUserDao;
+import it.academy.fitness_studio.dao.api.UserDao;
 import it.academy.fitness_studio.entity.RoleEntity;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
-import it.academy.fitness_studio.service.api.IUserService;
+import it.academy.fitness_studio.service.api.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -28,15 +28,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-public class UserService implements IUserService {
-    private final IUserDao dao;
+public class UserServiceImpl implements UserService {
+    private final UserDao dao;
     private ConversionService conversionService;
     private PasswordEncoder encoder;
     private static final Logger logger =
-            LoggerFactory.getLogger(UserService.class);
-    public UserService(IUserDao dao,
-                       ConversionService conversionService,
-                       PasswordEncoder encoder) {
+            LoggerFactory.getLogger(UserServiceImpl.class);
+    public UserServiceImpl(UserDao dao,
+                           ConversionService conversionService,
+                           PasswordEncoder encoder) {
         this.dao = dao;
         this.conversionService = conversionService;
         this.encoder = encoder;
