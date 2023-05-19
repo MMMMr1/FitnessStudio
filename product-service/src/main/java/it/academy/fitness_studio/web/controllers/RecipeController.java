@@ -3,7 +3,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.recipe.RecipeDTO;
 import it.academy.fitness_studio.core.dto.recipe.RecipeModel;
-import it.academy.fitness_studio.service.api.IRecipeService;
+import it.academy.fitness_studio.service.api.RecipeService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/recipe")
 public class RecipeController {
-    private final IRecipeService service;
-    public RecipeController(IRecipeService service) {
+    private final RecipeService service;
+    public RecipeController(RecipeService service) {
         this.service = service;
     }
     @RequestMapping(method = RequestMethod.POST)

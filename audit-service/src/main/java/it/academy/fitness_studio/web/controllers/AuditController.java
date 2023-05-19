@@ -3,7 +3,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.audit.AuditDTO;
 import it.academy.fitness_studio.core.dto.audit.AuditModel;
-import it.academy.fitness_studio.service.api.IAuditService;
+import it.academy.fitness_studio.service.api.AuditService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/audit")
 public class AuditController {
-    private IAuditService service;
-    public AuditController( IAuditService service) {
+    private AuditService service;
+    public AuditController( AuditService service) {
         this.service = service;
     }
     @RequestMapping(path = "/report",method = RequestMethod.POST)

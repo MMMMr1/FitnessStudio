@@ -27,7 +27,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
-@Transactional
+@Transactional(readOnly = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${mail.url}")
     private String mailUrl;
@@ -59,7 +59,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         sendMessage(user.getMail(),code);
     }
     @Override
-    @Transactional
     public void verify(String code,String mail) {
         UserEntity userEntity = find(mail);
         if(code.equals(userEntity.getCode())){

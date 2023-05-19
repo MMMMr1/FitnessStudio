@@ -7,30 +7,31 @@ import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
 import it.academy.fitness_studio.core.exception.InvalidVersionException;
-import it.academy.fitness_studio.core.exception.ProductAlreadyExistException;
 import it.academy.fitness_studio.core.exception.ProductNotFoundException;
 import it.academy.fitness_studio.dao.api.IProductDao;
 import it.academy.fitness_studio.entity.ProductEntity;
-import it.academy.fitness_studio.service.api.IProductService;
+import it.academy.fitness_studio.service.api.ProductService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-public class ProductService implements IProductService {
+@Transactional(readOnly = true)
+public class ProductServiceImpl implements ProductService {
     private final IProductDao dao;
     private ConversionService conversionService;
-    public ProductService(IProductDao dao,
-                          ConversionService conversionService) {
+    public ProductServiceImpl(IProductDao dao,
+                              ConversionService conversionService) {
         this.dao = dao;
         this.conversionService = conversionService;
     }
     @Override
+    @Transactional
     @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.PRODUCT)
     public UUID create( @Validated ProductDTO product) {
          if (!conversionService.canConvert(ProductDTO.class, ProductEntity.class)) {
@@ -47,6 +48,7 @@ public class ProductService implements IProductService {
         return uuid;
     }
     @Override
+    @Transactional
     @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.PRODUCT)
     public UUID update(UUID id, Instant version,@Validated ProductDTO product) {
         ProductEntity productEntity = dao.findById(id)

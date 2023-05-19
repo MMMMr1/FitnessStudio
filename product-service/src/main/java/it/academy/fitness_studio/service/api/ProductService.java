@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.UUID;
 
-public interface IProductService {
+public interface ProductService {
     UUID create(ProductDTO product);
     UUID update(UUID id, Instant version, ProductDTO product);
     Pages getPageProduct(Pageable paging);

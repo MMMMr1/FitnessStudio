@@ -3,13 +3,13 @@ package it.academy.fitness_studio.service;
 import it.academy.fitness_studio.core.dto.ingredient.IngredientDTO;
 import it.academy.fitness_studio.core.dto.recipe.RecipeDTO;
 import it.academy.fitness_studio.core.exception.ValidationRecipeException;
-import it.academy.fitness_studio.service.api.IProductService;
-import it.academy.fitness_studio.service.api.IValidatorRecipe;
+import it.academy.fitness_studio.service.api.ProductService;
+import it.academy.fitness_studio.service.api.ValidatorRecipe;
 
 import java.util.List;
-public class ValidatorRecipe implements IValidatorRecipe {
-    private final IProductService service;
-    public ValidatorRecipe(IProductService service) {
+public class ValidatorRecipeImpl implements ValidatorRecipe {
+    private final ProductService service;
+    public ValidatorRecipeImpl(ProductService service) {
         this.service = service;
     }
     @Override

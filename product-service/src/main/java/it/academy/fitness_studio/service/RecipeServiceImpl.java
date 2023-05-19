@@ -17,35 +17,37 @@ import it.academy.fitness_studio.dao.api.IRecipeDao;
 import it.academy.fitness_studio.entity.IngredientEntity;
 import it.academy.fitness_studio.entity.ProductEntity;
 import it.academy.fitness_studio.entity.RecipeEntity;
-import it.academy.fitness_studio.service.api.IProductService;
-import it.academy.fitness_studio.service.api.IRecipeService;
-import it.academy.fitness_studio.service.api.IValidatorRecipe;
+import it.academy.fitness_studio.service.api.ProductService;
+import it.academy.fitness_studio.service.api.RecipeService;
+import it.academy.fitness_studio.service.api.ValidatorRecipe;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-public class RecipeService implements IRecipeService {
+@Transactional(readOnly = true)
+public class RecipeServiceImpl implements RecipeService {
     private final IRecipeDao dao;
-    private final IProductService service;
+    private final ProductService service;
     private ConversionService conversionService;
-    private final IValidatorRecipe validator;
+    private final ValidatorRecipe validator;
 
-    public RecipeService(IRecipeDao dao,
-                         IProductService service,
-                         ConversionService conversionService,
-                         IValidatorRecipe validator) {
+    public RecipeServiceImpl(IRecipeDao dao,
+                             ProductService service,
+                             ConversionService conversionService,
+                             ValidatorRecipe validator) {
         this.dao = dao;
         this.service = service;
         this.conversionService = conversionService;
         this.validator = validator;
     }
     @Override
+    @Transactional
     @Auditable(auditCode = AuditCode.CREATED, auditType = AuditEntityType.RECIPE)
     public UUID create(@Validated RecipeDTO recipeDTO) throws ValidationRecipeException {
         validator.validate(recipeDTO);
@@ -84,6 +86,7 @@ public class RecipeService implements IRecipeService {
                 .setTotalElements(all.getTotalElements()).build();
     }
     @Override
+    @Transactional
     @Auditable(auditCode = AuditCode.UPDATE, auditType = AuditEntityType.RECIPE)
     public UUID update(UUID id, Instant version, RecipeDTO product) throws ValidationRecipeException {
         validator.validate(product);

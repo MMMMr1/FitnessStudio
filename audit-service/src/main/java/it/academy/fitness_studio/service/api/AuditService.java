@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 
-public interface IAuditService
+public interface AuditService
 {
     void create(AuditDTO user);
     AuditModel getReport(UUID id);

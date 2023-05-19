@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserDao dao;
     private ConversionService conversionService;
@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
         return conversionService.convert(userEntity,UserModel.class);
     }
     @Override
-    @Auditable(AuditCode.UPDATE)
     @Transactional
+    @Auditable(AuditCode.UPDATE)
     public UserModel update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));

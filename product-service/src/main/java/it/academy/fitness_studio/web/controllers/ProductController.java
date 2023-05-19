@@ -3,7 +3,7 @@ package it.academy.fitness_studio.web.controllers;
 import it.academy.fitness_studio.core.dto.pages.Pages;
 import it.academy.fitness_studio.core.dto.product.ProductDTO;
 import it.academy.fitness_studio.core.dto.product.ProductModel;
-import it.academy.fitness_studio.service.api.IProductService;
+import it.academy.fitness_studio.service.api.ProductService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/product")
 public class ProductController {
-    private IProductService service;
-    public ProductController(IProductService service) {
+    private ProductService service;
+    public ProductController(ProductService service) {
         this.service = service;
     }
     @RequestMapping(method = RequestMethod.POST)

@@ -19,19 +19,19 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    public IProductService productService(IProductDao dao,
-                                          ConversionService conversionService){
-        return new ProductService(dao, conversionService);
+    public ProductService productService(IProductDao dao,
+                                         ConversionService conversionService){
+        return new ProductServiceImpl(dao, conversionService);
     }
     @Bean
-    public IRecipeService recipeService(IRecipeDao dao,
-                                        IProductService service,
-                                        ConversionService conversionService,
-    IValidatorRecipe validator){
-        return new RecipeService(dao, service, conversionService,validator);
+    public RecipeService recipeService(IRecipeDao dao,
+                                       ProductService service,
+                                       ConversionService conversionService,
+                                       ValidatorRecipe validator){
+        return new RecipeServiceImpl(dao, service, conversionService,validator);
     }
     @Bean
-    public IValidatorRecipe validatorRecipe(IProductService service ){
-        return new ValidatorRecipe( service );
+    public ValidatorRecipe validatorRecipe(ProductService service ){
+        return new ValidatorRecipeImpl( service );
     }
 }

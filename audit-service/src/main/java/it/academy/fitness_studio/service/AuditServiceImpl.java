@@ -10,7 +10,7 @@ import it.academy.fitness_studio.core.dto.audit.AuditModel;
 import it.academy.fitness_studio.core.exception.AuditNotFoundException;
 import it.academy.fitness_studio.dao.api.IAuditDao;
 import it.academy.fitness_studio.entity.AuditEntity;
-import it.academy.fitness_studio.service.api.IAuditService;
+import it.academy.fitness_studio.service.api.AuditService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +22,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-public class AuditService implements IAuditService {
+public class AuditServiceImpl implements AuditService {
     private final IAuditDao dao;
     private ConversionService conversionService;
-    public AuditService(IAuditDao dao,
-                        ConversionService conversionService) {
+    public AuditServiceImpl(IAuditDao dao,
+                            ConversionService conversionService) {
         this.dao = dao;
         this.conversionService = conversionService;
     }
