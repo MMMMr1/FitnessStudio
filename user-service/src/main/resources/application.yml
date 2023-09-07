@@ -21,3 +21,17 @@ mail:
   url: http://mail-service:8080/api/v1/mail/verification
 audit:
   url: http://audit-service:8080/api/v1/audit/report
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true

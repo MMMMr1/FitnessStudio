@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserService {
         userEntity.setDtCreate(dtCreated);
         userEntity.setDtUpdate(dtCreated);
         dao.save(userEntity);
-        logger.info("successful create of user: "+ user);
-        return conversionService.convert(userEntity,UserModel.class);
+        logger.info("successful create of user: " + user);
+        return conversionService.convert(userEntity, UserModel.class);
     }
     @Override
     @Transactional
@@ -67,18 +67,18 @@ public class UserServiceImpl implements UserService {
     public UserModel update(UUID id, Instant version, @Validated UserDTO user) {
         UserEntity userEntity = dao.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("There is no user with such id"));
-        if(version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()){
-            logger.error("Can not update user "+ id+ "invalid version "+ version);
+        if (version.toEpochMilli() != userEntity.getDtUpdate().toEpochMilli()) {
+            logger.error("Can not update user " + id + "invalid version " + version);
             throw new InvalidVersionException("Invalid version");
         }
-            userEntity.setFio(user.getFio());
-            userEntity.setMail(user.getMail());
-            userEntity.setStatus(new StatusEntity(user.getStatus()));
-            userEntity.setPassword(user.getPassword());
-            userEntity.setRole(new RoleEntity(user.getRole()));
-            dao.save(userEntity);
-            logger.info("successful update of user: "+ user);
-            return conversionService.convert(userEntity,UserModel.class);
+        userEntity.setFio(user.getFio());
+        userEntity.setMail(user.getMail());
+        userEntity.setStatus(new StatusEntity(user.getStatus()));
+        userEntity.setPassword(user.getPassword());
+        userEntity.setRole(new RoleEntity(user.getRole()));
+        dao.save(userEntity);
+        logger.info("successful update of user: " + user);
+        return conversionService.convert(userEntity, UserModel.class);
     }
     public Pages<UserModel> getPageUser(Pageable paging) {
         Page<UserEntity> all = dao.findAll(paging);
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkDoubleMail(UserDTO user) {
-        String mail = user.getMail(); 
+        String mail = user.getMail();
         if (dao.findByMail(mail).isPresent()) {
             throw new UserAlreadyExistException("User with this mail is already registered");
         }
