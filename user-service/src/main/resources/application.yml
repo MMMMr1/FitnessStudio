@@ -31,6 +31,9 @@ management:
       exposure:
         include: health, info
   info:
+    contact:
+      email: thymeleaf@thymeleaf.com
+      phone: 822-625-6856
     env:
       enabled: true
     java:
