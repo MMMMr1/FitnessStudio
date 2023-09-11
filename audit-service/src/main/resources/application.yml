@@ -4,6 +4,8 @@ spring:
 ---
 spring:
   profiles: dev
+  application:
+    name: audit-service
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${SPRING_DATASOURCE_URL_AUDIT}
@@ -19,3 +21,11 @@ jwt:
   secret: ${JWT_SECRET}
   issuer: ${JWT_ISSUER}
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
