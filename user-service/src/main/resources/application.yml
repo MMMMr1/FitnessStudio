@@ -4,6 +4,8 @@ spring:
 ---
 spring:
   profiles: dev
+  application:
+    name: user-service
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${SPRING_DATASOURCE_URL_USER}
@@ -38,3 +40,11 @@ management:
       enabled: true
     java:
       enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
