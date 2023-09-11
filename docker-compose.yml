@@ -1,5 +1,13 @@
 version: '3.5'
 services:
+  eureka-server:
+    build: eureka-server
+    image: eureka-server:1.0.0
+    ports:
+      - 8761:8761 
+    networks:
+      - fitness_ntwrk
+      
   database-user-service:
     build: user-postgresql
     image: user_postgresql:1.0.0
@@ -45,8 +53,11 @@ services:
       - "81:8080"
     networks:
       - fitness_ntwrk
+  
 
+      
   user-service:
+    container_name: user-service
     build: user-service
     image: fitness_user-service:1.0.0
     environment:
@@ -56,10 +67,13 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_ISSUER: ${JWT_ISSUER}
     depends_on:
+      - eureka-server
       - database-user-service
+      
     networks:
       - fitness_ntwrk
   product-service:
+    container_name: product-service
     build: product-service
     image: fitness_product-service:1.0.0
     environment:
@@ -70,17 +84,22 @@ services:
       JWT_ISSUER: ${JWT_ISSUER}
     depends_on:
       - database-product-service
+      - eureka-server
     networks:
       - fitness_ntwrk
   mail-service:
+    container_name: mail-service
     build: mail-service
     image: fitness_mail-service:1.0.0
     environment:
       MAIL_USER: ${MAIL_USER}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
+    depends_on: 
+      - eureka-server
     networks:
       - fitness_ntwrk
   audit-service:
+    container_name: audit-service
     build: audit-service
     image: fitness_audit-service:1.0.0
     environment:
@@ -91,6 +110,7 @@ services:
       JWT_ISSUER: ${JWT_ISSUER}
     depends_on:
       - database-audit-service
+      - eureka-server
     networks:
       - fitness_ntwrk
   proxy:
@@ -100,6 +120,7 @@ services:
       - "8080:8080"
     networks:
       - fitness_ntwrk
+
 networks:
   fitness_ntwrk:
     name: fitness_ntwrk
