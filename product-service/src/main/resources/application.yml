@@ -21,6 +21,23 @@ jwt:
 audit:
   url: http://audit-service:8080/api/v1/audit/report
 
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metric
+  info:
+    contact:
+      email: thymeleaf@thymeleaf.com
+      phone: 822-625-6856
+    env:
+      enabled: true
+    java:
+      enabled: true
+
 eureka:
   instance:
     prefer-ip-address: true

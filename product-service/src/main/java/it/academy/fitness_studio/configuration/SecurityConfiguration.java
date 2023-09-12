@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PUT,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST,"/api/v1/product/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.GET,"/api/v1/recipe").permitAll()
+                        .antMatchers("/actuator/prometheus").permitAll()
                         .antMatchers(HttpMethod.PUT,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers(HttpMethod.POST,"/api/v1/recipe/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated());

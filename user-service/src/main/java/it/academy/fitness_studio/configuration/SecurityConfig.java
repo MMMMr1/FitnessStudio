@@ -37,6 +37,7 @@ public class SecurityConfig  {
                         .antMatchers("/api/v1/users/verification").permitAll()
                         .antMatchers("/api/v1/users/me").authenticated()
                         .antMatchers("/api/v1/users/login").permitAll()
+                        .antMatchers("/actuator/prometheus").permitAll()
                         .antMatchers("/api/v1/users/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 );
