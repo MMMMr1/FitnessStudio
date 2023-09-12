@@ -120,6 +120,19 @@ services:
       - "8080:8080"
     networks:
       - fitness_ntwrk
+      
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus/
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    container_name: prometheus
+    networks:
+      - fitness_ntwrk
+
 
 networks:
   fitness_ntwrk:
