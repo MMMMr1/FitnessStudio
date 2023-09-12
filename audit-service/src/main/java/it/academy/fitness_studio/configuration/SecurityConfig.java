@@ -26,6 +26,7 @@ public class SecurityConfig  {
                 .disable()
                 .authorizeHttpRequests((auth) -> auth
                         .antMatchers(HttpMethod.POST,"/api/v1/audit/report").permitAll()
+                        .antMatchers("/actuator/prometheus").permitAll()
                         .antMatchers(HttpMethod.GET,"/api/v1/audit/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest()
                         .authenticated()
