@@ -10,10 +10,10 @@ import it.academy.fitness_studio.core.exception.ValidationUserException;
 import it.academy.fitness_studio.dao.api.AuthenticationDao;
 import it.academy.fitness_studio.entity.StatusEntity;
 import it.academy.fitness_studio.entity.UserEntity;
+import it.academy.fitness_studio.kafka.schema.Verification;
+import it.academy.fitness_studio.messaging.api.MessageProducer;
 import it.academy.fitness_studio.service.api.AuthenticationService;
 import it.academy.fitness_studio.service.api.UserService;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.UUID;
 @Transactional(readOnly = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -35,17 +31,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService service;
     private ConversionService conversionService;
     private BCryptPasswordEncoder encoder;
+    private MessageProducer <Verification> messageProducer;
+
     private static final Logger logger =
             LoggerFactory.getLogger(AuthenticationServiceImpl.class);
     public AuthenticationServiceImpl(AuthenticationDao dao,
                                      UserService service,
                                      ConversionService conversionService,
-                                     BCryptPasswordEncoder encoder
+                                     BCryptPasswordEncoder encoder,
+                                     MessageProducer <Verification> messageProducer
     ) {
         this.dao = dao;
         this.service = service;
         this.conversionService = conversionService;
         this.encoder = encoder;
+        this.messageProducer = messageProducer;
     }
     @Override
     @Transactional
@@ -96,21 +96,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new UserNotFoundException("User with mail {"+mail+"} is not registered"));
     }
     private void sendMessage(String to, String code ){
-        try {
-            JSONObject object =new JSONObject();
-            object.put("to", to);
-            object.put("subject", "Активируйте свою учетную запись в Healthy Cloud ");
-            object.put("text",code);
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(mailUrl))
-                    .setHeader("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(object.toString())).build();
-            httpClient.sendAsync(request,HttpResponse.BodyHandlers.ofString())
-                    .thenApply(HttpResponse::body)
-                    .exceptionally(e -> "Exception: "+ e);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        messageProducer.sendMessage(new Verification(to, code));
     }
 }

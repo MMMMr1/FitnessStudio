@@ -4,6 +4,8 @@ package it.academy.fitness_studio.configuration;
 import it.academy.fitness_studio.core.dto.user.UserModel;
 import it.academy.fitness_studio.dao.api.UserDao;
 import it.academy.fitness_studio.dao.api.AuthenticationDao;
+import it.academy.fitness_studio.kafka.schema.Verification;
+import it.academy.fitness_studio.messaging.api.MessageProducer;
 import it.academy.fitness_studio.service.*;
 import it.academy.fitness_studio.service.api.*;
 import it.academy.fitness_studio.service.api.UserService;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class UserServiceConfiguration {
     private final UserDao dao;
+
     private final ConversionService conversionService;
     public UserServiceConfiguration(UserDao dao, ConversionService conversionService) {
         this.dao = dao;
@@ -37,9 +40,11 @@ public class UserServiceConfiguration {
     public AuthenticationService authenticationService(AuthenticationDao dao,
                                                        UserService service,
                                                        ConversionService conversionService,
-                                                       BCryptPasswordEncoder encoder) {
+                                                       BCryptPasswordEncoder encoder,
+                                                       MessageProducer<Verification> messageProducer) {
         return new AuthenticationServiceImpl(dao, service,
-                conversionService, encoder);
+                conversionService, encoder,
+                messageProducer);
     }
     @Bean
     public UserDetailsService userDetailsService() {
