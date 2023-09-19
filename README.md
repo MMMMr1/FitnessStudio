@@ -1,4 +1,4 @@
-# Healthy Cloud is a microservices-based web application for managing a healthy fitness diet. It is built using the following technologies: Spring Boot, Spring MVC, Spring Data, Spring Security with JWT, Spring Mail, JPA with Hibernate implementation, PostgreSQL, Docker, Swagger UI, Spring Cloud Netflix Eureka, Prometheus, Grafana.
+# Healthy Cloud is a microservices-based web application for managing a healthy fitness diet. It is built using the following technologies: Spring Boot, Spring MVC, Spring Data, Spring Security with JWT, Spring Mail, JPA with Hibernate implementation, PostgreSQL, Kafka, Avro, Docker, Swagger UI, Spring Cloud Netflix Eureka, Prometheus, Grafana.
 _____________________________________________________ 
  In the Healthy Cloud application, the subject area includes such objects as recipes, ingredients that these recipes consist of, products, users. Figure shows these objects and how they are interconnected.
 
