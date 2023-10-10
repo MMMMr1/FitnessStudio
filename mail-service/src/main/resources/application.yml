@@ -16,7 +16,26 @@ mail:
 spring:
   application:
     name: mail-service
-
+  kafka:
+    bootstrap-servers: broker:29092
+    consumer:
+      group-id: client-mail-service-group
+      keyDeserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      valueDeserializer: "io.confluent.kafka.serializers.KafkaAvroDeserializer"
+      properties:
+        schema:
+          registry:
+            url: http://schema-registry:8081
+        specific:
+          avro:
+            reader: "true"
+kafka:
+  topic:
+    verification: verification_topic
+avro:
+  topic:
+    name:
+      verification: verification_topic
 management:
   endpoint:
     health:

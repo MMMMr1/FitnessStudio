@@ -1,0 +1,23 @@
+{
+  "namespace": "it.academy.fitness_studio.kafka.schema",
+  "type": "record",
+  "name": "Verification",
+  "fields": [
+    {
+      "name": "mail",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "code",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    }
+  ]
+}

@@ -3,17 +3,10 @@ package it.academy.fitness_studio.configuration;
 import it.academy.fitness_studio.service.*;
 import it.academy.fitness_studio.service.api.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Description;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import java.util.Properties;
 
@@ -31,9 +24,9 @@ public class ServiceConfiguration {
     private String protocol;
 
     @Bean
-    public IMailService emailService(
+    public MailService emailService(
             JavaMailSender emailSender){
-        return new MailService(emailSender);
+        return new MailServiceImpl(emailSender);
     }
 
     @Bean

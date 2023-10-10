@@ -7,9 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 public class VerificationMessageProducerImpl implements MessageProducer<Verification> {
 
@@ -24,7 +21,7 @@ public class VerificationMessageProducerImpl implements MessageProducer<Verifica
 
     @Override
     public void sendMessage(Verification message) {
-         verificationKafkaTemplate.send(verificationTopicName,message);
+        verificationKafkaTemplate.send(verificationTopicName,message);
         logger.info("Sent message to topic [" + verificationTopicName +
                         "] with offset=[" + message + "]");
 //         ListenableFuture<SendResult<String, Verification>> future = (ListenableFuture<SendResult<String, Verification>>) verificationKafkaTemplate.send(

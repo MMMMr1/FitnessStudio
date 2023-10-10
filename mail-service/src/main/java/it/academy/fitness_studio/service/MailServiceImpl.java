@@ -1,22 +1,22 @@
 package it.academy.fitness_studio.service;
 
-import it.academy.fitness_studio.core.dto.VerificationMailDTO;
-import it.academy.fitness_studio.service.api.IMailService;
+import it.academy.fitness_studio.kafka.schema.Verification;
+import it.academy.fitness_studio.service.api.MailService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-public class MailService implements IMailService {
+public class MailServiceImpl implements MailService {
     private JavaMailSender emailSender;
     private String NOREPLY_ADDRESS = "maksim.maks.23@mail.ru";
-    public MailService(JavaMailSender emailSender  ) {
+    public MailServiceImpl(JavaMailSender emailSender  ) {
         this.emailSender = emailSender;
     }
     @Override
-    public void sendVerificationMessage(VerificationMailDTO mailDTO) {
-        String mail = mailDTO.getTo();
+    public void sendVerificationMessage(Verification messageDto) {
+        String mail =  messageDto.getMail().toString();
         String subject = "Активируйте свою учетную запись в Thyme ";
-        String code = mailDTO.getText();
+        String code = messageDto.getCode().toString();
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(NOREPLY_ADDRESS);

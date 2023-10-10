@@ -16,8 +16,6 @@ public class KafkaConfiguration {
         @Bean
     public NewTopic topic() {
         return TopicBuilder.name(bootstrapAddress)
-                .partitions(2)
-                .replicas(2)
                 .build();
     }
 }

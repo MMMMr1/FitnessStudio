@@ -67,6 +67,7 @@ services:
     depends_on:
       - eureka-server
       - database-user-service
+      - broker
       
     networks:
       - fitness_ntwrk
@@ -94,8 +95,10 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD}
     depends_on: 
       - eureka-server
+      - broker
     networks:
       - fitness_ntwrk
+      
   audit-service:
     container_name: audit-service
     build: audit-service
